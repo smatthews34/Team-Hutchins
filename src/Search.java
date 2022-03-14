@@ -51,13 +51,14 @@ public class Search {
         }
 
     }
-    public static void getResults(String searchInputWithSpace){ //Get rid of static afterwards and return string, get rid of parameter
+    public static ArrayList<Course> getResults(String searchInputWithSpace){ //Get rid of static afterwards and return string, get rid of parameter
         try {
             File classFile = new File("classFile.txt");
             Scanner classScan = new Scanner(classFile);
             String course;
             int index = 0;
             String searchInput = searchInputWithSpace.replace(" ", "");
+            ArrayList<Course> results = new ArrayList<>(); //Finish
             while (classScan.hasNextLine()) {
                 course = classScan.nextLine(); //grabs the line of code (the course info)
                 Scanner courseScan = new Scanner(course); //Creates a new scanner to read the line
