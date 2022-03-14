@@ -1,5 +1,3 @@
-
-
 public class Course {
     String courseCode;
     protected String time;
