@@ -1,5 +1,10 @@
 import java.util.*;
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class Search {
     static String searchInput; //Change from static later
@@ -98,14 +103,62 @@ public class Search {
         }
     }
 
-    public void addFilter(){ //Work on this
 
-    }
+
+        public static void dayFilter(String days) {
+            Connection conn = null;
+            if (days.equals("MWF")) {
+                try {
+                    Class.forName("org.sqlite.JDBC");
+                    conn = DriverManager.getConnection("jdbc:sqlite:courseList.db");
+                    Statement statement = conn.createStatement();
+                    statement.executeUpdate("DROP table if exists courseList");
+                    String select = "SELECT * from CourseList";
+                    ResultSet result = statement.executeQuery(select);
+
+                    while (result.next()) {
+                        String code = result.getString("CourseCode");
+                        String description = result.getString("LongTitle");
+                        System.out.println(code + " " + description);
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    System.out.println("Error connecting to the SQLite database");
+                    e.printStackTrace();
+                }
+            }
+            if (days.equals("TR")) {
+                try {
+                    Class.forName("org.sqlite.JDBC");
+                    conn = DriverManager.getConnection("jdbc:sqlite:courseList.db");
+                    Statement statement = conn.createStatement();
+                    statement.executeUpdate("DROP table if exists courseList");
+                    String select = "SELECT CourseCode, LongTitle FROM courseList where Meets = 'TR'";
+                    ResultSet result = statement.executeQuery(select);
+
+                    while (result.next()) {
+                        String code = result.getString("CourseCode");
+                        String description = result.getString("LongTitle");
+                        System.out.println(code + " " + description);
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    System.out.println("Error connecting to the SQLite database");
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        
+
 
     public static void main(String[] args){ //Temporary main for testing
         ArrayList<Course> daCourses = getResults("comp");
         for (Course daCours : daCourses) {
             System.out.println(daCours.longTitle);
         }
+        String days1 = "MWF";
+        String days2 = "TR";
+
+        dayFilter(days1);
+        dayFilter(days2);
     }
 }
