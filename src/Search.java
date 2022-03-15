@@ -66,8 +66,8 @@ public class Search {
                     potentialIndex++;
                 }
                 potentialCourse = new Course(theStrings.get(0), theStrings.get(1), theStrings.get(2),
-                        Integer.parseInt(theStrings.get(3)), Integer.parseInt(theStrings.get(4)),
-                        theStrings.get(5), theStrings.get(6), Integer.parseInt(theStrings.get(7)));
+                        theStrings.get(3), theStrings.get(4), //Look to change course class
+                        theStrings.get(5), theStrings.get(6), theStrings.get(7));
                 while (courseScan.hasNext()){ //Only search by course code and full course name
                     String data = courseScan.next().replace(" ", "");
                     if(data.equalsIgnoreCase("CourseCode")){
@@ -103,9 +103,9 @@ public class Search {
     }
 
     public static void main(String[] args){ //Temporary main for testing
-        ArrayList<Course> daCourses = getResults("abrd");
-        for (int i = 0; i < daCourses.size(); i++){
-            System.out.println(daCourses.get(i));
+        ArrayList<Course> daCourses = getResults("comp");
+        for (Course daCours : daCourses) {
+            System.out.println(daCours.longTitle);
         }
     }
 }
