@@ -3,13 +3,6 @@ import java.io.*;
 
 public class Search {
     static String searchInput; //Change from static later
-    //Temp course for writing a method
-    public class Course{
-        String day;
-        String time;
-        String courseName;
-        String code;
-    }
 
     public Search(String searchInput){
         this.searchInput = searchInput;
@@ -20,7 +13,7 @@ public class Search {
      * Takes in the results of the search and orginzes it to be prepared for the user to see
      * @param searchResults from the getResults method
      */
-    public static ArrayList<Course> orderSearch(ArrayList<Course> searchResults){
+    /*public static ArrayList<Course> orderSearch(ArrayList<Course> searchResults){
         ArrayList<Course> ordered = searchResults;
         Collections.sort(ordered, new Comparator<Course>() {
             @Override
@@ -37,21 +30,21 @@ public class Search {
             }
         });
         return ordered;
-    }
+    }*/
 
     /**
      * Prints the ordered lists from the search results for the user to view and choose what to add.
      * @param orderList takes in and ordered list from the search results given to the orderList()
      */
-    public static void printResults(ArrayList<Course> orderList){
+    /*public static void printResults(ArrayList<Course> orderList){
         for(int i = 0; i < orderList.size(); i++){
             String course = "";
             course = orderList.get(i).day + " " + orderList.get(i).time + " " + orderList.get(i).code + " " + orderList.get(i).courseName;
             System.out.println(course);
         }
 
-    }
-    public static void getResults(String searchInputWithSpace){ //Get rid of static afterwards and return string, get rid of parameter
+    }*/
+    public static ArrayList<Course> getResults(String searchInputWithSpace){ //Get rid of static afterwards and return string, get rid of parameter
         try {
             File classFile = new File("classFile.txt");
             Scanner classScan = new Scanner(classFile);
@@ -59,10 +52,22 @@ public class Search {
             int index = 0;
             String searchInput = searchInputWithSpace.replace(" ", "");
             ArrayList<Course> results = new ArrayList<>(); //Finish
+            ArrayList<String> theStrings = new ArrayList<>();
+            int potentialIndex = 0;
+            Course potentialCourse;
             while (classScan.hasNextLine()) {
                 course = classScan.nextLine(); //grabs the line of code (the course info)
                 Scanner courseScan = new Scanner(course); //Creates a new scanner to read the line
                 courseScan.useDelimiter(",");
+                Scanner potentialScan = new Scanner(course);
+                potentialScan.useDelimiter(",");
+                while (potentialScan.hasNext()){
+                    theStrings.add(potentialScan.next());
+                    potentialIndex++;
+                }
+                potentialCourse = new Course(theStrings.get(0), theStrings.get(1), theStrings.get(2),
+                        Integer.parseInt(theStrings.get(3)), Integer.parseInt(theStrings.get(4)),
+                        theStrings.get(5), theStrings.get(6), Integer.parseInt(theStrings.get(7)));
                 while (courseScan.hasNext()){ //Only search by course code and full course name
                     String data = courseScan.next().replace(" ", "");
                     if(data.equalsIgnoreCase("CourseCode")){
@@ -70,32 +75,37 @@ public class Search {
                     }
                     if (data.equalsIgnoreCase(searchInput) && index == 0 ||
                             data.toLowerCase().contains(searchInput.toLowerCase()) && index == 0){ //User is searching by course code
-                        System.out.println("Match found for: " + searchInput);
-                        System.out.println("Here is the course: " + course + "\n");
+                        results.add(potentialCourse);
                         break;
                     }
                     else if (data.equalsIgnoreCase(searchInput) && index == 2){ //User is searching by course name
-                        System.out.println("Match found for: " + searchInput);
-                        System.out.println("Here is the course: " + course + "\n");
+                        results.add(potentialCourse);
                         break;
                     }
                     index++;
                 }
                 index = 0;
                 courseScan.close();
+                potentialScan.close();
+                theStrings.clear();
             }
             classScan.close();
+            return results;
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
+            return null;
         }
     }
 
     public void addFilter(){ //Work on this
-        System.out.println("test");
+
     }
 
     public static void main(String[] args){ //Temporary main for testing
-        getResults("abrd");
+        ArrayList<Course> daCourses = getResults("abrd");
+        for (int i = 0; i < daCourses.size(); i++){
+            System.out.println(daCourses.get(i));
+        }
     }
 }
