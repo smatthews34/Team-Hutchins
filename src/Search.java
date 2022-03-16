@@ -18,7 +18,7 @@ public class Search {
      * Takes in the results of the search and orginzes it to be prepared for the user to see
      * @param searchResults from the getResults method
      */
-    /*public static ArrayList<Course> orderSearch(ArrayList<Course> searchResults){
+    public static ArrayList<Course> orderSearch(ArrayList<Course> searchResults){
         ArrayList<Course> ordered = searchResults;
         Collections.sort(ordered, new Comparator<Course>() {
             @Override
@@ -35,20 +35,20 @@ public class Search {
             }
         });
         return ordered;
-    }*/
+    }
 
     /**
      * Prints the ordered lists from the search results for the user to view and choose what to add.
      * @param orderList takes in and ordered list from the search results given to the orderList()
      */
-    /*public static void printResults(ArrayList<Course> orderList){
+    public static void printResults(ArrayList<Course> orderList){
         for(int i = 0; i < orderList.size(); i++){
             String course = "";
             course = orderList.get(i).day + " " + orderList.get(i).time + " " + orderList.get(i).code + " " + orderList.get(i).courseName;
             System.out.println(course);
         }
 
-    }*/
+    }
     public static ArrayList<Course> getResults(String searchInputWithSpace){ //Get rid of static afterwards and return string, get rid of parameter
         try {
             File classFile = new File("classFile.txt");
