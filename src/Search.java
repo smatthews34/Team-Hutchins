@@ -80,7 +80,7 @@ public class Search {
                     }
                     if (data.equalsIgnoreCase(searchInput) && index == 0 ||
                             data.toLowerCase().contains(searchInput.toLowerCase()) && index == 0){ //User is searching by course code
-                        results.add(potentialCourse);
+                        results.add(potentialCourse);zack
                         break;
                     }
                     else if (data.equalsIgnoreCase(searchInput) && index == 2){ //User is searching by course name

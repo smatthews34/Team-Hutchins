@@ -57,4 +57,14 @@ public class Course {
         }
     }
 
+    /**
+     * For full length courses
+     * @return the formatted String of a Course.
+     */
+    @Override
+    public String toString(){
+        return String.format(courseCode + " " + shortTitle + " " + startTime + "-" + endTime + " " + meets + " " + longTitle);
+    }
+
+
 }

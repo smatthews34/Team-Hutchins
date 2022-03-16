@@ -4,33 +4,23 @@ import java.util.Stack;
 
 
 public class CourseList {
-    Stack<course> courseHist = new Stack<>();
+    Stack<Course> courseHist = new Stack<>();
     Stack<String> commandHist = new Stack<>();
 
-    Stack<course> undoCourseHist = new Stack<>();
+    Stack<Course> undoCourseHist = new Stack<>();
     Stack<String> undoCommandHist = new Stack<>();
 
-    /**
-     * Place holder for the course class
-     */
-    public class course {
-        String code = "TEST 123A";
-        String time = "9-9:50";
-        String day = "MWF";
-        //place holder
 
-    }
-
-    public void updateHistory(String command, course course){
+    public void updateHistory(String command, Course course){
         commandHist.push(command);
         courseHist.push(course);
     }
 
 
-    public void undo(ArrayList<course> schedule){
+    public void undo(ArrayList<Course> schedule){
         if (!undoCommandHist.isEmpty() && !undoCourseHist.isEmpty()) {
             String lastCommand = commandHist.pop();
-            course lastCourse = courseHist.pop();
+            Course lastCourse = courseHist.pop();
 
             //do opposite of last command to applicable course
             if (lastCommand.equals("add")) {
@@ -49,11 +39,11 @@ public class CourseList {
         }
     }
 
-    public void redo(ArrayList<course> schedule) {
+    public void redo(ArrayList<Course> schedule) {
 
         if (!undoCommandHist.isEmpty() && !undoCourseHist.isEmpty()){
             String lastCommand = undoCommandHist.pop();
-            course lastCourse = undoCourseHist.pop();
+            Course lastCourse = undoCourseHist.pop();
 
             if (lastCommand.equals("add")) {
                 schedule.add(lastCourse);
@@ -68,7 +58,7 @@ public class CourseList {
         }
     }
 
-    public static void removeClass(course course, ArrayList<course> Schedule){
+    public static void removeClass(Course course, ArrayList<Course> Schedule){
         if (checkDouble(course, Schedule)) {
             Schedule.remove(course);
             System.out.println("Course removed.");
@@ -84,9 +74,11 @@ public class CourseList {
      * @param course the course that is being attempted to be added to user schedule
      * @param Schedule
      */
-    public static void addClass(course course, ArrayList<course> Schedule){
+    public static void addClass(Course course, ArrayList<Course> Schedule){
         //checks for time confliction
-        if(checkConfliction(course, Schedule)){
+        if(checkDouble(course, Schedule)){
+            System.out.println("That course already is on your schedule, cannot be added.");
+        }else if(checkConfliction(course, Schedule)){
             System.out.println("There is a time conflict with your schedule.");
             Scanner scn = new Scanner(System.in);
             while (true) {
@@ -103,9 +95,6 @@ public class CourseList {
                     System.out.println("Invalid response please select Y or N.");
                 }
             }
-
-        }else if(checkDouble(course, Schedule)){
-            System.out.println("That course already is on your schedule, cannot be added.");
         }else{
             Schedule.add(course);
             System.out.println("The course has successfully been added to your schedule.");
@@ -119,10 +108,10 @@ public class CourseList {
      * @return True if there is a conflict
      * @return False if there is no conflict
      */
-    public static boolean checkDouble(course C, ArrayList<course> S){
+    public static boolean checkDouble(Course C, ArrayList<Course> S){
         boolean check = false;
         for(int i = 0; i < S.size(); i++){
-            if(S.get(i).code.equals(C.code)){
+            if(S.get(i).courseCode.equals(C.courseCode)){
                 check = true;
             }
         }
@@ -135,17 +124,42 @@ public class CourseList {
      * @return True if there is a conflict
      * @return False if there is no conflict
      */
-    public static boolean checkConfliction(course C, ArrayList<course> S){
+    public static boolean checkConfliction(Course C, ArrayList<Course> S){
         boolean check = false;
         for(int i = 0; i < S.size(); i++){
-            if(S.get(i).time.equals(C.time) && S.get(i).day.equals(C.day)){
+            if(S.get(i).startTime == C.startTime && S.get(i).meets.equals(C.meets)){
                 check = true;
             }
         }
         return check;
     }
+    public static void main(String[] args) {
+        //Test 1
+        System.out.println("Test 1:");
+        ArrayList<Course> test = new ArrayList<>();
+        Course test_c = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", 9, 10, "MWF", "SHAL", 101);
+        System.out.println(test);
+        addClass(test_c,test);
+        System.out.println(test);
 
+        //Test 2
+        System.out.println("Test 2:");
+        System.out.println(test);
+        addClass(test_c, test);
+        System.out.println(test);
 
+        //Test 3
+        System.out.println("Test 3:");
+        Course test_c2 = new Course("PHIL 101", "Intro Phil", "Introduction to Philosophy", 9, 10, "MWF", "SHAL", 102);
+        System.out.println(test);
+        addClass(test_c2, test);
+        System.out.println(test);
 
+        //Test 4
+        System.out.println("Test 4:");
+        removeClass(test_c, test);
+        System.out.println(test);
+
+    }
 }
 
