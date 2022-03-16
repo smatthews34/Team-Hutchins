@@ -23,12 +23,12 @@ public class Search {
         Collections.sort(ordered, new Comparator<Course>() {
             @Override
             public int compare(Course c1, Course c2) {
-                String time1 = ((Course) c1).time; //getters could be used here
-                String time2 = ((Course) c2).time;
+                /*String time1 = ((Course) c1).startTime; //getters could be used here
+                String time2 = ((Course) c2).startTime;
                 int time_compare = time1.compareTo(time2);
                 if (time_compare != 0) {
                     return time_compare;
-                }
+                }*/
                 String day1 = ((Course) c1).meets; //getters code be used here
                 String day2 = ((Course) c2).meets;
                 return day1.compareTo(day2);
@@ -43,9 +43,7 @@ public class Search {
      */
     public static void printResults(ArrayList<Course> orderList){
         for(int i = 0; i < orderList.size(); i++){
-            String course = "";
-            course = orderList.get(i).meets + " " + orderList.get(i).time + " " + orderList.get(i).courseCode + " " + orderList.get(i).shortTitle;
-            System.out.println(course);
+            System.out.println(orderList.get(i));
         }
 
     }
@@ -152,6 +150,11 @@ public class Search {
 
     public static void main(String[] args){ //Temporary main for testing
         ArrayList<Course> daCourses = getResults("comp");
+        printResults(orderSearch(daCourses));
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        printResults(daCourses);
         for (Course daCours : daCourses) {
             System.out.println(daCours.longTitle);
         }
