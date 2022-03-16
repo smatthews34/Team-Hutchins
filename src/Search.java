@@ -109,7 +109,6 @@ public class Search {
             Connection conn = null;
             if (days.equals("MWF")) {
                 try {
-                    Class.forName("org.sqlite.JDBC");
                     conn = DriverManager.getConnection("jdbc:sqlite:courseList.db");
                     Statement statement = conn.createStatement();
                     statement.executeUpdate("DROP table if exists courseList");
@@ -121,14 +120,13 @@ public class Search {
                         String description = result.getString("LongTitle");
                         System.out.println(code + " " + description);
                     }
-                } catch (SQLException | ClassNotFoundException e) {
+                } catch (SQLException e) {
                     System.out.println("Error connecting to the SQLite database");
                     e.printStackTrace();
                 }
             }
             if (days.equals("TR")) {
                 try {
-                    Class.forName("org.sqlite.JDBC");
                     conn = DriverManager.getConnection("jdbc:sqlite:courseList.db");
                     Statement statement = conn.createStatement();
                     statement.executeUpdate("DROP table if exists courseList");
@@ -140,14 +138,14 @@ public class Search {
                         String description = result.getString("LongTitle");
                         System.out.println(code + " " + description);
                     }
-                } catch (SQLException | ClassNotFoundException e) {
+                } catch (SQLException e) {
                     System.out.println("Error connecting to the SQLite database");
                     e.printStackTrace();
                 }
             }
         }
 
-        
+
 
 
     public static void main(String[] args){ //Temporary main for testing
