@@ -29,8 +29,8 @@ public class Search {
                 if (time_compare != 0) {
                     return time_compare;
                 }
-                String day1 = ((Course) c1).day; //getters code be used here
-                String day2 = ((Course) c2).day;
+                String day1 = ((Course) c1).meets; //getters code be used here
+                String day2 = ((Course) c2).meets;
                 return day1.compareTo(day2);
             }
         });
@@ -44,7 +44,7 @@ public class Search {
     public static void printResults(ArrayList<Course> orderList){
         for(int i = 0; i < orderList.size(); i++){
             String course = "";
-            course = orderList.get(i).day + " " + orderList.get(i).time + " " + orderList.get(i).code + " " + orderList.get(i).courseName;
+            course = orderList.get(i).meets + " " + orderList.get(i).time + " " + orderList.get(i).courseCode + " " + orderList.get(i).shortTitle;
             System.out.println(course);
         }
 
