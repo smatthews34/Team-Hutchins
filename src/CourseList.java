@@ -136,7 +136,7 @@ public class CourseList {
     /**
      * Count how many courses have a conflict
      * @param S Student schedule
-     * @return number of conlficts
+     * @return number of conflicts
      */
     public static int countConflicts(ArrayList<Course> S){
         int count = 0;
@@ -149,6 +149,10 @@ public class CourseList {
         return count;
     }
 
+    /**
+     * Returns a calendar, will modify to list classes
+     * @param S Current classes in user schedule
+     */
     public static void printCalendar(ArrayList<Course> S){
         Calendar calendar = new GregorianCalendar(2022, 2,1);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
@@ -156,6 +160,7 @@ public class CourseList {
 
         System.out.println(new SimpleDateFormat("MMMM yyyy").format(calendar.getTime()));
         System.out.println("  S   M   T   W   T   F   S");
+
         //print initial spaces
         String initialSpace = "";
         for (int i = 0; i < dayOfWeek - 1; i++) {
@@ -170,6 +175,33 @@ public class CourseList {
                 dayOfMonth++;
             }
             System.out.println();
+        }
+    }
+
+    public static void confirmS(ArrayList<Course> S) {
+        //check for number of conflicts
+        Scanner scn = new Scanner(System.in);
+        int conflicts = countConflicts(S);
+        if (conflicts > 0)
+            System.out.println(conflicts + " conflicts still exist, would you still like to" +
+                    " confirm? (Y/N)");
+        String answer = scn.next();
+        boolean confirmed = false;
+        while (!confirmed) {
+            if (answer.equalsIgnoreCase("YES") || answer.equalsIgnoreCase("Y")) {
+                printCalendar(S);
+                System.out.println(conflicts + " conflicts exist");
+                confirmed = true;
+
+                //Let the user edit schedule and print their status sheet here
+
+            } else if (answer.equalsIgnoreCase("NO") || answer.equalsIgnoreCase("N")) {
+                System.out.println("Proceed back to course list.");
+                confirmed = true;
+            } else {
+                System.out.println("Invalid input. Type Yes or No.");
+                answer = scn.next();
+            }
         }
     }
 
