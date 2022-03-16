@@ -7,10 +7,10 @@ public class Course {
     String shortTitle;
     String meets;
     String building;
-    int roomNum;
+    String roomNum;
 
-    int startTime;
-    int endTime;
+    String startTime;
+    String endTime;
 
     /**
      * This constructor has it all baby
@@ -22,8 +22,8 @@ public class Course {
      * @param meets
      * @param roomNum
      */
-    public Course (String courseCode, String shortTitle, String longTitle, int startTime, int endTime, String meets,
-                   String building, int roomNum){
+    public Course (String courseCode, String shortTitle, String longTitle, String startTime, String endTime, String meets,
+                   String building, String roomNum){
         this.courseCode = courseCode;
         this.shortTitle = shortTitle;
         this.longTitle = longTitle;
@@ -44,10 +44,10 @@ public class Course {
         this.courseCode = courseCode;
         this.shortTitle = shortTitle;
         this.longTitle = longTitle;
-        this.startTime = 0;
+        //this.startTime = 0;
     }
 
-    public String getTime(){
+    /*public String getTime(){
         if(startTime == 0){
             return "na";
         }
@@ -55,7 +55,7 @@ public class Course {
             time = startTime + "-" + endTime;
             return time;
         }
-    }
+    }*/
 
     /**
      * For full length courses

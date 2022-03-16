@@ -60,6 +60,7 @@ public class Search {
             ArrayList<String> theStrings = new ArrayList<>();
             int potentialIndex = 0;
             Course potentialCourse;
+            classScan.nextLine();
             while (classScan.hasNextLine()) {
                 course = classScan.nextLine(); //grabs the line of code (the course info)
                 Scanner courseScan = new Scanner(course); //Creates a new scanner to read the line
@@ -67,11 +68,12 @@ public class Search {
                 Scanner potentialScan = new Scanner(course);
                 potentialScan.useDelimiter(",");
                 while (potentialScan.hasNext()){
-                    theStrings.add(potentialScan.next());
+                    String potentialData = potentialScan.next();
+                    theStrings.add(potentialData);
                     potentialIndex++;
                 }
                 potentialCourse = new Course(theStrings.get(0), theStrings.get(1), theStrings.get(2),
-                        theStrings.get(3), theStrings.get(4), //Look to change course class
+                        theStrings.get(3), theStrings.get(4),
                         theStrings.get(5), theStrings.get(6), theStrings.get(7));
                 while (courseScan.hasNext()){ //Only search by course code and full course name
                     String data = courseScan.next().replace(" ", "");
@@ -80,7 +82,7 @@ public class Search {
                     }
                     if (data.equalsIgnoreCase(searchInput) && index == 0 ||
                             data.toLowerCase().contains(searchInput.toLowerCase()) && index == 0){ //User is searching by course code
-                        results.add(potentialCourse);zack
+                        results.add(potentialCourse);//zack
                         break;
                     }
                     else if (data.equalsIgnoreCase(searchInput) && index == 2){ //User is searching by course name
