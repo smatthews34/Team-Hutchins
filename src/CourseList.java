@@ -1,6 +1,5 @@
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Stack;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 public class CourseList {
@@ -133,6 +132,47 @@ public class CourseList {
         }
         return check;
     }
+
+    /**
+     * Count how many courses have a conflict
+     * @param S Student schedule
+     * @return number of conlficts
+     */
+    public static int countConflicts(ArrayList<Course> S){
+        int count = 0;
+        for(int i = 0; i < S.size(); i++){
+            Course c = S.get(i);
+            if(checkConfliction(c, S)){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static void printCalendar(ArrayList<Course> S){
+        Calendar calendar = new GregorianCalendar(2022, 2,1);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        System.out.println(new SimpleDateFormat("MMMM yyyy").format(calendar.getTime()));
+        System.out.println("  S   M   T   W   T   F   S");
+        //print initial spaces
+        String initialSpace = "";
+        for (int i = 0; i < dayOfWeek - 1; i++) {
+            initialSpace += "    ";
+        }
+        System.out.print(initialSpace);
+
+        //print the days of the month starting from 1
+        for (int i = 0, dayOfMonth = 1; dayOfMonth <= daysInMonth; i++) {
+            for (int j = ((i == 0) ? dayOfWeek - 1 : 0); j < 7 && (dayOfMonth <= daysInMonth); j++) {
+                System.out.printf("%3d ", dayOfMonth);
+                dayOfMonth++;
+            }
+            System.out.println();
+        }
+    }
+
     public static void main(String[] args) {
         //Test 1
         System.out.println("Test 1:");
