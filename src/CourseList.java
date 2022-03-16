@@ -182,26 +182,34 @@ public class CourseList {
         //check for number of conflicts
         Scanner scn = new Scanner(System.in);
         int conflicts = countConflicts(S);
-        if (conflicts > 0)
+        if (conflicts > 0) {
             System.out.println(conflicts + " conflicts still exist, would you still like to" +
                     " confirm? (Y/N)");
-        String answer = scn.next();
-        boolean confirmed = false;
-        while (!confirmed) {
-            if (answer.equalsIgnoreCase("YES") || answer.equalsIgnoreCase("Y")) {
-                printCalendar(S);
-                System.out.println(conflicts + " conflicts exist");
-                confirmed = true;
+            String answer = scn.next();
+            boolean confirmed = false;
+            while (!confirmed) {
+                if (answer.equalsIgnoreCase("YES") || answer.equalsIgnoreCase("Y")) {
+                    printCalendar(S);
+                    System.out.println(conflicts + " conflicts exist");
+                    confirmed = true;
 
-                //Let the user edit schedule and print their status sheet here
+                    //Let the user edit schedule and print their status sheet here? or outside loop
 
-            } else if (answer.equalsIgnoreCase("NO") || answer.equalsIgnoreCase("N")) {
-                System.out.println("Proceed back to course list.");
-                confirmed = true;
-            } else {
-                System.out.println("Invalid input. Type Yes or No.");
-                answer = scn.next();
+                } else if (answer.equalsIgnoreCase("NO") || answer.equalsIgnoreCase("N")) {
+                    System.out.println("Proceed back to course list.");
+                    confirmed = true;
+                } else {
+                    System.out.println("Invalid input. Type Yes or No.");
+                    answer = scn.next();
+                }
             }
+        }
+        //if no conflicts, then proceed with confirming schedule
+        else{
+            System.out.println(conflicts + " conflicts exist. Confirming schedule now.");
+            printCalendar(S);
+
+            //Let user get status sheet or continue to edit schedule
         }
     }
 
