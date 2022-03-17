@@ -183,14 +183,14 @@ public class CourseList {
         Scanner scn = new Scanner(System.in);
         int conflicts = countConflicts(S);
         if (conflicts > 0) {
-            System.out.println(conflicts + " conflicts still exist, would you still like to" +
+            System.out.println(conflicts + " classes conflict, would you still like to" +
                     " confirm? (Y/N)");
             String answer = scn.next();
             boolean confirmed = false;
             while (!confirmed) {
                 if (answer.equalsIgnoreCase("YES") || answer.equalsIgnoreCase("Y")) {
                     printCalendar(S);
-                    System.out.println(conflicts + " conflicts exist");
+                    System.out.println(conflicts + " classes conflict.");
                     confirmed = true;
 
                     //Let the user edit schedule and print their status sheet here? or outside loop
@@ -235,8 +235,13 @@ public class CourseList {
         addClass(test_c2, test);
         System.out.println(test);
 
-        //Test 4
+        //Test 4, test for confirm schedule
         System.out.println("Test 4:");
+        System.out.println(test);
+        confirmS(test);
+
+        //Test 5
+        System.out.println("Test 5:");
         removeClass(test_c, test);
         System.out.println(test);
 
