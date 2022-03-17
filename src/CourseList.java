@@ -17,7 +17,7 @@ public class CourseList {
 
 
     public void undo(ArrayList<Course> schedule){
-        if (!undoCommandHist.isEmpty() && !undoCourseHist.isEmpty()) {
+        if (!courseHist.isEmpty() && !commandHist.isEmpty()) {
             String lastCommand = commandHist.pop();
             Course lastCourse = courseHist.pop();
 

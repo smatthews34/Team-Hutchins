@@ -1,5 +1,7 @@
+import java.util.ArrayList;
+
 public class User {
-    //ArrayList<course> schedule;   //change later
+    ArrayList<Course> schedule;   //change later
     String username;
     String password;
     String name;
@@ -7,7 +9,7 @@ public class User {
     int gradYear;
 
     public User(String username, String password, String name){
-        //schedule = new ArrayList();
+        schedule = new ArrayList();
         this.username = username;
         this.password = password;
         this.name = name;

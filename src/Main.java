@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -9,6 +10,15 @@ public class Main {
             System.out.println("\t" + s);
         }
     }
+
+    static void tempPrint(ArrayList<Course> schedule){
+
+        for (int i = 0; i < schedule.size(); i++){
+            System.out.println(schedule.get(i).courseCode);
+        }
+
+    }
+
 
 
     static void printScreen(){
@@ -25,8 +35,39 @@ public class Main {
 
 
     public static void main (String[] args) {
-        //CourseList cl = new CourseList();
-        //User user = new User("jimatheey123", "mypassword", "Jimatheey");
+        CourseList cl = new CourseList();
+        User user = new User("jimatheey123", "mypassword", "Jimatheey");
+
+        Course testC1 = new Course("ACCT 202 B", "PRIN OF ACCOUNT", "PRINCIPLES OF ACCOUNTING II", "8:00:00", "8:50:00", "MWF",
+                "HAL", "306");
+        Course testC2 = new Course("BIOL 234 A", "CELL BIOLOGY", "CELL BIOLOGY", "9:00:00", "9:50:00", "MWF",
+                "HAL", "208");
+
+        //basic temp tests of addClass(), removeClass(), undo(), redo() - feel free to add your own
+        //add
+        System.out.println("Add:");
+        cl.addClass(testC1,user.schedule);
+        cl.updateHistory("add", testC1);
+        cl.addClass(testC2, user.schedule);
+        cl.updateHistory("add", testC2);
+
+        tempPrint(user.schedule);
+
+        //undo
+        System.out.println("Undo:");
+        cl.undo(user.schedule);
+        tempPrint(user.schedule);
+
+        //redo
+        System.out.println("Redo:");
+        cl.redo(user.schedule);
+        tempPrint(user.schedule);
+
+        //remove
+        System.out.println("Remove:");
+        cl.removeClass(testC1, user.schedule);
+        tempPrint(user.schedule);
+
 
         Scanner mainScn = new Scanner(System.in);
         printScreen();
