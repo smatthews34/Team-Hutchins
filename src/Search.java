@@ -23,18 +23,22 @@ public class Search {
         Collections.sort(ordered, new Comparator<Course>() {
             @Override
             public int compare(Course c1, Course c2) {
-                /*String time1 = ((Course) c1).startTime; //getters could be used here
-                String time2 = ((Course) c2).startTime;
-                int time_compare = time1.compareTo(time2);
-                if (time_compare != 0) {
-                    return time_compare;
-                }*/
+                //sorts by day they meet
                 String day1 = ((Course) c1).meets; //getters code be used here
                 String day2 = ((Course) c2).meets;
-                return day1.compareTo(day2);
+                int day = day1.compareTo(day2);
+                if(day != 0 ){
+                    return day;
+                }
+                //then sorts by time of that day
+                String time1 = ((Course) c1).startTime; //getters could be used here
+                String time2 = ((Course) c2).startTime;
+                return time1.compareTo(time2);
             }
+
         });
         return ordered;
+        //return ordered;
     }
 
     /**
