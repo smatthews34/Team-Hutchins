@@ -217,7 +217,7 @@ public class CourseList {
         //Test 1
         System.out.println("Test 1:");
         ArrayList<Course> test = new ArrayList<>();
-        Course test_c = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", 9, 10, "MWF", "SHAL", 101);
+        Course test_c = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
         System.out.println(test);
         addClass(test_c,test);
         System.out.println(test);
@@ -230,7 +230,7 @@ public class CourseList {
 
         //Test 3
         System.out.println("Test 3:");
-        Course test_c2 = new Course("PHIL 101", "Intro Phil", "Introduction to Philosophy", 9, 10, "MWF", "SHAL", 102);
+        Course test_c2 = new Course("PHIL 101", "Intro Phil", "Introduction to Philosophy", "9", "10", "MWF", "SHAL", "102");
         System.out.println(test);
         addClass(test_c2, test);
         System.out.println(test);
