@@ -10,7 +10,7 @@ public class CourseList {
     Stack<String> undoCommandHist = new Stack<>();
 
 
-    public void updateHistory(String command, Course course){
+    private void updateHistory(String command, Course course){
         commandHist.push(command);
         courseHist.push(course);
     }
@@ -57,7 +57,7 @@ public class CourseList {
         }
     }
 
-    public static void removeClass(Course course, ArrayList<Course> Schedule){
+    public void removeClass(Course course, ArrayList<Course> Schedule){
         if (checkDouble(course, Schedule)) {
             Schedule.remove(course);
             System.out.println("Course removed.");
@@ -66,6 +66,8 @@ public class CourseList {
         else {
             System.out.println("Course not in schedule, cannot be removed.");
         }
+
+        updateHistory("remove", course);
     }
 
     /**
@@ -73,7 +75,7 @@ public class CourseList {
      * @param course the course that is being attempted to be added to user schedule
      * @param Schedule
      */
-    public static void addClass(Course course, ArrayList<Course> Schedule){
+    public void addClass(Course course, ArrayList<Course> Schedule){
         //checks for time confliction
         if(checkDouble(course, Schedule)){
             System.out.println("That course already is on your schedule, cannot be added.");
@@ -214,25 +216,27 @@ public class CourseList {
     }
 
     public static void main(String[] args) {
+
+        CourseList cList = new CourseList();
         //Test 1
         System.out.println("Test 1:");
         ArrayList<Course> test = new ArrayList<>();
         Course test_c = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
         System.out.println(test);
-        addClass(test_c,test);
+        cList.addClass(test_c,test);
         System.out.println(test);
 
         //Test 2
         System.out.println("Test 2:");
         System.out.println(test);
-        addClass(test_c, test);
+        cList.addClass(test_c, test);
         System.out.println(test);
 
         //Test 3
         System.out.println("Test 3:");
         Course test_c2 = new Course("PHIL 101", "Intro Phil", "Introduction to Philosophy", "9", "10", "MWF", "SHAL", "102");
         System.out.println(test);
-        addClass(test_c2, test);
+        cList.addClass(test_c2, test);
         System.out.println(test);
 
         //Test 4, test for confirm schedule
@@ -242,7 +246,7 @@ public class CourseList {
 
         //Test 5
         System.out.println("Test 5:");
-        removeClass(test_c, test);
+        cList.removeClass(test_c, test);
         System.out.println(test);
 
     }
