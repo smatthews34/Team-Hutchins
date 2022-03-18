@@ -20,8 +20,6 @@ public class Main {
 
     }
 
-
-
     static void printScreen(){
         System.out.println("\n___________________________________________________");
         System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::");

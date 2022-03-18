@@ -30,11 +30,7 @@ public class User {
     public Course getCourse(String code) {
         //this can definitely be more efficient eventually
         for (Course c : schedule) {
-            System.out.println("courseCode:" + c.courseCode);
-            System.out.println("code:" + code);
-            System.out.println(c.courseCode.equals(code));
             if (c.courseCode.equals(code)) {
-                System.out.println("Entered");
                 return c;
             }
         }
