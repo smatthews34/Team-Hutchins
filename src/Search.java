@@ -47,7 +47,7 @@ public class Search {
      */
     public static void printResults(ArrayList<Course> orderList){
         for(int i = 0; i < orderList.size(); i++){
-            System.out.println(orderList.get(i));
+            System.out.println(orderList.get(i).courseCode + " " + orderList.get(i).shortTitle + " " + orderList.get(i).meets + " " + orderList.get(i).startTime + "-" + orderList.get(i).endTime);
         }
 
     }
