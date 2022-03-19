@@ -152,11 +152,12 @@ public class CourseList {
     }
 
     /**
-     * Returns a calendar, will modify to list classes
-     * @param S Current classes in user schedule
+     * Returns a calendar for the current month
      */
-    public static void printCalendar(ArrayList<Course> S){
-        Calendar calendar = new GregorianCalendar(2022, 2,1);
+    public static void printCalendar(){
+        Calendar currentDate = Calendar.getInstance();
+        Calendar calendar = new GregorianCalendar(currentDate.get(Calendar.YEAR),
+                currentDate.get(Calendar.MONTH),1);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
@@ -180,10 +181,51 @@ public class CourseList {
         }
     }
 
+    /**
+     * Returns all classes on a particular day
+     * @param S List of current courses
+     * @param dayOfMonth day of the month selected by user
+     * @return ArrayList of courses
+     */
+    public static ArrayList<Course> classesPerDay(ArrayList<Course> S, int dayOfMonth){
+        Calendar c = Calendar.getInstance();
+        GregorianCalendar date = new GregorianCalendar(c.get(Calendar.YEAR),
+                c.get(Calendar.MONTH), dayOfMonth);
+        //days of the week starts with Sunday = 1
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        String day;
+        ArrayList<Course> classesForDay = new ArrayList<>();
+
+        if(dayOfWeek == 1 || dayOfWeek == 7){
+            return null;
+        }
+
+        for(int i = 0; i < S.size(); i++){
+            if(dayOfWeek == 2 && (S.get(i).meets.equals("MWF") || S.get(i).meets.equals("M"))){
+                classesForDay.add(S.get(i));
+            }
+            else if(dayOfWeek == 3 && (S.get(i).meets.equals("TR") || S.get(i).meets.equals("T"))){
+                classesForDay.add(S.get(i));
+            }
+            else if(dayOfWeek == 4 && (S.get(i).meets.equals("MWF") || S.get(i).meets.equals("W"))){
+                classesForDay.add(S.get(i));
+            }
+            else if(dayOfWeek == 5 && (S.get(i).meets.equals("TR") || S.get(i).meets.equals("R"))){
+                classesForDay.add(S.get(i));
+            }
+            else if(dayOfWeek == 6 && (S.get(i).meets.equals("MWF") || S.get(i).meets.equals("F"))){
+                classesForDay.add(S.get(i));
+            }
+        }
+        return classesForDay;
+    }
+
     public static void confirmS(ArrayList<Course> S) {
         //check for number of conflicts
         Scanner scn = new Scanner(System.in);
         int conflicts = countConflicts(S);
+        int dayOfMonth;
+
         if (conflicts > 0) {
             System.out.println(conflicts + " classes conflict, would you still like to" +
                     " confirm? (Y/N)");
@@ -191,11 +233,18 @@ public class CourseList {
             boolean confirmed = false;
             while (!confirmed) {
                 if (answer.equalsIgnoreCase("YES") || answer.equalsIgnoreCase("Y")) {
-                    printCalendar(S);
                     System.out.println(conflicts + " classes conflict.");
+                    printCalendar();
                     confirmed = true;
 
-                    //Let the user edit schedule and print their status sheet here? or outside loop
+                    System.out.println("Select a day to view classes, enter what day of the month");
+                    dayOfMonth = scn.nextInt();
+
+                    ArrayList<Course> classes = classesPerDay(S,dayOfMonth);
+                    int conflictsPerDay = countConflicts(classes);
+
+                    System.out.println(conflictsPerDay + " classes conflict on this day.");
+                    System.out.println(classes);
 
                 } else if (answer.equalsIgnoreCase("NO") || answer.equalsIgnoreCase("N")) {
                     System.out.println("Proceed back to course list.");
@@ -209,9 +258,13 @@ public class CourseList {
         //if no conflicts, then proceed with confirming schedule
         else{
             System.out.println(conflicts + " conflicts exist. Confirming schedule now.");
-            printCalendar(S);
+            printCalendar();
 
-            //Let user get status sheet or continue to edit schedule
+            System.out.println("Select a day to view classes, enter what day of the month");
+            dayOfMonth = scn.nextInt();
+
+            ArrayList<Course> classes = classesPerDay(S,dayOfMonth);
+            System.out.println(classes);
         }
     }
 

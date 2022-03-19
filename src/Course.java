@@ -2,7 +2,6 @@
 
 public class Course {
     String courseCode;
-    protected String time;
     String longTitle;
     String shortTitle;
     String meets;
@@ -44,18 +43,7 @@ public class Course {
         this.courseCode = courseCode;
         this.shortTitle = shortTitle;
         this.longTitle = longTitle;
-        //this.startTime = 0;
     }
-
-    /*public String getTime(){
-        if(startTime == 0){
-            return "na";
-        }
-        else {
-            time = startTime + "-" + endTime;
-            return time;
-        }
-    }*/
 
     /**
      * For full length courses
