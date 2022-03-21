@@ -57,7 +57,7 @@ public class Main {
         System.out.println("login\t\tsign up\t\tquit\n");
         System.out.print(">");
         String commandLn = mainScn.nextLine();
-        StringTokenizer st = new StringTokenizer(commandLn, " ");
+        StringTokenizer st = new StringTokenizer(commandLn, " "); //Like a second scanner that parses the line from mainScn
         String command = st.nextToken();
 
         while (!command.equals("quit")){
@@ -95,22 +95,24 @@ public class Main {
 
             }
 
-            else if(command.equals("remove")){
-                //System.out.println("Contains: " + user.scheduleContains("BIOL 234 A"));
+            else if(command.equals("remove")){  //user input should take the form 'remove ACCT 202 B'
                 String code = "";
                     while(st.hasMoreTokens()) {
-                        code += st.nextToken();
+                        code += st.nextToken();     //Concat course code like ACCT 202 B
 
                         if (st.hasMoreTokens()) {
                             code += " ";
                         }
                     }
-                //System.out.println("Contains: " + user.scheduleContains(code));
-                //System.out.println("code:" + code);
+
                     if(user.scheduleContains(code)) {
                         Course c = user.getCourse(code);
                         cl.removeClass(c, user.schedule);
                         tempPrint(user.schedule);
+                    }
+
+                    else {
+                        System.out.println("Error: Course not found.");
                     }
             }
 
