@@ -106,51 +106,123 @@ public class Search {
             return null;
         }
     }
+    //day filter code
 
+    // HashMap initialized with string as a key and a list of strings
+    public static Map<String, List<String>> mapCoursesDays = null;
 
+    // initlaizing map
+    static {
+        mapCoursesDays = new HashMap<>();
+    }
 
-        public static void dayFilter(String days) {
-            Connection conn = null;
-            if (days.equals("MWF")) {
-                try {
-                    conn = DriverManager.getConnection("jdbc:sqlite:courseList.db");
-                    Statement statement = conn.createStatement();
-                    statement.executeUpdate("DROP table if exists courseList");
-                    String select = "SELECT * from CourseList";
-                    ResultSet result = statement.executeQuery(select);
+    public static void filterTxtDays() {
+        String line;
+        BufferedReader br = null;
+        boolean header = true;
 
-                    while (result.next()) {
-                        String code = result.getString("CourseCode");
-                        String description = result.getString("LongTitle");
-                        System.out.println(code + " " + description);
-                    }
-                } catch (SQLException e) {
-                    System.out.println("Error connecting to the SQLite database");
-                    e.printStackTrace();
+        try {
+            br = new BufferedReader(new FileReader("classFile.txt"));
+            // while there is still data left in the file
+            while ((line = br.readLine()) != null) {
+                // this will make sure the header is not added to the map
+                if (header) {
+                    header = false;
+                    continue;
                 }
+                String[] split = line.split(","); // separates columns using a comma
+                populateMapDays(split[5], split[0]); // adds the columns for coursecode and time
             }
-            if (days.equals("TR")) {
-                try {
-                    conn = DriverManager.getConnection("jdbc:sqlite:courseList.db");
-                    Statement statement = conn.createStatement();
-                    statement.executeUpdate("DROP table if exists courseList");
-                    String select = "SELECT CourseCode, LongTitle FROM courseList where Meets = 'TR'";
-                    ResultSet result = statement.executeQuery(select);
-
-                    while (result.next()) {
-                        String code = result.getString("CourseCode");
-                        String description = result.getString("LongTitle");
-                        System.out.println(code + " " + description);
-                    }
-                } catch (SQLException e) {
-                    System.out.println("Error connecting to the SQLite database");
-                    e.printStackTrace();
-                }
-            }
+            promptUserDays();
+            // error catching
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+    }
 
+    public static void populateMapDays(String day, String courseCode) {
+        List<String> courses = null;
+        if (mapCoursesDays.containsKey(day)) {
+            courses = mapCoursesDays.get(day);
+            courses.add(courseCode);
+            mapCoursesDays.put(day, courses);
+        } else {
+            courses = new ArrayList<>();
+            courses.add(courseCode);
+            mapCoursesDays.put(day, courses);
+        }
+    }
 
+    public static void promptUserDays() {
+        Scanner scnr = new Scanner(System.in);
+        System.out.println("Enter the days you want to see classes on");
+        String daysEntered = scnr.nextLine();
+        List<String> courses = mapCoursesDays.get(daysEntered);
+        courses.forEach(System.out::println);
+        scnr.close();
+    }
+
+    // time filter code
+
+    // HashMap initialized with string as a key and a list of strings
+    public static Map<String, List<String>> mapCoursesTimes = null;
+
+    // initlaizing map
+    static {
+        mapCoursesTimes = new HashMap<>();
+    }
+
+    public static void filterTxtTimes() {
+        String line;
+        BufferedReader br = null;
+        boolean header = true;
+
+        try {
+            br = new BufferedReader(new FileReader("classFile.txt"));
+            // while there is still data left in the file
+            while ((line = br.readLine()) != null) {
+                // this will make sure the header is not added to the map
+                if (header) {
+                    header = false;
+                    continue;
+                }
+                String[] split = line.split(","); // separates columns using a comma
+                populateMapTimes(split[3], split[0]); // adds the columns for coursecode and day
+            }
+            promptUserTimes();
+            // error catching
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void populateMapTimes(String time, String courseCode) {
+        List<String> courses = null;
+        if (mapCoursesTimes.containsKey(time)) {
+            courses = mapCoursesTimes.get(time);
+            courses.add(courseCode);
+            mapCoursesTimes.put(time, courses);
+        } else {
+            courses = new ArrayList<>();
+            courses.add(courseCode);
+            mapCoursesTimes.put(time, courses);
+        }
+    }
+
+    public static void promptUserTimes() {
+        Scanner scnr = new Scanner(System.in);
+        System.out.println("Enter the times you want to see classes on");
+        String timesEntered = scnr.nextLine();
+        List<String> courses = mapCoursesTimes.get(timesEntered);
+        courses.forEach(System.out::println);
+        scnr.close();
+    }
 
     public static void main(String[] args){ //Temporary main for testing
         ArrayList<Course> daCourses = getResults("comp");
@@ -165,7 +237,5 @@ public class Search {
         String days1 = "MWF";
         String days2 = "TR";
 
-        dayFilter(days1);
-        dayFilter(days2);
     }
 }
