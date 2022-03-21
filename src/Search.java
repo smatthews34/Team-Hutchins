@@ -1,10 +1,5 @@
 import java.util.*;
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 public class Search {
     static String searchInput; //Change from static later
@@ -234,8 +229,7 @@ public class Search {
         for (Course daCours : daCourses) {
             System.out.println(daCours.longTitle);
         }
-        String days1 = "MWF";
-        String days2 = "TR";
-
+        filterTxtDays();
+        filterTxtTimes();
     }
 }
