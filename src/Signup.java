@@ -13,22 +13,21 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Signup {
-    static String username; //change from static later
-    static String password; //change from static later
+    String username; //change from static later
+    String password; //change from static later
 
     public Signup(String username, String password){
         this.username = username;
         this.password = password;
-        signupSubmit();
     }
 
-    public static void signupSubmit(){
+    public int signupSubmit(){ //Return value of 1 is a dummy value
         try {
-            if (checkIfValid()) {
+            if (checkIfUserValid() && checkIfPasswordValid()) {
                 File file = new File("loginInfo.txt");
                 File encryptedFile = new File("encryptedInfo.des");
                 if (encryptedFile.exists()) {
-                    System.out.println("There is already a registered account with these credentials");
+                    return -1;
                 } else {
                     boolean worked = file.createNewFile();
                     if (worked){
@@ -38,26 +37,32 @@ public class Signup {
                         fw.close();
                         AESEncryption();
                         file.delete();
-                        System.out.println("Successfully Registered");
+                        return 0;
                     }
                     else{
                         System.out.println("Could not open new file to log in, please try again");
+                        return 1;
                     }
                 }
                 //Submit to the database potentially or encryption/decryption
                 //Log the user in
             }
+            return 1;
         } catch (IOException e){
-            System.out.println("Error with file config");
             e.printStackTrace();
+            return 1;
         }
     }
 
-    public static boolean checkIfValid(){
-        return username != null && password != null; //May want additional test cases
+    public boolean checkIfUserValid(){
+        return username != null; //May want additional test cases
     }
 
-    public static void AESEncryption() {
+    public boolean checkIfPasswordValid(){
+        return password != null; //May want additional test cases
+    }
+
+    public void AESEncryption() {
         // file to be encrypted
         try {
             FileInputStream inFile = new FileInputStream("loginInfo.txt");
@@ -125,14 +130,4 @@ public class Signup {
         }
 
     }
-
-
-
-
-    public static void main (String[] args){
-        Signup.username = "user";
-        Signup.password = "pass";
-        Signup.signupSubmit();
-    }
-
 }

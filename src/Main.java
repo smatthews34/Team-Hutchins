@@ -72,9 +72,31 @@ public class Main {
                 tempPrint(user.schedule);
             }
 
-           else if(command.equals("sign up")){
-                //TODO
-                System.out.println("- TODO: sign up");
+           else if(command.equals("sign up")){ //Make sure this can be accessed with space, change to sign up later
+                Scanner signScn = new Scanner(System.in);
+                System.out.println("Enter new username");
+                String username = signScn.next();
+                System.out.println("Enter new password");
+                String password = signScn.next();
+                Signup s = new Signup(username, password);
+
+                if (!s.checkIfUserValid()){
+                    System.out.println("Username is null, please try again");
+                }
+                else if (!s.checkIfPasswordValid()){
+                    System.out.println("Password is null, please try again");
+                }
+                else{ //Username and password are valid
+                    int errno = s.signupSubmit();
+                    if (errno == 0){
+                        System.out.println("Successfully Registered");
+                    }
+                    else if (errno == -1){ //There is already a registered account with these credentials
+                        System.out.println("You are already signed in");
+                    }
+                }
+                //Scan user input for username and password, check for validity
+                //If valid complete sign up & log in, if not valid redo prompt or exit
             }
 
            else if(command.equals("add")){
