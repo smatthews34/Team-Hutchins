@@ -79,6 +79,18 @@ public class Main {
 
            else if(command.equals("add")){
                 //TODO
+                String addOption = "";
+                while(!addOption.equals("done")) {
+                    System.out.println("Enter course to be added or enter 'done' if finished adding: ");
+                    addOption = mainScn.next();
+                    //course validor or retriever to make adding easy
+                    if(!addOption.equals("done")){
+                        //Course add = new Course();
+                        //addCourse(add, useSchedule);
+                    }else {
+                        System.out.println("Please enter a valid class.");
+                    }
+                }
                 System.out.println("- TODO: add");
 
             }
