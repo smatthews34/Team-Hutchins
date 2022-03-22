@@ -128,144 +128,11 @@ public class CourseList {
     public static boolean checkConfliction(Course C, ArrayList<Course> S){
         boolean check = false;
         for(int i = 0; i < S.size(); i++){
-            if(S.get(i).startTime == C.startTime && S.get(i).meets.equals(C.meets)){
+            if(S.get(i).startTime != null && S.get(i).startTime == C.startTime && S.get(i).meets.equals(C.meets)){
                 check = true;
             }
         }
         return check;
-    }
-
-    /**
-     * Count how many courses have a conflict
-     * @param S Student schedule
-     * @return number of conflicts
-     */
-    public static int countConflicts(ArrayList<Course> S){
-        int count = 0;
-        for(int i = 0; i < S.size(); i++){
-            Course c = S.get(i);
-            if(checkConfliction(c, S)){
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Returns a calendar for the current month
-     */
-    public static void printCalendar(){
-        Calendar currentDate = Calendar.getInstance();
-        Calendar calendar = new GregorianCalendar(currentDate.get(Calendar.YEAR),
-                currentDate.get(Calendar.MONTH),1);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-        System.out.println(new SimpleDateFormat("MMMM yyyy").format(calendar.getTime()));
-        System.out.println("  S   M   T   W   T   F   S");
-
-        //print initial spaces
-        String initialSpace = "";
-        for (int i = 0; i < dayOfWeek - 1; i++) {
-            initialSpace += "    ";
-        }
-        System.out.print(initialSpace);
-
-        //print the days of the month starting from 1
-        for (int i = 0, dayOfMonth = 1; dayOfMonth <= daysInMonth; i++) {
-            for (int j = ((i == 0) ? dayOfWeek - 1 : 0); j < 7 && (dayOfMonth <= daysInMonth); j++) {
-                System.out.printf("%3d ", dayOfMonth);
-                dayOfMonth++;
-            }
-            System.out.println();
-        }
-    }
-
-    /**
-     * Returns all classes on a particular day
-     * @param S List of current courses
-     * @param dayOfMonth day of the month selected by user
-     * @return ArrayList of courses
-     */
-    public static ArrayList<Course> classesPerDay(ArrayList<Course> S, int dayOfMonth){
-        Calendar c = Calendar.getInstance();
-        GregorianCalendar date = new GregorianCalendar(c.get(Calendar.YEAR),
-                c.get(Calendar.MONTH), dayOfMonth);
-        //days of the week starts with Sunday = 1
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-        String day;
-        ArrayList<Course> classesForDay = new ArrayList<>();
-
-        if(dayOfWeek == 1 || dayOfWeek == 7){
-            return null;
-        }
-
-        for(int i = 0; i < S.size(); i++){
-            if(dayOfWeek == 2 && (S.get(i).meets.equals("MWF") || S.get(i).meets.equals("M"))){
-                classesForDay.add(S.get(i));
-            }
-            else if(dayOfWeek == 3 && (S.get(i).meets.equals("TR") || S.get(i).meets.equals("T"))){
-                classesForDay.add(S.get(i));
-            }
-            else if(dayOfWeek == 4 && (S.get(i).meets.equals("MWF") || S.get(i).meets.equals("W"))){
-                classesForDay.add(S.get(i));
-            }
-            else if(dayOfWeek == 5 && (S.get(i).meets.equals("TR") || S.get(i).meets.equals("R"))){
-                classesForDay.add(S.get(i));
-            }
-            else if(dayOfWeek == 6 && (S.get(i).meets.equals("MWF") || S.get(i).meets.equals("F"))){
-                classesForDay.add(S.get(i));
-            }
-        }
-        return classesForDay;
-    }
-
-    public static void confirmS(ArrayList<Course> S) {
-        //check for number of conflicts
-        Scanner scn = new Scanner(System.in);
-        int conflicts = countConflicts(S);
-        int dayOfMonth;
-
-        if (conflicts > 0) {
-            System.out.println(conflicts + " classes conflict, would you still like to" +
-                    " confirm? (Y/N)");
-            String answer = scn.next();
-            boolean confirmed = false;
-            while (!confirmed) {
-                if (answer.equalsIgnoreCase("YES") || answer.equalsIgnoreCase("Y")) {
-                    System.out.println(conflicts + " classes conflict.");
-                    printCalendar();
-                    confirmed = true;
-
-                    System.out.println("Select a day to view classes, enter what day of the month");
-                    dayOfMonth = scn.nextInt();
-
-                    ArrayList<Course> classes = classesPerDay(S,dayOfMonth);
-                    int conflictsPerDay = countConflicts(classes);
-
-                    System.out.println(conflictsPerDay + " classes conflict on this day.");
-                    System.out.println(classes);
-
-                } else if (answer.equalsIgnoreCase("NO") || answer.equalsIgnoreCase("N")) {
-                    System.out.println("Proceed back to course list.");
-                    confirmed = true;
-                } else {
-                    System.out.println("Invalid input. Type Yes or No.");
-                    answer = scn.next();
-                }
-            }
-        }
-        //if no conflicts, then proceed with confirming schedule
-        else{
-            System.out.println(conflicts + " conflicts exist. Confirming schedule now.");
-            printCalendar();
-
-            System.out.println("Select a day to view classes, enter what day of the month");
-            dayOfMonth = scn.nextInt();
-
-            ArrayList<Course> classes = classesPerDay(S,dayOfMonth);
-            System.out.println(classes);
-        }
     }
 
     public static void main(String[] args) {
@@ -295,7 +162,7 @@ public class CourseList {
         //Test 4, test for confirm schedule
         System.out.println("Test 4:");
         System.out.println(test);
-        confirmS(test);
+        //confirmS(test);
 
         //Test 5
         System.out.println("Test 5:");

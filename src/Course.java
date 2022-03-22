@@ -51,7 +51,7 @@ public class Course {
      */
     @Override
     public String toString(){
-        return String.format(courseCode + " " + shortTitle + " " + startTime + "-" + endTime + " " + meets + " " + longTitle);
+        return String.format(courseCode + " " + shortTitle + " " + startTime + "-" + endTime + " " + meets);
     }
 
 
