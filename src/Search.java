@@ -154,9 +154,11 @@ public class Search {
     public static void promptUserDays() {
         Scanner scnr = new Scanner(System.in);
         System.out.println("Enter the days you want to see classes on");
-        String daysEntered = scnr.nextLine();
-        List<String> courses = mapCoursesDays.get(daysEntered);
-        courses.forEach(System.out::println);
+        while(scnr.hasNextLine()){
+            String daysEntered = scnr.nextLine();
+            List<String> courses = mapCoursesDays.get(daysEntered);
+            courses.forEach(System.out::println);
+        }
         scnr.close();
     }
 
@@ -213,9 +215,11 @@ public class Search {
     public static void promptUserTimes() {
         Scanner scnr = new Scanner(System.in);
         System.out.println("Enter the times you want to see classes on");
-        String timesEntered = scnr.nextLine();
-        List<String> courses = mapCoursesTimes.get(timesEntered);
-        courses.forEach(System.out::println);
+        while(scnr.hasNextLine()){
+            String timesEntered = scnr.nextLine();
+            List<String> courses = mapCoursesTimes.get(timesEntered);
+            courses.forEach(System.out::println);
+        }
         scnr.close();
     }
 
