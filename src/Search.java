@@ -223,6 +223,63 @@ public class Search {
         scnr.close();
     }
 
+    // HashMap initialized with string as a key and a list of strings
+    public static Map<String, List<String>> mapCoursesDepts = null;
+
+    // initlaizing map
+    static {
+        mapCoursesDepts = new HashMap<>();
+    }
+
+    public static void filterTxtDepts() {
+        String line;
+        BufferedReader br = null;
+        boolean header = true;
+
+        try {
+            br = new BufferedReader(new FileReader("classFile.txt"));
+            // while there is still data left in the file
+            while ((line = br.readLine()) != null) {
+                // this will make sure the header is not added to the map
+                if (header) {
+                    header = false;
+                    continue;
+                }
+                String[] split = line.split(","); // separates columns using a comma
+                populateMapDepts(split[10], split[0]); // adds the columns for coursecode and time
+            }
+            promptUserDepts();
+            // error catching
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void populateMapDepts(String dept, String courseCode) {
+        List<String> courses = null;
+        if (mapCoursesDepts.containsKey(dept)) {
+            courses = mapCoursesDepts.get(dept);
+            courses.add(courseCode);
+            mapCoursesDepts.put(dept, courses);
+        } else {
+            courses = new ArrayList<>();
+            courses.add(courseCode);
+            mapCoursesDepts.put(dept, courses);
+        }
+    }
+
+    public static void promptUserDepts() {
+        Scanner scnr = new Scanner(System.in);
+        System.out.println("Enter the depts you want to see classes in");
+        String deptsEntered = scnr.nextLine();
+        List<String> courses = mapCoursesDepts.get(deptsEntered);
+        courses.forEach(System.out::println);
+        scnr.close();
+    }
+
     public static void main(String[] args){ //Temporary main for testing
         filterTxtDays();
         //filterTxtTimes();
