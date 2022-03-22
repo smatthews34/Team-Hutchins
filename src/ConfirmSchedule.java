@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -90,6 +91,11 @@ public class ConfirmSchedule {
         }
     }
 
+    /**
+     * Takes a day of the month and finds what weekday it is
+     * @param dayOfMonth, user input
+     * @return day of the week in integer format
+     */
     public static int findDayOfWeek(int dayOfMonth){
         Calendar c = Calendar.getInstance();
         GregorianCalendar date = new GregorianCalendar(c.get(Calendar.YEAR),
@@ -139,7 +145,15 @@ public class ConfirmSchedule {
      * @return Sorted list of courses
      */
     public static ArrayList<Course> orderList(ArrayList<Course> courseList){
-        ArrayList<Course> ordered = courseList;
+        ArrayList<Course> ordered = (ArrayList<Course>) courseList.clone();
+        ArrayList<Course> indStudy = new ArrayList<Course>();
+        for(int i = 0; i<ordered.size(); i++){
+            if(ordered.get(i).meets == null){
+                Course c = ordered.get(i);
+                indStudy.add(c);
+                ordered.remove(c);
+            }
+        }
         Collections.sort(ordered, new Comparator<Course>() {
             @Override
             public int compare(Course c1, Course c2) {
@@ -148,6 +162,11 @@ public class ConfirmSchedule {
                 return time1.compareTo(time2);
             }
         });
+
+        for(int i = 0; i < indStudy.size(); i++){
+            ordered.add(indStudy.get(i));
+        }
+
         return ordered;
         //return ordered
     }
@@ -155,14 +174,15 @@ public class ConfirmSchedule {
     public static void main(String[] args) throws FileNotFoundException {
         ArrayList<Course> S = new ArrayList<Course>();
         Course c1 = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
-        //Course c2 = new Course("PHIL 101", "Intro Phil", "Introduction to Philosophy", "9", "10", "MWF", "SHAL", "102");
+        Course c2 = new Course("PHIL 101", "Intro Phil", "Introduction to Philosophy", "9", "10", "MWF", "SHAL", "102");
         Course c3 = new Course("ACCT 202", "PRIN OF ACCOUNT", "PRINCIPLES OF ACCOUNTING II", "4", "6","R", "HAL", "302");
         Course c4 = new Course("BUSA 303", "BUS LAW", "BUSINESS LAW", "10", "11","TR", "HAL", "302");
-        //Course c3 = new Course("BIOL 370", "IND RESEARCH", "INDEPENDENT RESEARCH");
+        Course c5 = new Course("BIOL 370", "IND RESEARCH", "INDEPENDENT RESEARCH");
         S.add(c1);
-        //S.add(c2);
+        S.add(c2);
         S.add(c3);
         S.add(c4);
+        S.add(c5);
 
         //check for number of conflicts
         Scanner scn = new Scanner(System.in);
@@ -183,11 +203,16 @@ public class ConfirmSchedule {
                     System.out.println("Select a day to view classes, enter what day of the month");
                     dayOfMonth = scn.nextInt();
 
-                    ArrayList<Course> classes = classesPerDay(S,findDayOfWeek(dayOfMonth), false);
-                    int conflictsPerDay = countConflicts(classes);
+                    if(findDayOfWeek(dayOfMonth) == 1 || findDayOfWeek(dayOfMonth) == 7){
+                        System.out.println("There are no classes on the weekend");
+                    }
+                    else {
+                        ArrayList<Course> classes = classesPerDay(S, dayOfMonth, false);
+                        int conflictsPerDay = countConflicts(classes);
 
-                    System.out.println(conflictsPerDay + " conflict(s) on this day.");
-                    System.out.println(classes);
+                        System.out.println(conflictsPerDay + " conflict(s) on this day.");
+                        System.out.println(courseListString(classes));
+                    }
 
                     scheduleFile(S);
 
@@ -208,8 +233,13 @@ public class ConfirmSchedule {
             System.out.println("Select a day to view classes, enter what day of the month");
             dayOfMonth = scn.nextInt();
 
-            ArrayList<Course> classes = classesPerDay(S,dayOfMonth, false);
-            System.out.println(classes);
+            if(findDayOfWeek(dayOfMonth) == 1 || findDayOfWeek(dayOfMonth) == 7){
+                System.out.println("There are no classes on the weekend");
+            }
+            else {
+                ArrayList<Course> classes = classesPerDay(S, dayOfMonth, false);
+                System.out.println(courseListString(classes));
+            }
 
             scheduleFile(S);
         }
