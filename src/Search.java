@@ -237,7 +237,7 @@ public class Search {
         boolean header = true;
 
         try {
-            br = new BufferedReader(new FileReader("classFile.txt"));
+            br = new BufferedReader(new FileReader("classFileDeptFilter.txt"));
             // while there is still data left in the file
             while ((line = br.readLine()) != null) {
                 // this will make sure the header is not added to the map
@@ -281,7 +281,8 @@ public class Search {
     }
 
     public static void main(String[] args){ //Temporary main for testing
-        filterTxtDays();
+        //filterTxtDays();
         //filterTxtTimes();
+        filterTxtDepts();
     }
 }
