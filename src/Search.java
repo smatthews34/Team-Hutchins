@@ -224,16 +224,7 @@ public class Search {
     }
 
     public static void main(String[] args){ //Temporary main for testing
-        ArrayList<Course> daCourses = getResults("comp");
-        printResults(orderSearch(daCourses));
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        printResults(daCourses);
-        for (Course daCours : daCourses) {
-            System.out.println(daCours.longTitle);
-        }
         filterTxtDays();
-        filterTxtTimes();
+        //filterTxtTimes();
     }
 }
