@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "quit"};
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit"};
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -153,6 +153,25 @@ public class Main {
             else if(command.equals("list")){
                 printCommands();
 
+            }
+            else if(command.equals("filter")){
+                System.out.println("What would you like to filter by?");
+                System.out.println("The options are to filter by: day, time or department");
+                String filter = st.nextToken();
+                if(filter.equals("days")){
+                    Search.filterTxtDays();
+                }
+                else if(filter.equals("time")){
+                    Search.filterTxtTimes();
+                }
+                else if(filter.equals("department")){
+                    Search.filterTxtDepts();
+                }
+                else{
+                    System.out.println("Not a valid filter");
+                    printEndScreen();
+                    printScreen();
+                }
             }
             //etc
 
