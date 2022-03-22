@@ -126,9 +126,9 @@ public class Search {
                     continue;
                 }
                 String[] split = line.split(","); // separates columns using a comma
-                populateMapDays(split[5], split[0]); // adds the columns for coursecode and time
+                populateMapDays(split[5], split[0]); // adds the columns for coursecode and days
             }
-            promptUserDays();
+            promptUserDays(); //calls the prompt user method after
             // error catching
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -140,6 +140,7 @@ public class Search {
 
     public static void populateMapDays(String day, String courseCode) {
         List<String> courses = null;
+        // if the map contains the key, in this case the day that the class takes place on, it is added to the list
         if (mapCoursesDays.containsKey(day)) {
             courses = mapCoursesDays.get(day);
             courses.add(courseCode);
@@ -157,7 +158,7 @@ public class Search {
         while(scnr.hasNextLine()){
             String daysEntered = scnr.nextLine();
             List<String> courses = mapCoursesDays.get(daysEntered);
-            courses.forEach(System.out::println);
+            courses.forEach(System.out::println); // prints out the list of appropriate courses
         }
         scnr.close();
     }
@@ -187,9 +188,9 @@ public class Search {
                     continue;
                 }
                 String[] split = line.split(","); // separates columns using a comma
-                populateMapTimes(split[3], split[0]); // adds the columns for coursecode and day
+                populateMapTimes(split[3], split[0]); // adds the columns for coursecode and start time
             }
-            promptUserTimes();
+            promptUserTimes(); // then calls the prompt user method
             // error catching
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -201,6 +202,7 @@ public class Search {
 
     public static void populateMapTimes(String time, String courseCode) {
         List<String> courses = null;
+        // if the map contains the key, in this case the time that the class takes place on, it is added to the list
         if (mapCoursesTimes.containsKey(time)) {
             courses = mapCoursesTimes.get(time);
             courses.add(courseCode);
@@ -218,10 +220,12 @@ public class Search {
         while(scnr.hasNextLine()){
             String timesEntered = scnr.nextLine();
             List<String> courses = mapCoursesTimes.get(timesEntered);
-            courses.forEach(System.out::println);
+            courses.forEach(System.out::println); // prints list of appropriate courses
         }
         scnr.close();
     }
+
+    // dept filter code
 
     // HashMap initialized with string as a key and a list of strings
     public static Map<String, List<String>> mapCoursesDepts = null;
@@ -246,9 +250,9 @@ public class Search {
                     continue;
                 }
                 String[] split = line.split(","); // separates columns using a comma
-                populateMapDepts(split[10], split[0]); // adds the columns for coursecode and time
+                populateMapDepts(split[10], split[0]); // adds the columns for coursecode and department
             }
-            promptUserDepts();
+            promptUserDepts(); //calls the method to prompt the user
             // error catching
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -260,6 +264,7 @@ public class Search {
 
     public static void populateMapDepts(String dept, String courseCode) {
         List<String> courses = null;
+        // if the map contains the key, in this case the department, it is added to the list
         if (mapCoursesDepts.containsKey(dept)) {
             courses = mapCoursesDepts.get(dept);
             courses.add(courseCode);
@@ -276,13 +281,8 @@ public class Search {
         System.out.println("Enter the depts you want to see classes in");
         String deptsEntered = scnr.nextLine();
         List<String> courses = mapCoursesDepts.get(deptsEntered);
-        courses.forEach(System.out::println);
+        courses.forEach(System.out::println); // prints the array of course codes
         scnr.close();
     }
 
-    public static void main(String[] args){ //Temporary main for testing
-        //filterTxtDays();
-        //filterTxtTimes();
-        filterTxtDepts();
-    }
 }
