@@ -91,7 +91,7 @@ public class Main {
                 tempPrint(user.schedule);
             }
 
-           else if(command.equals("sign up")){ //Make sure this can be accessed with space, change to sign up later
+           else if(command.equals("sign_up")){ //Make sure this can be accessed with space, change to sign up later
                 Scanner signScn = new Scanner(System.in);
                 System.out.println("Enter new username");
                 String username = signScn.next();
@@ -113,10 +113,11 @@ public class Main {
                 else{ //Username, password, and name are valid
                     int errno = s.signupSubmit();
                     if (errno == 0){
-                        System.out.println("Successfully Registered, please log in");
+                        System.out.println("Successfully Registered, use 'login' command to log in");
                     }
                     else if (errno == -1){ //There is already a registered account with these credentials
-                        System.out.println("You are already signed in");
+                        System.out.println("There is already a registered account on this machine, " +
+                                "please use 'login' command to log in"); //Potentially allow multiple users in Sprint 2
                     }
                 }
                 //Scan user input for username and password, check for validity

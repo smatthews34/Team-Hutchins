@@ -69,7 +69,7 @@ public class Signup {
         return name != null; //May want additional test cases
     }
 
-    public void AESEncryption() {
+    private void AESEncryption() {
         // file to be encrypted
         try {
             FileInputStream inFile = new FileInputStream("loginInfo.txt");
