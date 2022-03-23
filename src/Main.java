@@ -130,11 +130,13 @@ public class Main {
                 while(!addOption.equals("done")) {
                     System.out.println("Enter course in the format; CODE ### A, to be added or enter 'done' if finished adding: ");
                     addOption = add.nextLine();
-                    Course a = cl.getCourse(addOption);
-                    if (!a.equals(null)) {
-                        cl.addClass(a, user.schedule);
-                    } else {
-                        System.out.println("Please enter a valid class.");
+                    if (!addOption.equals("done")) {
+                        Course a = cl.getCourse(addOption);
+                        if (!a.equals(null)) {
+                            cl.addClass(a, user.schedule);
+                        } else {
+                            System.out.println("Please enter a valid class.");
+                        }
                     }
                 }
                 add.close();
