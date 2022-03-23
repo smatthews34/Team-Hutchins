@@ -22,12 +22,12 @@ public class Login {
         this.password = password;
     }
 
-    public String loginSubmit() {
+    public User loginSubmit() {
         if (checkMatch()) {
-            return name; //May return whole user later
+            return new User(username, password, name); //May return whole user later
         }
         else {
-            return "";
+            return null;
         }
     }
 
