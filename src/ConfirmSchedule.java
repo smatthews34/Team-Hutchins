@@ -115,7 +115,7 @@ public class ConfirmSchedule {
         ArrayList<Course> classesForDay = new ArrayList<>();
 
         if(dayOfWeek == 1 || dayOfWeek == 7){
-            return null;
+            return classesForDay;
         }
 
         for(int i = 0; i < S.size(); i++){
@@ -146,7 +146,7 @@ public class ConfirmSchedule {
      */
     public static ArrayList<Course> orderList(ArrayList<Course> courseList){
         ArrayList<Course> ordered = (ArrayList<Course>) courseList.clone();
-        ArrayList<Course> indStudy = new ArrayList<Course>();
+        ArrayList<Course> indStudy = new ArrayList<>();
         for(int i = 0; i<ordered.size(); i++){
             if(ordered.get(i).meets == null){
                 Course c = ordered.get(i);
@@ -157,8 +157,8 @@ public class ConfirmSchedule {
         Collections.sort(ordered, new Comparator<Course>() {
             @Override
             public int compare(Course c1, Course c2) {
-                String time1 = ((Course) c1).startTime; //getters could be used here
-                String time2 = ((Course) c2).startTime;
+                String time1 = c1.startTime; //getters could be used here
+                String time2 = c2.startTime;
                 return time1.compareTo(time2);
             }
         });
@@ -174,10 +174,11 @@ public class ConfirmSchedule {
     public static void main(String[] args) throws FileNotFoundException {
         ArrayList<Course> S = new ArrayList<Course>();
         Course c1 = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
-        Course c2 = new Course("PHIL 101", "Intro Phil", "Introduction to Philosophy", "9", "10", "MWF", "SHAL", "102");
         Course c3 = new Course("ACCT 202", "PRIN OF ACCOUNT", "PRINCIPLES OF ACCOUNTING II", "4", "6","R", "HAL", "302");
         Course c4 = new Course("BUSA 303", "BUS LAW", "BUSINESS LAW", "10", "11","TR", "HAL", "302");
         Course c5 = new Course("BIOL 370", "IND RESEARCH", "INDEPENDENT RESEARCH");
+        Course c2 = new Course("PHIL 101", "Intro Phil", "Introduction to Philosophy", "9", "10", "MWF", "SHAL", "102");
+
         S.add(c1);
         S.add(c2);
         S.add(c3);
@@ -207,11 +208,10 @@ public class ConfirmSchedule {
                         System.out.println("There are no classes on the weekend");
                     }
                     else {
-                        ArrayList<Course> classes = classesPerDay(S, dayOfMonth, false);
-                        int conflictsPerDay = countConflicts(classes);
-
-                        System.out.println(conflictsPerDay + " conflict(s) on this day.");
+                        ArrayList<Course> classes = classesPerDay(S, findDayOfWeek(dayOfMonth), false);
                         System.out.println(courseListString(classes));
+                        int conflictsPerDay = countConflicts(classes);
+                        System.out.println(conflictsPerDay + " conflict(s) on this day.");
                     }
 
                     scheduleFile(S);
@@ -237,7 +237,7 @@ public class ConfirmSchedule {
                 System.out.println("There are no classes on the weekend");
             }
             else {
-                ArrayList<Course> classes = classesPerDay(S, dayOfMonth, false);
+                ArrayList<Course> classes = classesPerDay(S, findDayOfWeek(dayOfMonth), false);
                 System.out.println(courseListString(classes));
             }
 
