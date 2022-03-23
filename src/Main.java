@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -62,8 +63,26 @@ public class Main {
 
         while (!command.equals("quit")){
             if(command.equals("login")){
-                //TODO
-                System.out.println("- TODO: login");
+                File file = new File("encryptedInfo.des");
+                Scanner loginScn = new Scanner(System.in);
+                System.out.println("Enter your username");
+                String username = loginScn.next();
+                System.out.println("Enter your password");
+                String password = loginScn.next();
+
+                Login l = new Login(username, password);
+                String potentialUser = l.loginSubmit();
+
+                if (potentialUser.equals("") && file.exists()){
+                    System.out.println("Username or Password are invalid, Please Try Again");
+                }
+                else if (potentialUser.equals("") && !file.exists()) {
+                    System.out.println("User is not registered, Please Sign Up");
+                }
+                else {
+                    System.out.println(potentialUser); //Temporary
+                    //User can be logged in with the returned user string, May create new User here
+                }
 
             }
 
@@ -78,7 +97,9 @@ public class Main {
                 String username = signScn.next();
                 System.out.println("Enter new password");
                 String password = signScn.next();
-                Signup s = new Signup(username, password);
+                System.out.println("Enter your name");
+                String name = signScn.next();
+                Signup s = new Signup(username, password, name);
 
                 if (!s.checkIfUserValid()){
                     System.out.println("Username is null, please try again");
@@ -86,7 +107,10 @@ public class Main {
                 else if (!s.checkIfPasswordValid()){
                     System.out.println("Password is null, please try again");
                 }
-                else{ //Username and password are valid
+                else if (!s.checkIfNameValid()){
+                    System.out.println("Name is null, please try again");
+                }
+                else{ //Username, password, and name are valid
                     int errno = s.signupSubmit();
                     if (errno == 0){
                         System.out.println("Successfully Registered");

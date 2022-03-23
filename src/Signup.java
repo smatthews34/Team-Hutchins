@@ -13,17 +13,19 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Signup {
-    String username; //change from static later
-    String password; //change from static later
+    String username;
+    String password;
+    String name;
 
-    public Signup(String username, String password){
+    public Signup(String username, String password, String name){
         this.username = username;
         this.password = password;
+        this.name = name;
     }
 
     public int signupSubmit(){ //Return value of 1 is a dummy value
         try {
-            if (checkIfUserValid() && checkIfPasswordValid()) {
+            if (checkIfUserValid() && checkIfPasswordValid() && checkIfNameValid()) {
                 File file = new File("loginInfo.txt");
                 File encryptedFile = new File("encryptedInfo.des");
                 if (encryptedFile.exists()) {
@@ -33,7 +35,8 @@ public class Signup {
                     if (worked){
                         FileWriter fw = new FileWriter(file);
                         fw.write(username + "\n");
-                        fw.write(password);
+                        fw.write(password + "\n");
+                        fw.write(name);
                         fw.close();
                         AESEncryption();
                         file.delete();
@@ -60,6 +63,10 @@ public class Signup {
 
     public boolean checkIfPasswordValid(){
         return password != null; //May want additional test cases
+    }
+
+    public boolean checkIfNameValid(){
+        return name != null; //May want additional test cases
     }
 
     public void AESEncryption() {

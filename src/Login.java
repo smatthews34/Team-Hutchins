@@ -13,30 +13,32 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Login {
 
-    static public String username; //Change from static later
-    static public String password; //Change from static later
+    public String username;
+    public String password;
+    public String name;
 
     public Login (String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public static String loginSubmit() { //Change from static later
+    public String loginSubmit() {
         if (checkMatch()) {
-            return username;
+            return name; //May return whole user later
         }
         else {
-            return null;
+            return "";
         }
     }
 
-    public static boolean checkMatch(){
+    private boolean checkMatch(){
         try {
             AESDecryption();
             File file = new File("plainfile_decrypted.txt");
             Scanner fileScan = new Scanner(file);
             String fileUsername = fileScan.next();
             String filePassword = fileScan.next();
+            name = fileScan.next();
             if (!fileUsername.equals(username)) {
                 fileScan.close();
                 file.delete();
@@ -51,12 +53,11 @@ public class Login {
             file.delete();
             return true;
         } catch (FileNotFoundException e) {
-            System.out.println("User is not registered, Please Sign Up");
             return false;
         }
     }
 
-    public static void AESDecryption() {
+    private void AESDecryption() {
         try {
             String password = "javapapers";
             // reading the salt
@@ -103,11 +104,4 @@ public class Login {
 
         }
     }
-
-    public static void main (String[] args) {
-        Login.username = "user";
-        Login.password = "pass";
-        System.out.println(Login.loginSubmit());
-    }
-
 }
