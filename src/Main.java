@@ -130,6 +130,7 @@ public class Main {
                 while(!addOption.equals("done")) {
                     System.out.println("Enter course to be added or enter 'done' if finished adding: ");
                     addOption = mainScn.next();
+
                     //course validor or retriever to make adding easy
                     if(!addOption.equals("done")){
                         //Course add = new Course();

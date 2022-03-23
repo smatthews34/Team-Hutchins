@@ -10,7 +10,7 @@ public class CourseList {
     Stack<Course> undoCourseHist = new Stack<>();
     Stack<String> undoCommandHist = new Stack<>();
 
-    //public ArrayList<Course> courseList = importCourseList(); //Remove if broken
+    public ArrayList<Course> courseList = importCourseList(); //Remove if broken
 
     private void updateHistory(String command, Course course){
         commandHist.push(command);
@@ -138,6 +138,10 @@ public class CourseList {
     }
 
     //remove if broken.
+    public static Course getCourse(String code){
+
+        return null;
+    }
 
     /**
      *
