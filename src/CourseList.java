@@ -139,7 +139,14 @@ public class CourseList {
 
     //remove if broken.
     public static Course getCourse(String code){
-
+        ArrayList<Course> courseList = importCourseList();
+        Course c;
+        for(int j = 0; j < courseList.size(); j++){
+            if(courseList.get(j).courseCode.equals(code)){
+                c = courseList.get(j);
+                return c;
+            }
+        }
         return null;
     }
 
@@ -186,11 +193,15 @@ public class CourseList {
     }
     //remove if broken.
     public static void main(String[] args) {
-
+        Course zack = getCourse("ACCT 202  A");
+        System.out.println(zack);
         CourseList cList = new CourseList();
         //
         ArrayList<Course> courseList = importCourseList();
-        System.out.println(courseList);
+        for (int i = 0; i < courseList.size();i++){
+            System.out.println(courseList.get(i));
+        }
+        //System.out.println(courseList);
         //Test 1
         System.out.println("Test 1:");
         ArrayList<Course> test = new ArrayList<>();
