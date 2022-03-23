@@ -55,7 +55,7 @@ public class Main {
         printScreen();
         System.out.println("- Welcome to the Class Scheduling Assistant!");
         System.out.println("- Type what you'd like to do:\n");
-        System.out.println("login\t\tsign up\t\tquit\n");
+        System.out.println("login\t\tsign_up\t\tquit\n");
         System.out.print(">");
         String commandLn = mainScn.nextLine();
         StringTokenizer st = new StringTokenizer(commandLn, " "); //Like a second scanner that parses the line from mainScn
