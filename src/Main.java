@@ -113,7 +113,7 @@ public class Main {
                 else{ //Username, password, and name are valid
                     int errno = s.signupSubmit();
                     if (errno == 0){
-                        System.out.println("Successfully Registered");
+                        System.out.println("Successfully Registered, please log in");
                     }
                     else if (errno == -1){ //There is already a registered account with these credentials
                         System.out.println("You are already signed in");
