@@ -36,7 +36,7 @@ public class Main {
 
     public static void main (String[] args) {
         CourseList cl = new CourseList();
-        User user = new User("jimatheey123", "mypassword", "Jimatheey");
+        User user = new User("jimatheey123", "mypassword", "Jimatheey"); //Potentially change to null later
 
         Course testC1 = new Course("ACCT 202 B", "PRIN OF ACCOUNT", "PRINCIPLES OF ACCOUNTING II", "8:00:00", "8:50:00", "MWF",
                 "HAL", "306");
@@ -71,19 +71,18 @@ public class Main {
                 String password = loginScn.next();
 
                 Login l = new Login(username, password);
-                String potentialUser = l.loginSubmit();
+                User potentialUser = l.loginSubmit();
 
-                if (potentialUser.equals("") && file.exists()){
+                if (potentialUser == null && file.exists()){
                     System.out.println("Username or Password are invalid, Please Try Again");
                 }
-                else if (potentialUser.equals("") && !file.exists()) {
+                else if (potentialUser == null && !file.exists()) {
                     System.out.println("User is not registered, Please Sign Up");
                 }
                 else {
-                    System.out.println(potentialUser); //Temporary
-                    //User can be logged in with the returned user string, May create new User here
+                    System.out.println(potentialUser.username + potentialUser.password + potentialUser.name); //Temporary
+                    //May copy to global User variable here
                 }
-
             }
 
             else if(command.equals("view")){
