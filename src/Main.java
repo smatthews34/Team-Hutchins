@@ -132,14 +132,15 @@ public class Main {
                     addOption = add.nextLine();
                     if (!addOption.equals("done")) {
                         Course a = cl.getCourse(addOption);
-                        if (!a.equals(null)) {
+
+                        if (a != null) {
                             cl.addClass(a, user.schedule);
                         } else {
                             System.out.println("Please enter a valid class.");
                         }
                     }
                 }
-                add.close();
+                //add.close();
             }
 
             else if(command.equals("remove")){  //user input should take the form 'remove ACCT 202 B'
