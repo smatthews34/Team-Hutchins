@@ -181,9 +181,10 @@ public class Main {
 
             }
             else if(command.equals("filter")){
+                Scanner filterSCNR= new Scanner(System.in);
                 System.out.println("What would you like to filter by?");
-                System.out.println("The options are to filter by: day, time or department");
-                String filter = st.nextToken();
+                System.out.println("The options are to filter by: days, time or department");
+                String filter = filterSCNR.nextLine();
                 if(filter.equals("days")){
                     Search.filterTxtDays();
                 }
