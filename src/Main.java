@@ -54,15 +54,19 @@ public class Main {
         Scanner mainScn = new Scanner(System.in);
         printScreen();
         System.out.println("- Welcome to the Class Scheduling Assistant!");
+
+        boolean loggedIn = false;
+
         System.out.println("- Type what you'd like to do:\n");
         System.out.println("login\t\tsign_up\t\tquit\n");
         System.out.print(">");
-        String commandLn = mainScn.nextLine();
-        StringTokenizer st = new StringTokenizer(commandLn, " "); //Like a second scanner that parses the line from mainScn
-        String command = st.nextToken();
 
-        while (!command.equals("quit")){
-            if(command.equals("login")){
+        Scanner initScn = new Scanner(System.in);
+        String initCommand = initScn.nextLine();
+
+        while (!loggedIn && (!initCommand.equals("quit"))){
+
+            if(initCommand.equals("login")){
                 File file = new File("encryptedInfo.des");
                 Scanner loginScn = new Scanner(System.in);
                 System.out.println("Enter your username");
@@ -80,17 +84,15 @@ public class Main {
                     System.out.println("User is not registered, Please Sign Up");
                 }
                 else {
+                    System.out.println("Welcome, " + potentialUser.name + "!");
                     System.out.println(potentialUser.username + potentialUser.password + potentialUser.name); //Temporary
                     //May copy to global User variable here
+                    loggedIn = true;
+                    break;
                 }
             }
 
-            else if(command.equals("view")){
-                //TODO: This may be changed later
-                tempPrint(user.schedule);
-            }
-
-           else if(command.equals("sign_up")){ //Make sure this can be accessed with space, change to sign up later
+            else if(initCommand.equals("sign_up")){ //Make sure this can be accessed with space, change to sign up later
                 Scanner signScn = new Scanner(System.in);
                 System.out.println("Enter new username");
                 String username = signScn.next();
@@ -122,7 +124,27 @@ public class Main {
                 //Scan user input for username and password, check for validity
                 //If valid complete sign up & log in, if not valid redo prompt or exit
             }
+            System.out.println("- Type what you'd like to do:\n");
+            System.out.println("login\t\tsign_up\t\tquit\n");
+            System.out.print(">");
+            initCommand= initScn.nextLine();
+        }
 
+        System.out.println("- Type what you'd like to do:");
+        System.out.println("  (or type 'list' to see valid commands)\n");
+        System.out.print(">");
+
+        String commandLn = mainScn.nextLine();
+        StringTokenizer st = new StringTokenizer(commandLn, " "); //Like a second scanner that parses the line from mainScn
+        String command = st.nextToken();
+        System.out.println(command);
+
+        while (!command.equals("quit")){
+
+            if(command.equals("view")){
+                //TODO: This may be changed later
+                tempPrint(user.schedule);
+            }
            else if(command.equals("add")){
                 //TODO
                 Scanner add = new Scanner(System.in);
@@ -156,6 +178,7 @@ public class Main {
                     if(user.scheduleContains(code)) {
                         Course c = user.getCourse(code);
                         cl.removeClass(c, user.schedule);
+                        System.out.println("Course removed.");
                         tempPrint(user.schedule);
                     }
 
@@ -213,6 +236,7 @@ public class Main {
             System.out.println("- Type what you'd like to do:");
             System.out.println("  (or type 'list' to see valid commands)\n");
             System.out.print(">");
+
             commandLn = mainScn.nextLine();
             st = new StringTokenizer(commandLn, " ");
             command = st.nextToken();

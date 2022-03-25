@@ -62,11 +62,6 @@ public class CourseList {
     public void removeClass(Course course, ArrayList<Course> Schedule){
         if (checkDouble(course, Schedule)) {
             Schedule.remove(course);
-            System.out.println("Course removed.");
-        }
-
-        else {
-            System.out.println("Course not in schedule, cannot be removed.");
         }
 
         updateHistory("remove", course);
