@@ -94,6 +94,7 @@ public class CourseList {
                 }
             }
         }else{
+            updateHistory("add", course);
             Schedule.add(course);
             System.out.println("The course has successfully been added to your schedule.");
         }

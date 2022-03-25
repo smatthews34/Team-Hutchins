@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit"};
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search"};
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -235,6 +235,12 @@ public class Main {
                     }
                 }
 
+            }
+            else if(command.equals("confirm")){
+                //confirm schedule part goes here.
+            }
+            else if(command.equals("search")){
+                //search stuff goes here
             }
             //etc
 
