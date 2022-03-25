@@ -21,39 +21,45 @@ public class Main {
 
     }
 
-    static void printScreen(){
-        System.out.println("\n___________________________________________________");
-        System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::");
-        System.out.println(": Team Hutchins\t\t\tCLASS SCHEDULING ASSISTANT :");
-        System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
+    static void printInitScreen(){
+        System.out.println("\n____________________________________________________________________________");
+        System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+        System.out.println(": Team Hutchins\t\t\tCLASS SCHEDULING ASSISTANT                           :");
+        System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
+    }
+
+    static void printScreen(String name){
+        System.out.println("\n____________________________________________________________________________");
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+        System.out.println(": Team Hutchins\t\t\tCLASS SCHEDULING ASSISTANT \t\t\tUser: " + name +" ");
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
     }
 
     static void printEndScreen(){
-        System.out.println("___________________________________________________\n");
+        System.out.println("\n____________________________________________________________________________\n");
 
     }
 
 
     public static void main (String[] args) {
         CourseList cl = new CourseList();
-        User user = null;
-        //User user = new User("jimatheey123", "mypassword", "Jimatheey"); //Potentially change to null later
+        User user = new User("jimatheey123", "mypassword", "Jimatheey"); //Potentially change to null later
 
-        /*Course testC1 = new Course("ACCT 202 B", "PRIN OF ACCOUNT", "PRINCIPLES OF ACCOUNTING II", "8:00:00", "8:50:00", "MWF",
+        Course testC1 = new Course("ACCT 202 B", "PRIN OF ACCOUNT", "PRINCIPLES OF ACCOUNTING II", "8:00:00", "8:50:00", "MWF",
                 "HAL", "306");
         Course testC2 = new Course("BIOL 234 A", "CELL BIOLOGY", "CELL BIOLOGY", "9:00:00", "9:50:00", "MWF",
-                "HAL", "208");*/
+                "HAL", "208");
 
         //Temporary for testing
-        /*System.out.println("Add:");
+        System.out.println("Add:");
         cl.addClass(testC1,user.schedule);
-        cl.addClass(testC2, user.schedule);*/
+        cl.addClass(testC2, user.schedule);
 
-        //tempPrint(user.schedule);
+        tempPrint(user.schedule);
         //end temp
 
         Scanner mainScn = new Scanner(System.in);
-        printScreen();
+        printInitScreen();
         System.out.println("- Welcome to the Class Scheduling Assistant!");
 
         boolean loggedIn = false;
@@ -125,12 +131,14 @@ public class Main {
                 //Scan user input for username and password, check for validity
                 //If valid complete sign up & log in, if not valid redo prompt or exit
             }
+
             System.out.println("- Type what you'd like to do:\n");
             System.out.println("login\t\tsign_up\t\tquit\n");
             System.out.print(">");
             initCommand= initScn.nextLine();
         }
 
+        printScreen(user.name);
         System.out.println("- Type what you'd like to do:");
         System.out.println("  (or type 'list' to see valid commands)\n");
         System.out.print(">");
@@ -223,7 +231,7 @@ public class Main {
                     else{
                         System.out.println("Not a valid filter");
                         printEndScreen();
-                        printScreen();
+                        printScreen(user.name);
                     }
                 }
 
@@ -235,7 +243,7 @@ public class Main {
             }
 
             printEndScreen();
-            printScreen();
+            printScreen(user.name);
 
            //if user is signed in...
             System.out.println("- Type what you'd like to do:");
