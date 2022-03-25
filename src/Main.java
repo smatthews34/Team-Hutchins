@@ -24,20 +24,15 @@ public class Main {
     static void printInitScreen(){
         System.out.println("\n____________________________________________________________________________");
         System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-        System.out.println(": Team Hutchins\t\t\tCLASS SCHEDULING ASSISTANT                           :");
+        System.out.println(" Team Hutchins\t\t\tCLASS SCHEDULING ASSISTANT");
         System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
     }
 
-    static void printScreen(String name){
+    static void printScreen(String name) {
         System.out.println("\n____________________________________________________________________________");
         System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-        System.out.println(": Team Hutchins\t\t\tCLASS SCHEDULING ASSISTANT \t\t\tUser: " + name +" ");
+        System.out.println(" Team Hutchins\t\t\tCLASS SCHEDULING ASSISTANT \t\t\tUser: " + name + " ");
         System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
-    }
-
-    static void printEndScreen(){
-        System.out.println("\n____________________________________________________________________________\n");
-
     }
 
 
@@ -176,12 +171,19 @@ public class Main {
 
             else if(command.equals("remove")){  //user input should take the form 'remove ACCT 202 B'
                 String code = "";
+                int codeSection = 1;
                     while(st.hasMoreTokens()) {
                         code += st.nextToken();     //Concat course code like ACCT 202 B
 
                         if (st.hasMoreTokens()) {
-                            code += " ";
+                            if (codeSection != 2) {
+                                code += " ";
+                            }
+                            else {
+                                code += "  ";
+                            }
                         }
+                        codeSection++;
                     }
 
                     if(user.scheduleContains(code)) {
@@ -230,7 +232,6 @@ public class Main {
                     }
                     else{
                         System.out.println("Not a valid filter");
-                        printEndScreen();
                         printScreen(user.name);
                     }
                 }
@@ -242,7 +243,6 @@ public class Main {
                 System.out.println("- Command '" + command + "' not recognized.");
             }
 
-            printEndScreen();
             printScreen(user.name);
 
            //if user is signed in...
