@@ -125,7 +125,7 @@ public class CourseList {
     public static boolean checkConfliction(Course C, ArrayList<Course> S){
         boolean check = false;
         for(int i = 0; i < S.size(); i++){
-            if(S.get(i).startTime != null && S.get(i).startTime == C.startTime && S.get(i).meets.equals(C.meets)){
+            if(S.get(i).startTime != null && S.get(i).startTime.equals(C.startTime) && S.get(i).meets.equals(C.meets)){
                 check = true;
             }
         }
