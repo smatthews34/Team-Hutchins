@@ -36,19 +36,20 @@ public class Main {
 
     public static void main (String[] args) {
         CourseList cl = new CourseList();
-        User user = new User("jimatheey123", "mypassword", "Jimatheey"); //Potentially change to null later
+        User user = null;
+        //User user = new User("jimatheey123", "mypassword", "Jimatheey"); //Potentially change to null later
 
-        Course testC1 = new Course("ACCT 202 B", "PRIN OF ACCOUNT", "PRINCIPLES OF ACCOUNTING II", "8:00:00", "8:50:00", "MWF",
+        /*Course testC1 = new Course("ACCT 202 B", "PRIN OF ACCOUNT", "PRINCIPLES OF ACCOUNTING II", "8:00:00", "8:50:00", "MWF",
                 "HAL", "306");
         Course testC2 = new Course("BIOL 234 A", "CELL BIOLOGY", "CELL BIOLOGY", "9:00:00", "9:50:00", "MWF",
-                "HAL", "208");
+                "HAL", "208");*/
 
         //Temporary for testing
-        System.out.println("Add:");
+        /*System.out.println("Add:");
         cl.addClass(testC1,user.schedule);
-        cl.addClass(testC2, user.schedule);
+        cl.addClass(testC2, user.schedule);*/
 
-        tempPrint(user.schedule);
+        //tempPrint(user.schedule);
         //end temp
 
         Scanner mainScn = new Scanner(System.in);
@@ -85,7 +86,7 @@ public class Main {
                 }
                 else {
                     System.out.println("Welcome, " + potentialUser.name + "!");
-                    System.out.println(potentialUser.username + potentialUser.password + potentialUser.name); //Temporary
+                    user = new User(potentialUser.username, potentialUser.password, potentialUser.name);
                     //May copy to global User variable here
                     loggedIn = true;
                     break;
