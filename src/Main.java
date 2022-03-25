@@ -206,23 +206,27 @@ public class Main {
             }
             else if(command.equals("filter")){
                 Scanner filterSCNR= new Scanner(System.in);
-                System.out.println("What would you like to filter by?");
-                System.out.println("The options are to filter by: days, time or department");
-                String filter = filterSCNR.nextLine();
-                if(filter.equals("days")){
-                    Search.filterTxtDays();
+                String filter = "";
+                while(!filter.equals("done")){
+                    System.out.println("What would you like to filter by?");
+                    System.out.println("The options are to filter by: days, time, department or done to exit");
+                    filter = filterSCNR.nextLine();
+                    if(filter.equals("days")){
+                        Search.filterTxtDays();
+                    }
+                    else if(filter.equals("time")){
+                        Search.filterTxtTimes();
+                    }
+                    else if(filter.equals("department")){
+                        Search.filterTxtDepts();
+                    }
+                    else{
+                        System.out.println("Not a valid filter");
+                        printEndScreen();
+                        printScreen();
+                    }
                 }
-                else if(filter.equals("time")){
-                    Search.filterTxtTimes();
-                }
-                else if(filter.equals("department")){
-                    Search.filterTxtDepts();
-                }
-                else{
-                    System.out.println("Not a valid filter");
-                    printEndScreen();
-                    printScreen();
-                }
+
             }
             //etc
 
