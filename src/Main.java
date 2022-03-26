@@ -241,7 +241,18 @@ public class Main {
                 //confirm schedule part goes here.
             }
             else if(command.equals("search")){
-                //search stuff goes here
+                Scanner searchScan = new Scanner(System.in);
+                System.out.println("Enter search term");
+                String searchInput = searchScan.nextLine();
+                ArrayList<Course> courses = new ArrayList<>();
+                Search s = new Search(searchInput);
+                courses = s.getResults(searchInput);
+                if (courses.isEmpty()) {
+                    System.out.println("Search yielded no results, please try again");
+                }
+                else {
+                    s.printResults(courses);
+                }
             }
             //etc
 

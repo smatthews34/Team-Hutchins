@@ -13,7 +13,7 @@ public class Search {
      * Takes in the results of the search and orginzes it to be prepared for the user to see
      * @param searchResults from the getResults method
      */
-    public static ArrayList<Course> orderSearch(ArrayList<Course> searchResults){
+    public ArrayList<Course> orderSearch(ArrayList<Course> searchResults){
         ArrayList<Course> ordered = searchResults;
         Collections.sort(ordered, new Comparator<Course>() {
             @Override
@@ -40,13 +40,13 @@ public class Search {
      * Prints the ordered lists from the search results for the user to view and choose what to add.
      * @param orderList takes in and ordered list from the search results given to the orderList()
      */
-    public static void printResults(ArrayList<Course> orderList){
+    public void printResults(ArrayList<Course> orderList){
         for(int i = 0; i < orderList.size(); i++){
             System.out.println(orderList.get(i).courseCode + " " + orderList.get(i).shortTitle + " " + orderList.get(i).meets + " " + orderList.get(i).startTime + "-" + orderList.get(i).endTime);
         }
 
     }
-    public static ArrayList<Course> getResults(String searchInputWithSpace){ //Get rid of static afterwards and return string, get rid of parameter
+    public ArrayList<Course> getResults(String searchInputWithSpace){ //Get rid of static afterwards and return string, get rid of parameter
         try {
             File classFile = new File("classFile.txt");
             Scanner classScan = new Scanner(classFile);
@@ -82,7 +82,8 @@ public class Search {
                         results.add(potentialCourse);//zack
                         break;
                     }
-                    else if (data.equalsIgnoreCase(searchInput) && index == 2){ //User is searching by course name
+                    else if (data.equalsIgnoreCase(searchInput) && index == 2 ||
+                            data.toLowerCase().contains(searchInput.toLowerCase()) && index == 2){ //User is searching by course name
                         results.add(potentialCourse);
                         break;
                     }
@@ -94,7 +95,7 @@ public class Search {
                 theStrings.clear();
             }
             classScan.close();
-            return results;
+            return orderSearch(results);
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
