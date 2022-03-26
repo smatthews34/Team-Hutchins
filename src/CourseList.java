@@ -73,15 +73,16 @@ public class CourseList {
      * @param Schedule
      */
     public void addClass(Course course, ArrayList<Course> Schedule){
-        //checks for time confliction
+        //checks to see if the course being added is a duplicate.
         if(checkDouble(course, Schedule)){
             System.out.println("That course already is on your schedule, cannot be added.");
-        }else if(checkConfliction(course, Schedule)){
-            System.out.println("There is a time conflict with your schedule.");
+        }else if(checkConfliction(course, Schedule)){ //checks to see if the course conflicts
+            System.out.println("There is a time conflict with your schedule."); //alerts the user there is a conflict
             Scanner scn = new Scanner(System.in);
-            while (true) {
+            String answer = "";
+            while (!answer.equals("No")&&!answer.equals("no")&&!answer.equals("yes")&&!answer.equals("Yes")&&!answer.equals("N")&&!answer.equals("n")&&!answer.equals("Y")&&!answer.equals("y")) { //gives the user the ability to add if conflicting.
                 System.out.println("Would you like to add anyway? (Y/N");
-                String answer = scn.next();
+                answer = scn.next();
                 if (answer.equals("Y") || answer.equals("y") || answer.equals("yes") || answer.equals("Yes")) {
                     Schedule.add(course);
                     System.out.println("Conflicting course added.");
@@ -93,12 +94,11 @@ public class CourseList {
                     System.out.println("Invalid response please select Y or N.");
                 }
             }
-        }else{
+        }else{ //if the course is not a duplicate or a not conflicting course it wil be added to the user's schedule.
             updateHistory("add", course);
             Schedule.add(course);
             System.out.println("The course has successfully been added to your schedule.");
         }
-        //possibly a remove from grand course list so you can add double of a course
     }
 
     /**
@@ -109,6 +109,7 @@ public class CourseList {
      */
     public static boolean checkDouble(Course C, ArrayList<Course> S){
         boolean check = false;
+        //goes through the user's current schedule to see if they already have the course they are trying to add.
         for(int i = 0; i < S.size(); i++){
             if(S.get(i).courseCode.equals(C.courseCode)){
                 check = true;
@@ -126,6 +127,7 @@ public class CourseList {
     public static boolean checkConfliction(Course C, ArrayList<Course> S){
         boolean check = false;
         for(int i = 0; i < S.size(); i++){
+            //checks the user list of courses and check if the course the user wants to add has a time and day confliction with any courses they currently have.
             if(S.get(i).startTime != null && S.get(i).startTime.equals(C.startTime) && S.get(i).meets.equals(C.meets)){
                 check = true;
             }
@@ -140,20 +142,21 @@ public class CourseList {
      * @return null if class does not exist.
      */
     public static Course getCourse(String code){
-        ArrayList<Course> courseList = importCourseList();
-        Course c;
+        ArrayList<Course> courseList = importCourseList(); //Gathers all of the possible courses from the given data.
+        Course c; //a temp Course that will hold the value of the course that the user is looking for.
         for(int j = 0; j < courseList.size(); j++){
+            //if the course is found it will set the empty course and have it set to the course the user wants
             if(courseList.get(j).courseCode.equals(code)){
                 c = courseList.get(j);
                 return c;
             }
         }
-        return null;
+        return null; //if there is no such course will return nothing.
     }
 
     /**
      *  Similar to the getResults() but edited to just gather all of the courses in the data file
-     * @return the grand course list for finding and adding a course
+     * @return the grand course list for finding and adding a course that the user requested for.
      */
     public static ArrayList<Course> importCourseList(){
         try {

@@ -256,17 +256,19 @@ public class Main {
                     String addOption = "";
                     System.out.println("Would you like to add a course from the search? (Yes/No)");
                     addOption = searchScan.next();
-                    while(!addOption.equals("No") && !addOption.equals("no") ) {
-                        System.out.println("Enter course in the format: CODE ### A, to be added or enter 'done' if finished adding: ");
-                        addOption = add.nextLine();
-                        if (!addOption.equals("No") && !addOption.equals("no")) {
-                            Course a = cl.getCourse(addOption);
-                            if (a != null) {
-                                cl.addClass(a, user.schedule);
-                                System.out.println("Would you like to add another course from the search? (Yes/No)");
-                                addOption = add.next();
-                            } else {
-                                System.out.println("Please enter a valid class.");
+                    if(addOption.equals("yes")||addOption.equals("Yes")) {
+                        while (!addOption.equals("No") && !addOption.equals("no")) {
+                            System.out.println("Enter course in the format: CODE ### A, to be added or enter 'no' if finished adding: ");
+                            addOption = add.nextLine();
+                            if (!addOption.equals("No") && !addOption.equals("no")) {
+                                Course a = cl.getCourse(addOption);
+                                if (a != null) {
+                                    cl.addClass(a, user.schedule);
+                                    System.out.println("Would you like to add another course from the search? (Yes/No)");
+                                    addOption = add.next();
+                                } else {
+                                    System.out.println("Please enter a valid class.");
+                                }
                             }
                         }
                     }
