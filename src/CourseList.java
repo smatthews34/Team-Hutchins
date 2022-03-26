@@ -133,7 +133,12 @@ public class CourseList {
         return check;
     }
 
-    //remove if broken.
+    /**
+     *
+     * @param code of a course to be added
+     * @return the course the user was trying to acces
+     * @return null if class does not exist.
+     */
     public static Course getCourse(String code){
         ArrayList<Course> courseList = importCourseList();
         Course c;
@@ -147,7 +152,7 @@ public class CourseList {
     }
 
     /**
-     *
+     *  Similar to the getResults() but edited to just gather all of the courses in the data file
      * @return the grand course list for finding and adding a course
      */
     public static ArrayList<Course> importCourseList(){
