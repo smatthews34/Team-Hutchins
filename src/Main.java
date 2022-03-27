@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -36,7 +37,7 @@ public class Main {
     }
 
 
-    public static void main (String[] args) {
+    public static void main (String[] args) throws FileNotFoundException {
         CourseList cl = new CourseList();
        // User user = new User("jimatheey123", "mypassword", "Jimatheey"); //Potentially change to null later
         User user = null;
@@ -238,15 +239,73 @@ public class Main {
 
             }
             else if(command.equals("confirm")){
-                //confirm schedule part goes here.
+                Scanner confirmScan = new Scanner(System.in);
+                int conflicts = ConfirmSchedule.countConflicts(user.schedule);
+
+                if (conflicts > 0) {
+                    System.out.println(conflicts + " conflict(s) exist, would you still like to" +
+                            " confirm? (Y/N)");
+                    String answer = confirmScan.next();
+                    boolean confirmed = false;
+                    while (!confirmed) {
+                        if (answer.equalsIgnoreCase("YES") || answer.equalsIgnoreCase("Y")) {
+                            System.out.println(conflicts + " conflict(s) exists.");
+                            ConfirmSchedule.scheduleFile(user.schedule);
+                            System.out.println("Your schedule has been confirmed. See file.");
+                            confirmed = true;
+
+                        } else if (answer.equalsIgnoreCase("NO") || answer.equalsIgnoreCase("N")) {
+                            System.out.println("Type a new command.");
+                            confirmed = true;
+
+                        } else {
+                            System.out.println("Invalid input. Type Yes or No.");
+                            answer = confirmScan.next();
+                        }
+                    }
+                }
+                else {
+                    System.out.println(conflicts + " conflicts exist. Confirming schedule now.");
+                    ConfirmSchedule.scheduleFile(user.schedule);
+                    System.out.println("Your schedule has been confirmed. See file.");
+                }
             }
             else if(command.equals("calendar")){
+                int conflicts = ConfirmSchedule.countConflicts(user.schedule);
+
+                ConfirmSchedule.printCalendar();
+                System.out.println("There are " + conflicts + " conflict(s) in your schedule.");
+
                 Scanner calendarScan = new Scanner(System.in);
                 String calendar = "";
+                int dayOfMonth;
 
                 //a while loop structure so they can observe multiple days
                 while (!calendar.equals("done")){
-                    //calendar stuff here
+                    System.out.println("Enter a day of the month to view classes, type 'ind' to view independent studies," +
+                            " or enter 'done' to exit");
+                    calendar = calendarScan.next();
+
+                    if(calendar.equals("ind")){
+                        ArrayList<Course> classes = ConfirmSchedule.classesPerDay(user.schedule
+                                , 8, true);
+                        System.out.println(ConfirmSchedule.courseListString(classes));
+                    }
+
+                    if(!calendar.equals("done") && !calendar.equals("ind")){
+                        //need to catch exceptions if the integer is > days in month
+                        dayOfMonth = Integer.parseInt(calendar);
+
+                        if (ConfirmSchedule.findDayOfWeek(dayOfMonth) == 1 || ConfirmSchedule.findDayOfWeek(dayOfMonth) == 7) {
+                            System.out.println("There are no classes on the weekend");
+                        } else {
+                            ArrayList<Course> classes = ConfirmSchedule.classesPerDay(user.schedule
+                                    , ConfirmSchedule.findDayOfWeek(dayOfMonth), false);
+                            System.out.println(ConfirmSchedule.courseListString(classes));
+                            int conflictsPerDay = ConfirmSchedule.countConflicts(classes);
+                            System.out.println(conflictsPerDay + " conflict(s) on this day.");
+                        }
+                    }
                 }
             }
             else if(command.equals("search")){
@@ -299,7 +358,7 @@ public class Main {
             commandLn = mainScn.nextLine();
             st = new StringTokenizer(commandLn, " ");
             command = st.nextToken();
-        };
+        }
 
         System.out.println("- Goodbye.\n");
 
