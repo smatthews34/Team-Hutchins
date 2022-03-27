@@ -240,6 +240,15 @@ public class Main {
             else if(command.equals("confirm")){
                 //confirm schedule part goes here.
             }
+            else if(command.equals("calendar")){
+                Scanner calendarScan = new Scanner(System.in);
+                String calendar = "";
+
+                //a while loop structure so they can observe multiple days
+                while (!calendar.equals("done")){
+                    //calendar stuff here
+                }
+            }
             else if(command.equals("search")){
                 Scanner searchScan = new Scanner(System.in);
                 System.out.println("Enter search term");
