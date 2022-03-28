@@ -220,21 +220,28 @@ public class Main {
             else if(command.equals("filter")) {
                 Scanner filterSCNR = new Scanner(System.in);
                 String filter = "";
-                System.out.println("What would you like to filter by?");
-                System.out.println("The options are to filter by: days, time, department or done to exit");
-                System.out.println("To search by days, enter the first capital letter of that day, ex: MWF");
-                System.out.println("To search by times, enter the start time in military time, ex: 8:00:00");
-                System.out.println("To search by department, enter the code in all capital letters. ex: COMP");
-                filter = filterSCNR.nextLine();
-                if (filter.equals("days")) {
-                    Search.filterTxtDays();
-                    break;
-                } else if (filter.equals("time")) {
-                    Search.filterTxtTimes();
-                    break;
-                } else if (filter.equals("department")) {
-                    Search.filterTxtDepts();
-                    break;
+                while(!filter.equals("done")) {
+                    System.out.println("What would you like to filter by?");
+                    System.out.println("The options are to filter by: days, time, department or done to exit");
+                    System.out.println("To search by days, enter the first capital letter of that day, ex: MWF");
+                    System.out.println("To search by times, enter the start time in military time, ex: 8:00:00");
+                    System.out.println("To search by department, enter the code in all capital letters. ex: COMP");
+                    System.out.println("Or enter 'done' if you are done filtering the course.");
+                    filter = filterSCNR.nextLine();
+                    if(filter.equals("done")||filter.equals("Done")){
+                        break;
+                    }else if (filter.equals("days")) {
+                        Search.filterTxtDays();
+                        break;
+                    } else if (filter.equals("time")) {
+                        Search.filterTxtTimes();
+                        break;
+                    } else if (filter.equals("department")) {
+                        Search.filterTxtDepts();
+                        break;
+                    }else {
+                        System.out.println("Invalid filter.");
+                    }
                 }
             }
             else if(command.equals("confirm")){
