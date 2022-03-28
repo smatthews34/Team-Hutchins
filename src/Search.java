@@ -10,11 +10,12 @@ public class Search {
     }
 
     /**
-     * Takes in the results of the search and orginzes it to be prepared for the user to see
+     * Takes in the results of the search and orginizes it to be prepared for the user to see
      * @param searchResults from the getResults method
      */
     public ArrayList<Course> orderSearch(ArrayList<Course> searchResults){
         ArrayList<Course> ordered = searchResults;
+        //sorts an arraylist by days then sorts the groups of day by chronological order
         Collections.sort(ordered, new Comparator<Course>() {
             @Override
             public int compare(Course c1, Course c2) {
@@ -33,7 +34,6 @@ public class Search {
 
         });
         return ordered;
-        //return ordered;
     }
 
     /**
