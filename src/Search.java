@@ -159,11 +159,17 @@ public class Search {
         while(scnr.hasNextLine()){
             String daysEntered = scnr.nextLine();
             List<String> courses = mapCoursesDays.get(daysEntered);
-            courses.forEach(System.out::println); // prints out the list of appropriate courses
+            if(courses == null){
+                System.out.println("Please enter valid input");
+            }
+            else{
+                courses.forEach(System.out::println); // prints out the list of appropriate courses
+            }
             break;
+            }
         }
+
         //scnr.close();
-    }
 
     // time filter code
 
@@ -222,7 +228,11 @@ public class Search {
         while(scnr.hasNextLine()) {
             String timesEntered = scnr.nextLine();
             List<String> courses = mapCoursesTimes.get(timesEntered);
-            courses.forEach(System.out::println); // prints list of appropriate courses
+            if(courses == null){
+                System.out.println("Please enter a valid time");
+            }else{
+                courses.forEach(System.out::println); // prints list of appropriate courses
+            }
             break;
         }
         //scnr.close();
@@ -260,7 +270,8 @@ public class Search {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Please enter valid input");
+            //e.printStackTrace();
         }
 
     }
@@ -285,7 +296,11 @@ public class Search {
         while(scnr.hasNextLine()){
             String deptsEntered = scnr.nextLine();
             List<String> courses = mapCoursesDepts.get(deptsEntered);
-            courses.forEach(System.out::println); // prints the array of course codes
+            if(courses == null){
+                System.out.println("Please enter a valid department");
+            }else{
+                courses.forEach(System.out::println); // prints the array of course codes
+            }
             break;
         }
         //scnr.close();
