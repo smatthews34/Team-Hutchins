@@ -17,7 +17,10 @@ public class CourseList {
         courseHist.push(course);
     }
 
-
+    /**
+     * Reverts to the state before the user's previous action (add or remove)
+     * @param schedule - user's working schedule
+     */
     public void undo(ArrayList<Course> schedule){
         if (!courseHist.isEmpty() && !commandHist.isEmpty()) {
             String lastCommand = commandHist.pop();
@@ -40,6 +43,10 @@ public class CourseList {
         }
     }
 
+    /**
+     * Re-applies last user action (add or remove)
+     * @param schedule - user's working schedule
+     */
     public void redo(ArrayList<Course> schedule) {
 
         if (!undoCommandHist.isEmpty() && !undoCourseHist.isEmpty()){
@@ -59,6 +66,11 @@ public class CourseList {
         }
     }
 
+    /**
+     *
+     * @param course - course to be removed from user schedule
+     * @param Schedule - user's working schedule
+     */
     public void removeClass(Course course, ArrayList<Course> Schedule){
         if (checkDouble(course, Schedule)) {
             Schedule.remove(course);

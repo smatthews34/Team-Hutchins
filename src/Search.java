@@ -162,7 +162,7 @@ public class Search {
             courses.forEach(System.out::println); // prints out the list of appropriate courses
             break;
         }
-        scnr.close();
+        //scnr.close();
     }
 
     // time filter code
@@ -225,7 +225,7 @@ public class Search {
             courses.forEach(System.out::println); // prints list of appropriate courses
             break;
         }
-        scnr.close();
+       // scnr.close();
     }
 
     // dept filter code
@@ -288,7 +288,7 @@ public class Search {
             courses.forEach(System.out::println); // prints the array of course codes
             break;
         }
-        scnr.close();
+        //sscnr.close();
     }
 
 }

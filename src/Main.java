@@ -40,20 +40,7 @@ public class Main {
 
     public static void main (String[] args) throws FileNotFoundException {
         CourseList cl = new CourseList();
-       // User user = new User("jimatheey123", "mypassword", "Jimatheey"); //Potentially change to null later
         User user = null;
-        /*Course testC1 = new Course("ACCT 202 B", "PRIN OF ACCOUNT", "PRINCIPLES OF ACCOUNTING II", "8:00:00", "8:50:00", "MWF",
-                "HAL", "306");
-        Course testC2 = new Course("BIOL 234 A", "CELL BIOLOGY", "CELL BIOLOGY", "9:00:00", "9:50:00", "MWF",
-                "HAL", "208");*/
-
-        //Temporary for testing
-        /*System.out.println("Add:");
-        cl.addClass(testC1,user.schedule);
-        cl.addClass(testC2, user.schedule);*/
-
-        //tempPrint(user.schedule);
-        //end temp
 
         Scanner mainScn = new Scanner(System.in);
         printInitScreen();
@@ -73,9 +60,11 @@ public class Main {
             if(initCommand.equals("login")){
                 File file = new File("encryptedInfo.des");
                 Scanner loginScn = new Scanner(System.in);
-                System.out.println("Enter your username");
+                System.out.println("Enter your username:");
+                System.out.print(">");
                 String username = loginScn.next();
-                System.out.println("Enter your password");
+                System.out.println("Enter your password:");
+                System.out.print(">");
                 String password = loginScn.next();
 
                 Login l = new Login(username, password);
@@ -99,10 +88,13 @@ public class Main {
             else if(initCommand.equals("sign_up")){ //Make sure this can be accessed with space, change to sign up later
                 Scanner signScn = new Scanner(System.in);
                 System.out.println("Enter new username");
+                System.out.print(">");
                 String username = signScn.next();
                 System.out.println("Enter new password");
+                System.out.print(">");
                 String password = signScn.next();
                 System.out.println("Enter your name");
+                System.out.print(">");
                 String name = signScn.next();
                 Signup s = new Signup(username, password, name);
 
@@ -157,6 +149,7 @@ public class Main {
                 String addOption = "";
                 while(!addOption.equals("done")) {
                     System.out.println("Enter course in the format: CODE ### A, to be added or enter 'done' if finished adding: ");
+                    System.out.print(">");
                     addOption = add.nextLine();
                     if (!addOption.equals("done")) {
                         Course a = cl.getCourse(addOption);
@@ -251,6 +244,7 @@ public class Main {
                 if (conflicts > 0) {
                     System.out.println(conflicts + " conflict(s) exist, would you still like to" +
                             " confirm? (Y/N)");
+                    System.out.print(">");
                     String answer = confirmScan.next();
                     boolean confirmed = false;
                     while (!confirmed) {
@@ -266,6 +260,7 @@ public class Main {
 
                         } else {
                             System.out.println("Invalid input. Type Yes or No.");
+                            System.out.print(">");
                             answer = confirmScan.next();
                         }
                     }
@@ -290,6 +285,7 @@ public class Main {
                 while (!calendar.equals("done")){
                     System.out.println("Enter a day of the month to view classes, type 'ind' to view independent studies," +
                             " or enter 'done' to exit");
+                    System.out.print(">");
                     calendar = calendarScan.next();
 
                     if(calendar.equals("ind")){
@@ -319,7 +315,8 @@ public class Main {
             }
             else if(command.equals("search")){
                 Scanner searchScan = new Scanner(System.in);
-                System.out.println("Enter search term");
+                System.out.println("Enter search term:");
+                System.out.print(">");
                 String searchInput = searchScan.nextLine();
                 ArrayList<Course> courses = new ArrayList<>();
                 Search s = new Search(searchInput);
@@ -332,16 +329,19 @@ public class Main {
                     Scanner add = new Scanner(System.in);
                     String addOption = "";
                     System.out.println("Would you like to add a course from the search? (Yes/No)");
+                    System.out.print(">");
                     addOption = searchScan.next();
                     if(addOption.equals("yes")||addOption.equals("Yes")) {
                         while (!addOption.equals("No") && !addOption.equals("no")) {
                             System.out.println("Enter course in the format: CODE ### A, to be added or enter 'no' if finished adding: ");
+                            System.out.print(">");
                             addOption = add.nextLine();
                             if (!addOption.equals("No") && !addOption.equals("no")) {
                                 Course a = cl.getCourse(addOption);
                                 if (a != null) {
                                     cl.addClass(a, user.schedule);
                                     System.out.println("Would you like to add another course from the search? (Yes/No)");
+                                    System.out.print(">");
                                     addOption = add.next();
                                 } else {
                                     System.out.println("Please enter a valid class.");
