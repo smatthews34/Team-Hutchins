@@ -67,7 +67,7 @@ public class CourseList {
     }
 
     /**
-     *
+     *Removes the given course from user schedule
      * @param course - course to be removed from user schedule
      * @param Schedule - user's working schedule
      */
