@@ -225,7 +225,7 @@ public class Search {
             courses.forEach(System.out::println); // prints list of appropriate courses
             break;
         }
-       // scnr.close();
+        //scnr.close();
     }
 
     // dept filter code
@@ -288,7 +288,7 @@ public class Search {
             courses.forEach(System.out::println); // prints the array of course codes
             break;
         }
-        //sscnr.close();
+        //scnr.close();
     }
 
 }
