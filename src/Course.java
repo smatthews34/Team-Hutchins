@@ -12,7 +12,7 @@ public class Course {
     String endTime;
 
     /**
-     * This constructor has it all baby
+     * This constructor has it all
      * @param courseCode
      * @param shortTitle
      * @param longTitle

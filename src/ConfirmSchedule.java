@@ -39,6 +39,11 @@ public class ConfirmSchedule {
         pw.close();
     }
 
+    /**
+     * Formats multiple courses into one string
+     * @param S, user schedule
+     * @return, string courses
+     */
     public static String courseListString(ArrayList<Course> S){
         String list = "";
         for(int i = 0; i < S.size(); i++){
@@ -48,8 +53,8 @@ public class ConfirmSchedule {
     }
 
     /**
-     * Count how many courses have a conflict
-     * @param S Student schedule
+     * Count how many conflicts are in the schedule
+     * @param S, user schedule
      * @return number of conflicts
      */
     public static int countConflicts(ArrayList<Course> S){
