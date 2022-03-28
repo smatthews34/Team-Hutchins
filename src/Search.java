@@ -160,6 +160,7 @@ public class Search {
             String daysEntered = scnr.nextLine();
             List<String> courses = mapCoursesDays.get(daysEntered);
             courses.forEach(System.out::println); // prints out the list of appropriate courses
+            break;
         }
         scnr.close();
     }
@@ -218,10 +219,11 @@ public class Search {
     public static void promptUserTimes() {
         Scanner scnr = new Scanner(System.in);
         System.out.println("Enter the times you want to see classes on");
-        while(scnr.hasNextLine()){
+        while(scnr.hasNextLine()) {
             String timesEntered = scnr.nextLine();
             List<String> courses = mapCoursesTimes.get(timesEntered);
             courses.forEach(System.out::println); // prints list of appropriate courses
+            break;
         }
         scnr.close();
     }
@@ -280,9 +282,12 @@ public class Search {
     public static void promptUserDepts() {
         Scanner scnr = new Scanner(System.in);
         System.out.println("Enter the depts you want to see classes in");
-        String deptsEntered = scnr.nextLine();
-        List<String> courses = mapCoursesDepts.get(deptsEntered);
-        courses.forEach(System.out::println); // prints the array of course codes
+        while(scnr.hasNextLine()){
+            String deptsEntered = scnr.nextLine();
+            List<String> courses = mapCoursesDepts.get(deptsEntered);
+            courses.forEach(System.out::println); // prints the array of course codes
+            break;
+        }
         scnr.close();
     }
 

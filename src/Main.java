@@ -218,24 +218,31 @@ public class Main {
             else if(command.equals("filter")){
                 Scanner filterSCNR= new Scanner(System.in);
                 String filter = "";
-                while(!filter.equals("done")){
-                    System.out.println("What would you like to filter by?");
-                    System.out.println("The options are to filter by: days, time, department or done to exit");
-                    filter = filterSCNR.nextLine();
+                System.out.println("What would you like to filter by?");
+                System.out.println("The options are to filter by: days, time, department or done to exit");
+                System.out.println("To search by days enter the first letter of the days in capital letters, ex. MWF");
+                System.out.println("To search by time enter the time in military time, ex. 8:00:00");
+                System.out.println("To search by department enter code in all capital letters, ex. COMP");
+                filter = filterSCNR.nextLine();
+                    //filter = filterSCNR.nextLine();
                     if(filter.equals("days")){
                         Search.filterTxtDays();
+                        break;
                     }
                     else if(filter.equals("time")){
                         Search.filterTxtTimes();
+                        break;
                     }
                     else if(filter.equals("department")){
                         Search.filterTxtDepts();
+                        break;
                     }
                     else{
                         System.out.println("Not a valid filter");
                         printScreen(user.name);
                     }
-                }
+                break;
+
 
             }
             else if(command.equals("confirm")){
