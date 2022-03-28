@@ -222,7 +222,7 @@ public class Main {
                     System.out.println("Or enter 'done' if you are done filtering the course.");
                     filter = filterSCNR.nextLine();
                     if(filter.equals("done")||filter.equals("Done")){
-                        break;
+                        //break;
                     }else if (filter.equals("days")) {
                         Search.filterTxtDays();
                         //break;
