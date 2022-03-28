@@ -232,13 +232,13 @@ public class Main {
                         break;
                     }else if (filter.equals("days")) {
                         Search.filterTxtDays();
-                        break;
+                        //break;
                     } else if (filter.equals("time")) {
                         Search.filterTxtTimes();
-                        break;
+                        //break;
                     } else if (filter.equals("department")) {
                         Search.filterTxtDepts();
-                        break;
+                        //break;
                     }else {
                         System.out.println("Invalid filter.");
                     }
