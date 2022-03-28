@@ -24,14 +24,14 @@ public class Login {
 
     public User loginSubmit() {
         if (checkMatch()) {
-            return new User(username, password, name); //May return whole user later
+            return new User(username, password, name);
         }
         else {
             return null;
         }
     }
 
-    private boolean checkMatch(){
+    private boolean checkMatch(){ //Checks file for valid login
         try {
             AESDecryption();
             File file = new File("plainfile_decrypted.txt");

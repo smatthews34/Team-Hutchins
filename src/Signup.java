@@ -29,7 +29,7 @@ public class Signup {
                 File file = new File("loginInfo.txt");
                 File encryptedFile = new File("encryptedInfo.des");
                 if (encryptedFile.exists()) {
-                    return -1;
+                    return -1; //User is already registered
                 } else {
                     boolean worked = file.createNewFile();
                     if (worked){
@@ -40,7 +40,7 @@ public class Signup {
                         fw.close();
                         AESEncryption();
                         file.delete();
-                        return 0;
+                        return 0; //No errors
                     }
                     else{
                         System.out.println("Could not open new file to log in, please try again");
