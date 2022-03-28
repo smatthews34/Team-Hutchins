@@ -5,6 +5,11 @@ import java.util.*;
 
 public class ConfirmSchedule {
 
+    /**
+     * Prints the schedule to a file the user can download
+     * @param S User schedule
+     * @throws FileNotFoundException
+     */
     public static void scheduleFile(ArrayList<Course> S) throws FileNotFoundException {
         PrintWriter pw = new PrintWriter("FinishedSchedule.txt");
         //pw.printf("%-50s%-50s%-50s%-50s%-50s\n","Monday","Tuesday","Wednesday","Thursday","Friday");
@@ -178,88 +183,5 @@ public class ConfirmSchedule {
         }
 
         return ordered;
-        //return ordered
     }
-
-//    public static void main(String[] args) throws FileNotFoundException {
-//        ArrayList<Course> S = new ArrayList<Course>();
-//        Course c1 = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
-//        Course c3 = new Course("ACCT 202", "PRIN OF ACCOUNT", "PRINCIPLES OF ACCOUNTING II", "4", "6","R", "HAL", "302");
-//        Course c4 = new Course("BUSA 303", "BUS LAW", "BUSINESS LAW", "10", "11","TR", "HAL", "302");
-//        Course c5 = new Course("BIOL 370", "IND RESEARCH", "INDEPENDENT RESEARCH");
-//        Course c2 = new Course("PHIL 101", "Intro Phil", "Introduction to Philosophy", "9", "10", "MWF", "SHAL", "102");
-//
-//        S.add(c1);
-//        S.add(c2);
-//        S.add(c3);
-//        S.add(c4);
-//        S.add(c5);
-//
-//        //check for number of conflicts
-//        Scanner scn = new Scanner(System.in);
-//        int conflicts = countConflicts(S);
-//        int dayOfMonth;
-//
-//        if (conflicts > 0) {
-////            System.out.println(conflicts + " conflict(s) exist, would you still like to" +
-////                    " confirm? (Y/N)");
-////            String answer = scn.next();
-//
-//            String calendar = "";
-//
-//            while (!calendar.equals("done")) {
-//                //if (answer.equalsIgnoreCase("YES") || answer.equalsIgnoreCase("Y")) {
-//                System.out.println(conflicts + " conflict(s) exists.");
-//                printCalendar();
-//                System.out.println("Select a day to view classes, enter what day of the month or enter 'done' to exit");
-//                calendar = scn.next();
-//
-//                    //confirmed = true;
-//
-//                    //System.out.println("Select a day to view classes, enter what day of the month");
-//                    //calendar = scn.next();
-//                    if(!calendar.equals("done")) {
-//                        dayOfMonth = Integer.parseInt(calendar);
-//
-//                        if (findDayOfWeek(dayOfMonth) == 1 || findDayOfWeek(dayOfMonth) == 7) {
-//                            System.out.println("There are no classes on the weekend");
-//                        } else {
-//                            ArrayList<Course> classes = classesPerDay(S, findDayOfWeek(dayOfMonth), false);
-//                            System.out.println(courseListString(classes));
-//                            int conflictsPerDay = countConflicts(classes);
-//                            System.out.println(conflictsPerDay + " conflict(s) on this day.");
-//                        }
-//                    }
-//
-//                    //scheduleFile(S);
-//
-////                } else if (answer.equalsIgnoreCase("NO") || answer.equalsIgnoreCase("N")) {
-////                    System.out.println("Proceed back to course list.");
-////                    confirmed = true;
-////                } else {
-////                    System.out.println("Invalid input. Type Yes or No.");
-////                    answer = scn.next();
-//                }
-//            }
-//        }
-//        //if no conflicts, then proceed with confirming schedule
-////        else{
-////            System.out.println(conflicts + " conflicts exist. Confirming schedule now.");
-////            printCalendar();
-////
-////            System.out.println("Select a day to view classes, enter what day of the month");
-////            dayOfMonth = scn.nextInt();
-////
-////            if(findDayOfWeek(dayOfMonth) == 1 || findDayOfWeek(dayOfMonth) == 7){
-////                System.out.println("There are no classes on the weekend");
-////            }
-////            else {
-////                ArrayList<Course> classes = classesPerDay(S, findDayOfWeek(dayOfMonth), false);
-////                System.out.println(courseListString(classes));
-////            }
-////
-////            scheduleFile(S);
-////        }
-//
-//    //}
 }
