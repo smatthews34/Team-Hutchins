@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -289,19 +290,22 @@ public class Main {
                                 , 8, true);
                         System.out.println(ConfirmSchedule.courseListString(classes));
                     }
+                    if(!calendar.equals("ind") && !calendar.equals("done")) {
+                        try {
+                            //need to catch exceptions if the integer is > days in month
+                            dayOfMonth = Integer.parseInt(calendar);
 
-                    if(!calendar.equals("done") && !calendar.equals("ind")){
-                        //need to catch exceptions if the integer is > days in month
-                        dayOfMonth = Integer.parseInt(calendar);
-
-                        if (ConfirmSchedule.findDayOfWeek(dayOfMonth) == 1 || ConfirmSchedule.findDayOfWeek(dayOfMonth) == 7) {
-                            System.out.println("There are no classes on the weekend");
-                        } else {
-                            ArrayList<Course> classes = ConfirmSchedule.classesPerDay(user.schedule
-                                    , ConfirmSchedule.findDayOfWeek(dayOfMonth), false);
-                            System.out.println(ConfirmSchedule.courseListString(classes));
-                            int conflictsPerDay = ConfirmSchedule.countConflicts(classes);
-                            System.out.println(conflictsPerDay + " conflict(s) on this day.");
+                            if (ConfirmSchedule.findDayOfWeek(dayOfMonth) == 1 || ConfirmSchedule.findDayOfWeek(dayOfMonth) == 7) {
+                                System.out.println("There are no classes on the weekend");
+                            } else {
+                                ArrayList<Course> classes = ConfirmSchedule.classesPerDay(user.schedule
+                                        , ConfirmSchedule.findDayOfWeek(dayOfMonth), false);
+                                System.out.println(ConfirmSchedule.courseListString(classes));
+                                int conflictsPerDay = ConfirmSchedule.countConflicts(classes);
+                                System.out.println(conflictsPerDay + " conflict(s) on this day.");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input.");
                         }
                     }
                 }
