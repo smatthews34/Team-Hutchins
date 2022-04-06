@@ -1,3 +1,19 @@
+
 .title {
 	-fx-font-size: 20px;
+}
+
+.buttons {
+	-fx-background-color: rgb(183, 28, 28);
+	-fx-padding: 8 15 8 15;
+	-fx-background-insets: 0,1,2;
+    -fx-background-radius: 4,2,1;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+
+}
+
+.buttons:hover{
+ -fx-background-color: rgb(173, 18, 18);
 }
