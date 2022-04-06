@@ -1,6 +1,9 @@
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -11,6 +14,7 @@ public class FXMain extends Application {
     Scene loginScene;
     TextField userField;
     TextField passField;
+    Label loginTitle;
 
     public static void main(String[] args) {
         launch(args);
@@ -26,9 +30,28 @@ public class FXMain extends Application {
 
         loginPane.setMaxSize(400, 450);			//layout dimensions
         loginPane.setMinSize(400, 450);
+        loginPane.setVgap(10);
+        loginPane.setHgap(10);
+
+        loginTitle = new Label("Log In");
+        loginTitle.getStyleClass().clear();
+        loginTitle.getStyleClass().add("title");
+
+        userField = new TextField("Username");
+        passField = new TextField("Password");
+
+        //index format is: (column, row, takes up x cols, takes up x rows)
+        loginPane.add(loginTitle, 0, 0);
+
+        //TODO: Connect fields to logic
+        loginPane.add(userField, 0, 1);
+        loginPane.add(passField, 0, 2);
+        loginPane.setPadding(new Insets(20));
+        loginPane.setAlignment(Pos.CENTER);
 
         loginGroup.getChildren().add(loginPane);
         loginScene = new Scene(loginGroup, 400, 450);
+        loginScene.getStylesheets().add("projStyles.css");
         loginStage.setTitle("Login");
         loginStage.setResizable(false);
         loginStage.setScene(loginScene);
