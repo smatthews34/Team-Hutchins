@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search"};
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity"};
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -205,6 +205,27 @@ public class Main {
 
             }
 
+            else if(command.equals("activity")){
+                Scanner ActScn = new Scanner(System.in);
+                String act = "";
+                String title, start, end, meets;
+                while(!act.equals("done") || !act.equals("Done")){
+                    System.out.println("Would you like to add an activity to your schedule? If yes enter 'yes'. If not enter 'done'");
+                    act = ActScn.next();
+                    if(act.equals("yes")||act.equals("Yes")||act.equals("Y")||act.equals("y")){
+                        System.out.println("What is the Name of your Activity you are participating in?");
+                        title = ActScn.nextLine();
+                        System.out.println("");
+                        start = ActScn.next();
+                        System.out.println("");
+                        end = ActScn.next();
+                        System.out.println("");
+                        meets = ActScn.next();
+                        Course c = new Course(title, start, end, meets);
+                    }
+                }
+            }
+
             else if(command.equals("list")){
                 printCommands();
 
@@ -351,9 +372,9 @@ public class Main {
                     }
                 }
             }
-            //etc
 
-           else {
+
+            else {
                 System.out.println("- Command '" + command + "' not recognized.");
             }
 

@@ -34,6 +34,21 @@ public class Course {
     }
 
     /**
+     * Constructor for Extracurricular Activities
+     * @param shortTitle
+     * @param startTime
+     * @param endTime
+     * @param meets
+     */
+    public Course (String shortTitle, String startTime, String endTime, String meets){
+        this.courseCode = "EXTRA";
+        this.shortTitle = shortTitle;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.meets = meets;
+    }
+
+    /**
      * Constructor for independent study and internships
      * @param courseCode
      * @param shortTitle
