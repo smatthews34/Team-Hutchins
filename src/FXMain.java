@@ -3,10 +3,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -19,7 +16,7 @@ public class FXMain extends Application {
     GridPane loginPane;
     Scene loginScene;
     TextField userField;
-    TextField passField;
+    PasswordField passField;
     Label loginTitle;
     Label loginSubtitle;
     Button loginBtn;
@@ -51,9 +48,11 @@ public class FXMain extends Application {
         loginSubtitle.getStyleClass().clear();
         loginSubtitle.getStyleClass().add("subtitle");
 
-
-        userField = new TextField("Username");
-        passField = new TextField("Password");
+        //TODO: Something is funky w/ the labels
+        userField = new TextField();
+        userField.setPromptText("Username");
+        passField = new PasswordField();
+        passField.setPromptText("Password");
 
         //TODO: Login button action event
         loginBtn = new Button("Log In");
