@@ -23,7 +23,7 @@ public class Login {
     }
 
     public User loginSubmit() {
-        if (checkMatch()) {
+        if (checkMatch() == 0) {
             return new User(username, password, name);
         }
         else {
@@ -31,45 +31,43 @@ public class Login {
         }
     }
 
-    private boolean checkMatch(){ //Checks file for valid login
+    private int checkMatch(){ //Checks files for valid login
         try {
-            AESDecryption();
-            File file = new File("plainfile_decrypted.txt");
-            Scanner fileScan = new Scanner(file);
-            String fileUsername = fileScan.next();
-            String filePassword = fileScan.next();
-            name = fileScan.next();
-            if (!fileUsername.equals(username)) {
+            for (int i = 0; i < checkFile(); i++) {
+                FileInputStream fis = new FileInputStream("encryptedInfo" + i + ".des");
+                FileInputStream ivFis = new FileInputStream("iv" + i + ".enc");
+                FileInputStream saltFis = new FileInputStream("salt" + i + ".enc");
+                AESDecryption(saltFis, ivFis, fis);
+                File file = new File("plainfile_decrypted.txt");
+                Scanner fileScan = new Scanner(file);
+                String fileUsername = fileScan.next();
+                String filePassword = fileScan.next();
+                name = fileScan.next();
+                if (fileUsername.equals(username) && filePassword.equals(password)){
+                    fileScan.close();
+                    file.delete();
+                    return 0; //Successful Login
+                }
                 fileScan.close();
                 file.delete();
-                return false;
             }
-            else if (!filePassword.equals(password)) {
-                fileScan.close();
-                file.delete();
-                return false;
-            }
-            fileScan.close();
-            file.delete();
-            return true;
+            return -1; //Username or Password is incorrect
         } catch (FileNotFoundException e) {
-            return false;
+            return 1; //FileNotFoundException was thrown
         }
     }
 
-    private void AESDecryption() {
+    private void AESDecryption(FileInputStream saltFis, FileInputStream ivFis, FileInputStream fis) {
         try {
             String password = "javapapers";
             // reading the salt
             // user should have secure mechanism to transfer the
             // salt, iv and password to the recipient
-            FileInputStream saltFis = new FileInputStream("salt.enc");
             byte[] salt = new byte[8];
             saltFis.read(salt);
             saltFis.close();
 
             // reading the iv
-            FileInputStream ivFis = new FileInputStream("iv.enc");
             byte[] iv = new byte[16];
             ivFis.read(iv);
             ivFis.close();
@@ -84,7 +82,6 @@ public class Login {
             // file decryption
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
-            FileInputStream fis = new FileInputStream("encryptedInfo.des");
             FileOutputStream fos = new FileOutputStream("plainfile_decrypted.txt");
             byte[] in = new byte[64];
             int read;
@@ -103,5 +100,18 @@ public class Login {
         } catch (Exception e) {
 
         }
+    }
+
+    private int checkFile(){ //Returns the next safe index to create encrypted files
+        //POTENTIALLY UTILIZE INCREMENTING LOOP TO CHECK HOW MANY PEOPLE THERE ARE AND CREATE A NEW FILE
+        int i = 0;
+        while(true){
+            File file = new File("encryptedInfo" + i + ".des");
+            if (!file.exists()){
+                break;
+            }
+            i++;
+        }
+        return i;
     }
 }

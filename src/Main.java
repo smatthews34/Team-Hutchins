@@ -58,7 +58,6 @@ public class Main {
         while (!loggedIn && (!initCommand.equals("quit"))){
 
             if(initCommand.equals("login")){
-                File file = new File("encryptedInfo.des");
                 Scanner loginScn = new Scanner(System.in);
                 System.out.println("Enter your username:");
                 System.out.print(">");
@@ -70,11 +69,8 @@ public class Main {
                 Login l = new Login(username, password);
                 User potentialUser = l.loginSubmit();
 
-                if (potentialUser == null && file.exists()){
+                if (potentialUser == null){
                     System.out.println("Username or Password are invalid, Please Try Again");
-                }
-                else if (potentialUser == null && !file.exists()) {
-                    System.out.println("User is not registered, Please Sign Up");
                 }
                 else {
                     System.out.println("Welcome, " + potentialUser.name + "!");
@@ -113,8 +109,8 @@ public class Main {
                         System.out.println("Successfully Registered, use 'login' command to log in");
                     }
                     else if (errno == -1){ //There is already a registered account with these credentials
-                        System.out.println("There is already a registered account on this machine, " +
-                                "please use 'login' command to log in"); //Potentially allow multiple users in Sprint 2
+                        System.out.println("There is already a registered account on this machine with the specified " +
+                                "username, please use the 'sign_up' command to sign up with a different username");
                     }
                 }
                 //Scan user input for username and password, check for validity

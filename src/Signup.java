@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.security.AlgorithmParameters;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
+import java.util.Scanner;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -27,10 +28,22 @@ public class Signup {
         try {
             if (checkIfUserValid() && checkIfPasswordValid() && checkIfNameValid()) {
                 File file = new File("loginInfo.txt");
-                File encryptedFile = new File("encryptedInfo.des");
-                if (encryptedFile.exists()) {
-                    return -1; //User is already registered
-                } else {
+                for (int i = 0; i < checkFile(); i++) { //Check if username is already taken from all available encrypted files (checkFile() times)
+                    FileInputStream fis = new FileInputStream("encryptedInfo" + i + ".des");
+                    FileInputStream ivFis = new FileInputStream("iv" + i + ".enc");
+                    FileInputStream saltFis = new FileInputStream("salt" + i + ".enc");
+                    AESDecryption(saltFis, ivFis, fis);
+                    File plainFile = new File("plainfile_decrypted.txt");
+                    Scanner fileScan = new Scanner(plainFile);
+                    String fileUsername = fileScan.next();
+                    if (fileUsername.equals(username)){
+                        fileScan.close();
+                        plainFile.delete();
+                        return -1; //Username already taken
+                    }
+                    fileScan.close();
+                    file.delete();
+                }
                     boolean worked = file.createNewFile();
                     if (worked){
                         FileWriter fw = new FileWriter(file);
@@ -46,7 +59,7 @@ public class Signup {
                         System.out.println("Could not open new file to log in, please try again");
                         return 1;
                     }
-                }
+
                 //Submit to the database potentially or encryption/decryption
                 //Log the user in
             }
@@ -69,13 +82,27 @@ public class Signup {
         return name != null; //May want additional test cases
     }
 
+    private int checkFile(){ //Returns the next safe index to create encrypted files
+        //POTENTIALLY UTILIZE INCREMENTING LOOP TO CHECK HOW MANY PEOPLE THERE ARE AND CREATE A NEW FILE
+        int i = 0;
+        while(true){
+            File file = new File("encryptedInfo" + i + ".des");
+            if (!file.exists()){
+                break;
+            }
+            i++;
+        }
+        return i;
+    }
+
     private void AESEncryption() {
         // file to be encrypted
         try {
             FileInputStream inFile = new FileInputStream("loginInfo.txt");
 
             // encrypted file
-            FileOutputStream outFile = new FileOutputStream("encryptedInfo.des");
+            int number = checkFile();
+            FileOutputStream outFile = new FileOutputStream("encryptedInfo" + number + ".des");
 
             // password to encrypt the file
             String password = "javapapers";
@@ -90,7 +117,7 @@ public class Signup {
             byte[] salt = new byte[8];
             SecureRandom secureRandom = new SecureRandom();
             secureRandom.nextBytes(salt);
-            FileOutputStream saltOutFile = new FileOutputStream("salt.enc");
+            FileOutputStream saltOutFile = new FileOutputStream("salt" + number +".enc");
             saltOutFile.write(salt);
             saltOutFile.close();
 
@@ -110,7 +137,7 @@ public class Signup {
             // secure
             // used while initializing the cipher
             // file to store the iv
-            FileOutputStream ivOutFile = new FileOutputStream("iv.enc");
+            FileOutputStream ivOutFile = new FileOutputStream("iv" + number + ".enc");
             byte[] iv = params.getParameterSpec(IvParameterSpec.class).getIV();
             ivOutFile.write(iv);
             ivOutFile.close();
@@ -137,4 +164,50 @@ public class Signup {
         }
 
     }
+
+    private void AESDecryption(FileInputStream saltFis, FileInputStream ivFis, FileInputStream fis) {
+        try {
+            String password = "javapapers";
+            // reading the salt
+            // user should have secure mechanism to transfer the
+            // salt, iv and password to the recipient
+            byte[] salt = new byte[8];
+            saltFis.read(salt);
+            saltFis.close();
+
+            // reading the iv
+            byte[] iv = new byte[16];
+            ivFis.read(iv);
+            ivFis.close();
+
+            SecretKeyFactory factory = SecretKeyFactory
+                    .getInstance("PBKDF2WithHmacSHA1");
+            KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 65536,
+                    256);
+            SecretKey tmp = factory.generateSecret(keySpec);
+            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+            // file decryption
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
+            FileOutputStream fos = new FileOutputStream("plainfile_decrypted.txt");
+            byte[] in = new byte[64];
+            int read;
+            while ((read = fis.read(in)) != -1) {
+                byte[] output = cipher.update(in, 0, read);
+                if (output != null)
+                    fos.write(output);
+            }
+
+            byte[] output = cipher.doFinal();
+            if (output != null)
+                fos.write(output);
+            fis.close();
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+
+        }
+    }
+
 }
