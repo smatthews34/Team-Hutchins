@@ -215,13 +215,19 @@ public class Main {
                     if(act.equals("yes")||act.equals("Yes")||act.equals("Y")||act.equals("y")){
                         System.out.println("What is the Name of your Activity you are participating in?");
                         title = ActScn.nextLine();
-                        System.out.println("");
+                        System.out.println("Enter the start time of the Activity.(In military time; ex. 8:00:00)");
                         start = ActScn.next();
-                        System.out.println("");
+                        System.out.println("Enter the start time of the Activity.(In military time; ex. 13:00:00)");
                         end = ActScn.next();
-                        System.out.println("");
+                        System.out.println("Enter the day(s) that the Activity occurs on.(Ex MWF)");
                         meets = ActScn.next();
                         Course c = new Course(title, start, end, meets);
+                        cl.addClass(c, user.schedule);
+                    }
+                    System.out.println("Would you like to add another activity? (Y/N)");
+                    act = ActScn.next();
+                    if(act.equals("N")||act.equals("No")||act.equals("n")||act.equals("no")){
+                        break;
                     }
                 }
             }
