@@ -84,7 +84,7 @@ public class CourseList {
      * @param course the course that is being attempted to be added to user schedule
      * @param Schedule
      */
-    public void addClass(Course course, ArrayList<Course> Schedule){
+    public void addClass(Course course, ArrayList<Course> Schedule){ //static
         //checks to see if the course being added is a duplicate.
         if(checkDouble(course, Schedule)){
             System.out.println("That course already is on your schedule, cannot be added.");
@@ -166,6 +166,9 @@ public class CourseList {
         return null; //if there is no such course will return nothing.
     }
 
+    public void FeelingLucky(ArrayList<Course> schedule){
+
+    }
     /**
      *  Similar to the getResults() but edited to just gather all of the courses in the data file
      * @return the grand course list for finding and adding a course that the user requested for.
@@ -208,6 +211,34 @@ public class CourseList {
         }
     }
 
+    public static void autoFill(String classPosition, String semester, ArrayList<Course> schedule){
+        if(classPosition.equals("Fresh") && semester.equals("F")){
+            schedule.add(getCourse("HUMA 102  A"));
+            schedule.add(getCourse("CHEM 102  O    L"));
+            schedule.add(getCourse("CHEM 102  B"));
+        }else if(classPosition.equals("Soph") && semester.equals("F")){
+            schedule.add(getCourse("HIST 120  A"));
+            schedule.add(getCourse("HUMA 202  A"));
+        }else if(classPosition.equals("Junior") && semester.equals("F")){
+            schedule.add(getCourse("HUMA 301  A"));
+        }else if(classPosition.equals("Senior") && semester.equals("F")){
+            schedule.add(getCourse("HUMA 302  B")); //would be HUMA 303 but the course list given is missing HUMA 303
+        }else if(classPosition.equals("Fresh") && semester.equals("S")){
+            schedule.add(getCourse("WRIT 101  A"));
+            schedule.add(getCourse("PHYE 102  C")); //Should be 101 but not on list
+            schedule.add(getCourse("BIOL 102  O     L"));
+            schedule.add(getCourse("BIOL 102  B"));
+        }else if(classPosition.equals("Soph") && semester.equals("S")){
+            schedule.add(getCourse("HUMA 202  A"));
+        }else if(classPosition.equals("Junior") && semester.equals("S")){
+            schedule.add(getCourse("HUMA 301  A"));
+        }else if(classPosition.equals("Senior") && semester.equals("S")){
+            schedule.add(getCourse("HUMA 302  B")); //would be HUMA 303 but the course list given is missing HUMA 303
+        }else {
+            System.out.println("Super Has No Designated HUMA or Base Courses, Seek an Advisors Assistance to Figure What HUMAs and Courses you Might be Missing.");
+        }
+    }
+
     public static void clearList(){
         courseList.clear();
     }
@@ -227,20 +258,20 @@ public class CourseList {
         ArrayList<Course> test = new ArrayList<>();
         Course test_c = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
         System.out.println(test);
-        cList.addClass(test_c,test);
+        //cList.addClass(test_c,test);
         System.out.println(test);
 
         //Test 2
         System.out.println("Test 2:");
         System.out.println(test);
-        cList.addClass(test_c, test);
+        //cList.addClass(test_c, test);
         System.out.println(test);
 
         //Test 3
         System.out.println("Test 3:");
         Course test_c2 = new Course("PHIL 101", "Intro Phil", "Introduction to Philosophy", "9", "10", "MWF", "SHAL", "102");
         System.out.println(test);
-        cList.addClass(test_c2, test);
+        //cList.addClass(test_c2, test);
         System.out.println(test);
 
         //Test 4, test for confirm schedule

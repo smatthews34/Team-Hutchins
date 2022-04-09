@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity"};
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity", "lucky", "HUMAs"};
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -42,6 +42,8 @@ public class Main {
     public static void main (String[] args) throws FileNotFoundException {
         CourseList cl = new CourseList();
         User user = null;
+
+        Boolean auto = false;
 
         Scanner mainScn = new Scanner(System.in);
         printInitScreen();
@@ -202,6 +204,30 @@ public class Main {
 
             }
 
+            else if(command.equals("auto")){
+                Scanner autoScn = new Scanner(System.in);
+                String year ="";
+                String semester ="";
+                if (auto !=true){
+                    while(!year.equals("Fresh")&&!year.equals("Soph")&&!year.equals("Junior")&&!year.equals("Senior")&&!year.equals("fresh")&&!year.equals("soph")&&!year.equals("junior")&&!year.equals("senior")){
+                        System.out.println("What year are you? (Fresh, Soph, Junior, Senior)");
+                        year = autoScn.next();
+                    }
+                    while(!semester.equals("F")&&!semester.equals("S")&&!semester.equals("f")&&!semester.equals("s")){
+                        System.out.println("What Semester? ('F' for Fall or 'S' for Spring)");
+                        semester = autoScn.next();
+                    }
+                    cl.autoFill(year,semester, user.schedule);
+                    System.out.println("Your Schedule has successfully been generated with the base requirements of a " + year + " during the " + semester + " semester.");
+                    auto = true;
+                }else{
+                    System.out.println("You have already completed an auto schedule.");
+                }
+            }
+
+            else if(command.equals("lucky")){
+            }
+
             else if(command.equals("activity")){
                 Scanner ActScn = new Scanner(System.in);
                 String act = "";
@@ -210,14 +236,15 @@ public class Main {
                     System.out.println("Would you like to add an activity to your schedule? If yes enter 'yes'. If not enter 'done'");
                     act = ActScn.next();
                     if(act.equals("yes")||act.equals("Yes")||act.equals("Y")||act.equals("y")){
-                        System.out.println("What is the Name of your Activity you are participating in?");
-                        title = ActScn.nextLine();
+
                         System.out.println("Enter the start time of the Activity.(In military time; ex. 8:00:00)");
                         start = ActScn.next();
                         System.out.println("Enter the start time of the Activity.(In military time; ex. 13:00:00)");
                         end = ActScn.next();
                         System.out.println("Enter the day(s) that the Activity occurs on.(Ex MWF)");
                         meets = ActScn.next();
+                        System.out.println("What is the Name of your Activity you are participating in?");
+                        title = ActScn.nextLine();
                         Course c = new Course(title, start, end, meets);
                         cl.addClass(c, user.schedule);
                     }
@@ -225,6 +252,8 @@ public class Main {
                     act = ActScn.next();
                     if(act.equals("N")||act.equals("No")||act.equals("n")||act.equals("no")){
                         break;
+                    }else if(!act.equals("Y")||!act.equals("y")||!act.equals("Yes")||!act.equals("yes")){
+                        System.out.println("Invalid response, exiting to main screen.");
                     }
                 }
             }
