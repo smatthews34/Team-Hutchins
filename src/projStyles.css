@@ -1,3 +1,7 @@
+.pane{
+    -fx-background-color:  rgb(245, 238, 238);
+}
+
 
 .title {
     -fx-text-fill: rgb(49, 44, 56);
@@ -7,7 +11,7 @@
 }
 
 .subtitle {
-    -fx-text-fill: rgb(183, 28, 28);
+    -fx-text-fill: rgb(211, 47, 47);
     -fx-font-size: 14px;
     -fx-font-family: "Arial";
     -fx-font-weight: bold;
@@ -15,7 +19,7 @@
 
 
 .buttons {
-	-fx-background-color:  rgb(183, 28, 28);
+	-fx-background-color:  rgb(211, 47, 47);
 	-fx-padding: 8 20 8 20;
 	-fx-background-insets: 0,1,2;
     -fx-background-radius: 4,2,1;
@@ -27,13 +31,13 @@
 
 }
 .buttons2 {
-	-fx-border-color: rgb(183, 28, 28);
+	-fx-border-color: rgb(211, 47, 47);
 	-fx-border-width: 2;
 	-fx-border-radius: 4px;
 	-fx-padding: 6 13 6 13;
 	-fx-background-insets: 0,1,2;
     -fx-background-radius: 4,2,1;
-    -fx-text-fill: rgb(183, 28, 28);
+    -fx-text-fill: rgb(211, 47, 47);
     -fx-font-size: 14px;
     -fx-alignment: center;
     -fx-font-weight: bold;
@@ -41,12 +45,40 @@
 
 }
 
+.mini-buttons {
+	-fx-background-color:  white;
+	-fx-padding: 4 4 4 4;
+	-fx-background-insets: 0,1,2;
+    -fx-background-radius: 4,2,1;
+    -fx-alignment: center;
+
+}
+
+.combo-box{
+ -fx-background-color:  white;
+}
+
 
 
 .buttons:hover{
- -fx-background-color: rgb(203, 48, 48);
+ -fx-background-color: rgb(196, 33, 33);
 }
 
 .buttons2:hover{
- -fx-background-color: rgb(255, 235, 238);
+ -fx-background-color: rgb(245, 225, 228);
 }
+
+.mini-buttons:hover{
+ -fx-background-color: rgb(255, 251, 251);
+}
+
+.split-pane:horizontal > .split-pane-divider {
+   -fx-background-color: white;
+}
+
+.text-field {
+ -fx-background-color: white;
+}
+
+
+
