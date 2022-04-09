@@ -1,3 +1,9 @@
+/*Current Palette:
+Main red (buttons, subtitles): rgb(211, 47, 47)
+Background: rgb(245, 238, 238)
+*/
+
+
 .pane{
     -fx-background-color:  rgb(245, 238, 238);
 }
@@ -69,7 +75,7 @@
 }
 
 .mini-buttons:hover{
- -fx-background-color: rgb(255, 251, 251);
+ -fx-background-color: rgb(255, 248, 248);
 }
 
 .split-pane:horizontal > .split-pane-divider {
@@ -79,6 +85,3 @@
 .text-field {
  -fx-background-color: white;
 }
-
-
-

@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -7,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -21,8 +23,11 @@ import javafx.stage.Stage;
 import static javafx.scene.paint.Color.rgb;
 
 public class FXMain extends Application {
+    User user;
+    CourseList cl;
 
     //login vars
+    boolean loggedIn;
     Group loginGroup;
     GridPane loginPane;
     Scene loginScene;
@@ -35,6 +40,7 @@ public class FXMain extends Application {
     Image undoImg;
     Image redoImg;
 
+
     public static void setProperties(GridPane gp, int sizeH, int sizeV, int vGap, int hGap, int insets){
         gp.setMinSize(sizeH, sizeV);
         gp.setMaxSize(sizeH, sizeV);
@@ -46,46 +52,36 @@ public class FXMain extends Application {
 
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    final EventHandler<ActionEvent> loginHandler = new EventHandler<ActionEvent>(){
+        @Override
+        public void handle(ActionEvent event) {
+            //LOGIN LOGIC
+            String username = userField.getText();
+            String password = passField.getText();
 
-    @Override
-    public void start(Stage loginStage) {
+            System.out.println(username);
+            System.out.println(password);
 
-        //** LOGIN WINDOW **
+            Login l = new Login(username, password);
+            User potentialUser = l.loginSubmit();
 
-        loginGroup = new Group();
-        loginPane = new GridPane();
-        setProperties(loginPane, 400, 450, 15, 10, 0);
+            if (potentialUser == null){
+                Label badLoginLbl = new Label("Username or Password are invalid, please try again");
+                loginPane.add(badLoginLbl, 0, 6);
+            }
+            else {
+                user = new User(potentialUser.username, potentialUser.password, potentialUser.name);
+                loggedIn = true;
 
-        loginTitle = new Label("Welcome to the \nClass Scheduling Assistant!");
-        loginTitle.getStyleClass().clear();
-        loginTitle.getStyleClass().add("title");
+                //https://stackoverflow.com/questions/13567019/close-fxml-window-by-code-javafx
+                final Node source = (Node) event.getSource();
+                final Stage stage = (Stage) source.getScene().getWindow();
+                stage.close();
+            }
 
-        loginSubtitle = new Label("LOG IN");
-        loginSubtitle.getStyleClass().clear();
-        loginSubtitle.getStyleClass().add("subtitle");
+            //SEARCH WINDOW
+            if (loggedIn) {
 
-        //TODO: Something is funky w/ the labels
-        userField = new TextField();
-        userField.setPromptText("Username");
-        passField = new PasswordField();
-        passField.setPromptText("Password");
-
-        //TODO: Login button action event
-        loginBtn = new Button("Log In");
-        loginBtn.getStyleClass().clear();
-        loginBtn.getStyleClass().add("buttons");
-
-        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent click) {
-
-                //** SEARCH WINDOW **
-
-                loginStage.close();
                 Group searchGroup = new Group();
                 Stage searchStage = new Stage();
 
@@ -193,12 +189,51 @@ public class FXMain extends Application {
                 searchStage.setTitle("Search");
                 searchStage.show();
             }
-        });
+        }
+    };
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage loginStage) {
+        cl = new CourseList();
+        user = null;
+        loggedIn = false;
+        //** LOGIN WINDOW **
+
+        loginGroup = new Group();
+        loginPane = new GridPane();
+        setProperties(loginPane, 400, 450, 10, 10, 0);
+
+        loginTitle = new Label("Welcome to the \nClass Scheduling Assistant!");
+        loginTitle.getStyleClass().clear();
+        loginTitle.getStyleClass().add("title");
+
+        loginSubtitle = new Label("LOG IN");
+        loginSubtitle.getStyleClass().clear();
+        loginSubtitle.getStyleClass().add("subtitle");
+
+        //TODO: Something is funky w/ the labels
+        userField = new TextField();
+        userField.setPromptText("Username");
+        userField.setOnAction(loginHandler);
+
+        passField = new PasswordField();
+        passField.setPromptText("Password");
+        passField.setOnAction(loginHandler);
+
+        loginBtn = new Button("Log In");
+        loginBtn.getStyleClass().clear();
+        loginBtn.getStyleClass().add("buttons");
+        loginBtn.setOnAction(loginHandler);
+
+
         //TODO: Sign up button action event
         signupBtn = new Button("Sign Up");
         signupBtn.getStyleClass().clear();
         signupBtn.getStyleClass().add("buttons2");
-
 
         //index format is: (column, row, takes up x cols, takes up x rows)
         loginPane.add(loginTitle, 0, 0);
