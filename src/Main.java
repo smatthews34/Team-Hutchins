@@ -236,6 +236,11 @@ public class Main {
             }
 
             else if(command.equals("lucky")){
+                Scanner luckyScn = new Scanner(System.in);
+                String lucky = "";
+                System.out.println("Are you feeling lucky? (Y/N)");
+                cl.FeelingLucky(user.schedule);
+
             }
 
             else if(command.equals("activity")){

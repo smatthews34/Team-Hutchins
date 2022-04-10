@@ -165,10 +165,6 @@ public class CourseList {
         }
         return null; //if there is no such course will return nothing.
     }
-
-    public void FeelingLucky(ArrayList<Course> schedule){
-
-    }
     /**
      *  Similar to the getResults() but edited to just gather all of the courses in the data file
      * @return the grand course list for finding and adding a course that the user requested for.
@@ -211,6 +207,14 @@ public class CourseList {
         }
     }
 
+    /**
+     * autoFill
+     * @description a method that will automaticallly sign the user up for the required core courses for that year and semester,
+     * had to find a few replacement courses since the list of courses only contains spring courses.
+     * @param classPosition Grades of Fresh for Freshman, Soph for Sophomore, Junior for Junior, and Senior for Senior
+     * @param semester Semester's of F for Fall Semester or S for Spring Semester.
+     * @param schedule the current user's schedule
+     */
     public static void autoFill(String classPosition, String semester, ArrayList<Course> schedule){
         if(classPosition.equals("Fresh") && semester.equals("F")){
             schedule.add(getCourse("HUMA 102  A"));
@@ -235,7 +239,7 @@ public class CourseList {
         }else if(classPosition.equals("Senior") && semester.equals("S")){
             schedule.add(getCourse("HUMA 302  B")); //would be HUMA 303 but the course list given is missing HUMA 303
         }else {
-            System.out.println("Super Has No Designated HUMA or Base Courses, Seek an Advisors Assistance to Figure What HUMAs and Courses you Might be Missing.");
+            System.out.println("Super Senior Has No Designated HUMA or Base Courses, Seek an Advisors Assistance to Figure What HUMAs and Courses you Might be Missing.");
         }
     }
 
@@ -243,6 +247,27 @@ public class CourseList {
         courseList.clear();
     }
     //remove if broken.
+
+    /**
+     *
+     * @param schedule the user's current schedule
+     */
+    public static void FeelingLucky(ArrayList<Course> schedule){
+        Boolean conflict = true;
+        ArrayList<Course> options = importCourseList();
+        Random rand = new Random();
+        Course c;
+        int choice = 0;
+        while(conflict = true) {
+            choice = rand.nextInt(options.size());
+            c = options.get(choice);
+            conflict = checkConfliction(c,schedule);
+            if(conflict =false) {
+                schedule.add(c);
+            }
+        }
+
+    }
     public static void main(String[] args) {
         Course zack = getCourse("ACCT 202  A");
         System.out.println(zack);
