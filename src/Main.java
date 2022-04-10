@@ -50,9 +50,10 @@ public class Main {
         System.out.println("- Welcome to the Class Scheduling Assistant!");
 
         boolean loggedIn = false;
+        boolean isGuest = false; //Use to prevent a guest user from saving a schedule
 
         System.out.println("- Type what you'd like to do:\n");
-        System.out.println("login\t\tsign_up\t\tquit\n");
+        System.out.println("login\t\tsign_up\t\tguest\t\tquit\n");
         System.out.print(">");
 
         Scanner initScn = new Scanner(System.in);
@@ -82,6 +83,15 @@ public class Main {
                     loggedIn = true;
                     break;
                 }
+            }
+
+            else if (initCommand.equals("guest")){
+                System.out.println("You are now signed in with a guest account, you may create a schedule " +
+                        "but will not be able to save it until you sign up");
+                user = new User("guest", "", "guest");
+                loggedIn = true;
+                isGuest = true;
+                break;
             }
 
             else if(initCommand.equals("sign_up")){ //Make sure this can be accessed with space, change to sign up later
@@ -121,7 +131,7 @@ public class Main {
             }
 
             System.out.println("- Type what you'd like to do:\n");
-            System.out.println("login\t\tsign_up\t\tquit\n");
+            System.out.println("login\t\tsign_up\t\tguest\t\tquit\n");
             System.out.print(">");
             initCommand= initScn.nextLine();
         }
