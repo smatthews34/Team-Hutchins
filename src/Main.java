@@ -238,8 +238,20 @@ public class Main {
             else if(command.equals("lucky")){
                 Scanner luckyScn = new Scanner(System.in);
                 String lucky = "";
-                System.out.println("Are you feeling lucky? (Y/N)");
-                cl.FeelingLucky(user.schedule);
+                while(!lucky.equals("N")||!lucky.equals("n")) {
+                    System.out.println("Are you feeling lucky? (Y/N)");
+                    lucky = luckyScn.next();
+                    if (lucky.equals("Y") || lucky.equals("y")) {
+                        cl.FeelingLucky(user.schedule);
+                        System.out.println("Would you like to try again?(Y/N)");
+                        if(lucky.equals("N") || lucky.equals("n")){
+                            System.out.println("Guess you're not feeling lucky anymore...");
+                        }
+                    }else{
+                        System.out.println("Not feeling lucky I guess...");
+                        break;
+                    }
+                }
 
             }
 

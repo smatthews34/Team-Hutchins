@@ -258,12 +258,13 @@ public class CourseList {
         Random rand = new Random();
         Course c;
         int choice = 0;
-        while(conflict = true) {
+        while(conflict) {
             choice = rand.nextInt(options.size());
             c = options.get(choice);
             conflict = checkConfliction(c,schedule);
-            if(conflict =false) {
+            if(conflict == false) {
                 schedule.add(c);
+                break;
             }
         }
 
