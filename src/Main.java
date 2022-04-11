@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity", "lucky", "HUMAs"};
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity", "lucky", "auto", "resolve"};
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -212,6 +212,11 @@ public class Main {
                 cl.redo(user.schedule);
                 tempPrint(user.schedule);
 
+            }
+
+            else if(command.equals("resolve")){
+                //
+                System.out.println("Would you liek to resolve conflicts");
             }
 
             else if(command.equals("auto")){
