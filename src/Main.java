@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity", "lucky", "auto", "resolve"};
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity", "lucky", "auto", "resolve", "logout"};
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -146,7 +146,7 @@ public class Main {
         String command = st.nextToken();
         System.out.println(command);
 
-        while (!command.equals("quit")){
+        while (!command.equals("quit") && !command.equals("logout")){
 
             if(command.equals("view")){
                 //TODO: This may be changed later
@@ -456,5 +456,8 @@ public class Main {
 
         System.out.println("- Goodbye.\n");
 
+        if (command.equals("logout")){
+            main(null);
+        }
     }
 }
