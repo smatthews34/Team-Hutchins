@@ -2,6 +2,11 @@
 Main red (buttons, subtitles): rgb(211, 47, 47)
 Background: rgb(245, 238, 238)
 */
+.hyperlink{
+ -fx-text-fill: rgb(49, 44, 56);
+ -fx-font-weight: bold;
+}
+
 
 
 .pane{

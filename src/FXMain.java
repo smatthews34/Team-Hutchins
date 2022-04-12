@@ -28,6 +28,7 @@ public class FXMain extends Application {
 
     //login vars
     boolean loggedIn;
+    boolean isGuest;
     Group loginGroup;
     GridPane loginPane;
     Scene loginScene;
@@ -41,6 +42,145 @@ public class FXMain extends Application {
     Image redoImg;
 
 
+    public static void openQuickAlert(String alertTitle, String alertMsg){
+        Group alertGroup = new Group();
+        Scene alertScene = new Scene(alertGroup, 350, 200);
+        Stage alertStg = new Stage();
+
+        GridPane alertPane = new GridPane();
+        alertPane.setAlignment(Pos.CENTER);
+
+        Label alertTitleLbl = new Label(alertTitle);
+        alertTitleLbl.getStyleClass().clear();
+        alertTitleLbl.getStyleClass().add("subtitle");
+
+        Label alertMsgLbl = new Label(alertMsg);
+        Button okBtn = new Button("Okay");
+        okBtn.getStyleClass().clear();
+        okBtn.getStyleClass().add("buttons");
+
+        setProperties(alertPane, 350, 200, 10, 10, 10);
+        alertPane.add(alertTitleLbl, 0, 0);
+        alertPane.add(alertMsgLbl, 0, 1);
+        alertPane.add(okBtn, 0, 2);
+
+        okBtn.setOnMouseClicked(event -> alertStg.close());
+        alertGroup.getChildren().add(alertPane);
+        alertScene.getStylesheets().add("projStyles.css");
+        alertStg.setScene(alertScene);
+        alertStg.show();
+    }
+
+    public static void openSearch() {
+        //SEARCH WINDOW
+
+            Group searchGroup = new Group();
+            Stage searchStage = new Stage();
+
+            SplitPane searchSplit = new SplitPane();
+            searchSplit.getStyleClass().add("pane");
+            searchSplit.setOrientation(Orientation.HORIZONTAL);
+
+            GridPane searchPane = new GridPane();
+            setProperties(searchPane, 400, 500, 15, 10, 0);
+            searchPane.setAlignment(Pos.CENTER);
+
+            Button undoBtn = new Button();
+            Image undoImg = new Image("undo.png");
+            ImageView undoView = new ImageView(undoImg);
+            Image redoImg = new Image("redo.png");
+            ImageView redoView = new ImageView(redoImg);
+            undoBtn.setGraphic(undoView);
+            Button redoBtn = new Button();
+            redoBtn.setGraphic(redoView);
+
+            GridPane btnPane = new GridPane();
+            btnPane.add(undoBtn, 0, 0);
+            btnPane.add(redoBtn, 1, 0);
+            btnPane.setHgap(5);
+            btnPane.setVgap(5);
+
+            undoBtn.getStyleClass().clear();
+            undoBtn.getStyleClass().add("mini-buttons");
+            redoBtn.getStyleClass().clear();
+            redoBtn.getStyleClass().add("mini-buttons");
+
+            Label searchLbl = new Label("Search for Courses");
+            searchLbl.getStyleClass().clear();
+            searchLbl.getStyleClass().add("title");
+
+            TextField searchField = new TextField();
+            searchField.setPromptText("Search...");
+
+            Button searchBtn = new Button("Search");
+            searchBtn.getStyleClass().clear();
+            searchBtn.getStyleClass().add("buttons");
+
+            Label filterLbl = new Label("Filter by...");
+
+            ObservableList<String> dayFilters =
+                    FXCollections.observableArrayList(
+                            "",
+                            "MWF",
+                            "TR"
+                    );
+            //TODO: Add all times
+            ObservableList<String> timeFilters =
+                    FXCollections.observableArrayList(
+                            "",
+                            "8:00:00",
+                            "9:00:00",
+                            "12:30:00"
+                    );
+            //TODO: Add all depts
+            ObservableList<String> deptFilters =
+                    FXCollections.observableArrayList(
+                            "",
+                            "HUMA",
+                            "COMP"
+                    );
+            ComboBox dayFilterBox = new ComboBox(dayFilters);
+            dayFilterBox.setPromptText("Day");
+            ComboBox timeFilterBox = new ComboBox(timeFilters);
+            timeFilterBox.setPromptText("Time");
+            ComboBox deptFilterBox = new ComboBox(deptFilters);
+            deptFilterBox.setPromptText("Dept");
+
+            GridPane filterPane = new GridPane();
+            setProperties(filterPane, 300, 25, 10, 5, 0);
+
+            filterPane.add(dayFilterBox, 0, 0);
+            filterPane.add(timeFilterBox, 1, 0);
+            filterPane.add(deptFilterBox, 2, 0);
+
+
+            searchPane.add(searchLbl, 0, 0);
+            searchPane.add(searchField, 0, 1, 2, 1);
+            searchPane.add(filterLbl, 0, 2);
+            searchPane.add(filterPane, 0, 3, 6, 1);
+            searchPane.add(searchBtn, 0, 4);
+
+            GridPane schedulePane = new GridPane();
+            Label scheduleLbl = new Label("CURRENT SCHEDULE:");
+            scheduleLbl.getStyleClass().clear();
+            scheduleLbl.getStyleClass().add("subtitle");
+
+            schedulePane.add(btnPane, 0, 0);
+            schedulePane.add(scheduleLbl, 0, 1);
+
+            setProperties(schedulePane, 200, 400, 10, 10, 10);
+
+            searchSplit.getItems().add(searchPane);
+            searchSplit.getItems().add(schedulePane);
+            searchGroup.getChildren().add(searchSplit);
+
+        Scene searchScene = new Scene(searchGroup, 600, 500);
+        searchScene.getStylesheets().add("projStyles.css");
+        searchStage.setScene(searchScene);
+        searchStage.setTitle("Search");
+        searchStage.show();
+    }
+
     public static void setProperties(GridPane gp, int sizeH, int sizeV, int vGap, int hGap, int insets){
         gp.setMinSize(sizeH, sizeV);
         gp.setMaxSize(sizeH, sizeV);
@@ -51,6 +191,26 @@ public class FXMain extends Application {
         gp.setPadding(new Insets(insets));
 
     }
+
+    final EventHandler<ActionEvent> guestHandler = new EventHandler<ActionEvent>(){
+        @Override
+        public void handle(ActionEvent event) {
+            //GUEST LOGIC
+
+            user = new User("guest", "", "guest");
+            loggedIn = true;
+            isGuest = true;
+
+            //https://stackoverflow.com/questions/13567019/close-fxml-window-by-code-javafx
+            final Node source = (Node) event.getSource();
+            final Stage stage = (Stage) source.getScene().getWindow();
+            openSearch();
+            stage.close();
+            openQuickAlert("You are now signed in with a guest account.", "You may create a schedule, " +
+                    "but will not be able to save it\nuntil you sign up.");
+        }
+    };
+
 
     final EventHandler<ActionEvent> loginHandler = new EventHandler<ActionEvent>(){
         @Override
@@ -67,7 +227,7 @@ public class FXMain extends Application {
 
             if (potentialUser == null){
                 Label badLoginLbl = new Label("Username or Password are invalid, please try again");
-                loginPane.add(badLoginLbl, 0, 6);
+                loginPane.add(badLoginLbl, 0, 7);
             }
             else {
                 user = new User(potentialUser.username, potentialUser.password, potentialUser.name);
@@ -76,118 +236,8 @@ public class FXMain extends Application {
                 //https://stackoverflow.com/questions/13567019/close-fxml-window-by-code-javafx
                 final Node source = (Node) event.getSource();
                 final Stage stage = (Stage) source.getScene().getWindow();
+                openSearch();
                 stage.close();
-            }
-
-            //SEARCH WINDOW
-            if (loggedIn) {
-
-                Group searchGroup = new Group();
-                Stage searchStage = new Stage();
-
-                SplitPane searchSplit = new SplitPane();
-                searchSplit.getStyleClass().add("pane");
-                searchSplit.setOrientation(Orientation.HORIZONTAL);
-
-                GridPane searchPane = new GridPane();
-                setProperties(searchPane, 400, 500, 15, 10, 0);
-                searchPane.setAlignment(Pos.CENTER);
-
-                Button undoBtn = new Button();
-                undoImg = new Image("undo.png");
-                ImageView undoView = new ImageView(undoImg);
-                redoImg = new Image("redo.png");
-                ImageView redoView = new ImageView(redoImg);
-                undoBtn.setGraphic(undoView);
-                Button redoBtn = new Button();
-                redoBtn.setGraphic(redoView);
-
-                GridPane btnPane = new GridPane();
-                btnPane.add(undoBtn, 0, 0);
-                btnPane.add(redoBtn, 1, 0);
-                btnPane.setHgap(5);
-                btnPane.setVgap(5);
-
-                undoBtn.getStyleClass().clear();
-                undoBtn.getStyleClass().add("mini-buttons");
-                redoBtn.getStyleClass().clear();
-                redoBtn.getStyleClass().add("mini-buttons");
-
-                Label searchLbl = new Label("Search for Courses");
-                searchLbl.getStyleClass().clear();
-                searchLbl.getStyleClass().add("title");
-
-                TextField searchField = new TextField();
-                searchField.setPromptText("Search...");
-
-                Button searchBtn = new Button("Search");
-                searchBtn.getStyleClass().clear();
-                searchBtn.getStyleClass().add("buttons");
-
-                Label filterLbl = new Label("Filter by...");
-
-                ObservableList<String> dayFilters =
-                        FXCollections.observableArrayList(
-                                "",
-                                "MWF",
-                                "TR"
-                        );
-                //TODO: Add all times
-                ObservableList<String> timeFilters =
-                        FXCollections.observableArrayList(
-                                "",
-                                "8:00:00",
-                                "9:00:00",
-                                "12:30:00"
-                        );
-                //TODO: Add all depts
-                ObservableList<String> deptFilters =
-                        FXCollections.observableArrayList(
-                                "",
-                                "HUMA",
-                                "COMP"
-                        );
-                ComboBox dayFilterBox = new ComboBox(dayFilters);
-                dayFilterBox.setPromptText("Day");
-                ComboBox timeFilterBox = new ComboBox(timeFilters);
-                timeFilterBox.setPromptText("Time");
-                ComboBox deptFilterBox = new ComboBox(deptFilters);
-                deptFilterBox.setPromptText("Dept");
-
-                GridPane filterPane = new GridPane();
-                setProperties(filterPane, 300, 25, 10, 5, 0);
-
-                filterPane.add(dayFilterBox, 0, 0);
-                filterPane.add(timeFilterBox, 1, 0);
-                filterPane.add(deptFilterBox, 2, 0);
-
-
-                searchPane.add(searchLbl, 0, 0);
-                searchPane.add(searchField, 0, 1, 2, 1);
-                searchPane.add(filterLbl, 0, 2);
-                searchPane.add(filterPane, 0, 3, 6, 1);
-                searchPane.add(searchBtn, 0, 4);
-
-                GridPane schedulePane = new GridPane();
-                Label scheduleLbl = new Label("CURRENT SCHEDULE:");
-                scheduleLbl.getStyleClass().clear();
-                scheduleLbl.getStyleClass().add("subtitle");
-
-                schedulePane.add(btnPane, 0, 0);
-                schedulePane.add(scheduleLbl, 0, 1);
-
-                setProperties(schedulePane, 200, 400, 10, 10, 10);
-
-                searchSplit.getItems().add(searchPane);
-                searchSplit.getItems().add(schedulePane);
-                searchGroup.getChildren().add(searchSplit);
-
-
-                Scene searchScene = new Scene(searchGroup, 600, 500);
-                searchScene.getStylesheets().add("projStyles.css");
-                searchStage.setScene(searchScene);
-                searchStage.setTitle("Search");
-                searchStage.show();
             }
         }
     };
@@ -201,6 +251,7 @@ public class FXMain extends Application {
         cl = new CourseList();
         user = null;
         loggedIn = false;
+        isGuest = false; //Use to prevent a guest user from saving a schedule
         //** LOGIN WINDOW **
 
         loginGroup = new Group();
@@ -229,6 +280,10 @@ public class FXMain extends Application {
         loginBtn.getStyleClass().add("buttons");
         loginBtn.setOnAction(loginHandler);
 
+        Hyperlink guestLink = new Hyperlink("Continue as Guest");
+        guestLink.setOnAction(guestHandler);
+
+
 
         //TODO: Sign up button action event
         signupBtn = new Button("Sign Up");
@@ -244,6 +299,7 @@ public class FXMain extends Application {
         loginPane.add(passField, 0, 3);
         loginPane.add(loginBtn, 0, 4);
         loginPane.add(signupBtn, 0, 5);
+        loginPane.add(guestLink, 0, 6);
 
         loginPane.setPadding(new Insets(20));
         loginPane.setAlignment(Pos.CENTER);
