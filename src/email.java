@@ -1,60 +1,83 @@
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
 class email {
-    public static void main(String[] args) {
-        final String username = "username";
-        final String password = "password";
-        String fromEmail = "fromemail@email.com";
-        String toEmail = "toEmail@email.com";
+    public static void main(String[] args) throws Exception{
+        // Recipient's email
+        String to = "gerellocm19@gcc.edu";
 
-        Properties properties = new Properties();
+        // Sender's email
+        String from = "myschedulinghelper@gmail.com";
+
+        String host = "smtp.gmail.com";
+
+        // Get system properties
+        Properties properties = System.getProperties();
+
+        // Setup mail server
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.mail.yahoo.com");
-        properties.put("mail.smtp.port", "587");
 
+        // Get the Session object.// and pass username and password
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthenication() {
-                return new PasswordAuthentication(username, password);
+
+            protected PasswordAuthentication getPasswordAuthentication() {
+
+                return new PasswordAuthentication("myschedulinghelper@gmail.com", "teamHutchins1!");
+
             }
+
         });
 
-        MimeMessage message = new MimeMessage(session);
         try {
-            message.setFrom(new InternetAddress(fromEmail));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+            // Create a default MimeMessage object.
+            MimeMessage message = new MimeMessage(session);
 
-            //subject line
-            message.setSubject("Subject Line"); // change this
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress(from));
 
-            Multipart emailContent = new MimeMultipart();
+            // Set To: header field of the header.
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
-            // text part of email
-            MimeBodyPart textBodyPart = new MimeBodyPart();
-            textBodyPart.setText("Multipart text"); // change this
+            // Set Subject: header field
+            message.setSubject("Attatched Class Schedule");
 
-            // attatchment part of email
-            MimeBodyPart txtAttatchment = new MimeBodyPart();
-            txtAttatchment.attachFile("FinishedSchedule.txt");
+            Multipart multipart = new MimeMultipart();
 
-            // attatch all parts
-            emailContent.addBodyPart(textBodyPart);
-            emailContent.addBodyPart(txtAttatchment);
+            MimeBodyPart attachmentPart = new MimeBodyPart();
 
-            message.setContent(emailContent);
+            MimeBodyPart textPart = new MimeBodyPart();
 
+            try {
+
+                File f =new File("classFile.txt");
+
+                attachmentPart.attachFile(f);
+                textPart.setText("Here is your completed class schedule");
+                multipart.addBodyPart(textPart);
+                multipart.addBodyPart(attachmentPart);
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+            }
+
+            message.setContent(multipart);
+
+            System.out.println("sending...");
+
+            // Send message
             Transport.send(message);
-            System.out.println("Message sent");
-        } catch (MessagingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Sent message successfully!");
+        } catch (MessagingException ex) {
+            ex.printStackTrace();
         }
 
     }
