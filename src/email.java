@@ -1,14 +1,15 @@
-/*
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-//import javax.mail.*;
-//import javax.mail.internet.*;
+import javax.mail.*;
+import javax.mail.internet.*;
 
+// when added to main need to change to email the final schedule. For testing I emailed other txt files in our folder
 class email {
-    public static void main(String[] args) throws Exception{
+    public static void emailSender(String to) throws Exception{
         // Recipient's email
-        String to = "gerellocm19@gcc.edu";
+        //String to = "gerellocm19@gcc.edu";
 
         // Sender's email
         String from = "myschedulinghelper@gmail.com";
@@ -24,7 +25,8 @@ class email {
         properties.put("mail.smtp.ssl.enable", "true");
         properties.put("mail.smtp.auth", "true");
 
-        // Get the Session object.// and pass username and password
+        // Get the Session object
+        // pass username and password
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -36,16 +38,15 @@ class email {
         });
 
         try {
-            // Create a default MimeMessage object.
             MimeMessage message = new MimeMessage(session);
 
-            // Set From: header field of the header.
+            // Set who the email is from
             message.setFrom(new InternetAddress(from));
 
-            // Set To: header field of the header.
+            // Set who is recieving the email
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
-            // Set Subject: header field
+            // Set the subject of the email
             message.setSubject("Attatched Class Schedule");
 
             Multipart multipart = new MimeMultipart();
@@ -54,6 +55,7 @@ class email {
 
             MimeBodyPart textPart = new MimeBodyPart();
 
+            // add everything to email
             try {
 
                 File f =new File("classFile.txt");
@@ -81,5 +83,12 @@ class email {
         }
 
     }
+
+    //testing
+    public static void main(String[] args) throws Exception {
+        Scanner scnr = new Scanner(System.in);
+        System.out.println("Enter your email address");
+        String to = scnr.next();
+        emailSender(to);
+    }
 }
-*/
