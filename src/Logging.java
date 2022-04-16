@@ -19,12 +19,12 @@ public class Logging {
             System.out.println("Log File created: " + f.getName());
         }
         fh = new FileHandler(user+".txt",true);
-        logger = Logger.getLogger("test");
+        logger = Logger.getLogger("Log");
         logger.addHandler(fh);
         SimpleFormatter form = new SimpleFormatter();
         fh.setFormatter(form);
     }
-    public void logAction(String s) {
+    public void Action(String s) {
         this.logger.info(s);
     }
     public void logConflict(String s) {
@@ -32,10 +32,10 @@ public class Logging {
     }
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Hello World!");
-        Logging lg1 = new Logging("tom");
-        lg1.logger.setLevel(Level.ALL);
-        lg1.logAction("Hi");
+        System.out.println("Welcom to Logging Testing!");
+        //Logging lg1 = new Logging("tom");
+        //lg1.logger.setLevel(Level.ALL);
+        //lg1.Action("Hi");
         //lg1.logger.info("Hello testing logger.");
         //lg1.logger.warning("conflict with scheduling accepted");//
         System.out.println("Thank you.");
