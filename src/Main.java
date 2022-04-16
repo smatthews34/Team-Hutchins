@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.NumberFormat;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class Main {
     }
 
 
-    public static void main (String[] args) throws FileNotFoundException {
+    public static void main (String[] args) throws FileNotFoundException, IOException {
         CourseList cl = new CourseList();
         User user = null;
         Logging lg;
@@ -81,6 +82,8 @@ public class Main {
                     user = new User(potentialUser.username, potentialUser.password, potentialUser.name);
                     //May copy to global User variable here
                     loggedIn = true;
+                    //lg = new Logging(potentialUser.username);
+                    //lg.logAction(potentialUser.username + " has begun scheduling.");
                     break;
                 }
             }
@@ -91,6 +94,8 @@ public class Main {
                 user = new User("guest", "", "guest");
                 loggedIn = true;
                 isGuest = true;
+                //lg = new Logging("guest");
+                //lg.logAction("A Guest has started to schedule");
                 break;
             }
 
@@ -137,6 +142,12 @@ public class Main {
         }
 
         printScreen(user.name);
+        lg = new Logging(user.username);
+        if(!user.username.equals("guest")){
+            lg.logAction(user.username + " has begun scheduling.");
+        }else{
+            lg.logAction("A Guest has started to schedule");
+        }
         System.out.println("- Type what you'd like to do:");
         System.out.println("  (or type 'list' to see valid commands)\n");
         System.out.print(">");
@@ -150,6 +161,7 @@ public class Main {
 
             if(command.equals("view")){
                 //TODO: This may be changed later
+                lg.logAction(user.username + " entered \"view\".");
                 tempPrint(user.schedule);
             }
            else if(command.equals("add")){
@@ -165,8 +177,10 @@ public class Main {
 
                         if (a != null) {
                             cl.addClass(a, user.schedule);
+                            lg.logAction(user.username + " added: " + a);
                         } else {
                             System.out.println("Please enter a valid class.");
+                            lg.logger.warning(user.username + " added the invalid course: " + addOption);
                         }
                     }
                 }
@@ -193,30 +207,35 @@ public class Main {
                     if(user.scheduleContains(code)) {
                         Course c = user.getCourse(code);
                         cl.removeClass(c, user.schedule);
+                        lg.logAction(user.username + " Successfuly removed the course: " + c);
                         System.out.println("Course removed.");
                         tempPrint(user.schedule);
                     }
 
                     else {
                         System.out.println("Error: Course not found.");
+                        lg.logger.warning(user.username + " has tried to remove the invalid course: " + code );
                     }
             }
 
             else if(command.equals("undo")){
                 cl.undo(user.schedule);
                 tempPrint(user.schedule);
+                lg.logAction(user.username + " has undone their last action");
 
             }
 
             else if(command.equals("redo")){
                 cl.redo(user.schedule);
                 tempPrint(user.schedule);
+                lg.logAction(user.username + " has redone their last action");
 
             }
 
             else if(command.equals("resolve")){
                 //
-                System.out.println("Would you liek to resolve conflicts");
+                System.out.println("Would you like to resolve conflicts");
+                lg.logAction(user.username + " has resolved their schedule conflicts.");
             }
 
             else if(command.equals("auto")){
@@ -234,9 +253,11 @@ public class Main {
                     }
                     cl.autoFill(year,semester, user.schedule);
                     System.out.println("Your Schedule has successfully been generated with the base requirements of a " + year + " during the " + semester + " semester.");
+                    lg.logAction(user.username + " has auto-generated their course schedule for " + year + " in the " + semester + " semester.");
                     auto = true;
                 }else{
                     System.out.println("You have already completed an auto schedule.");
+                    lg.logger.warning(user.username + " attempted to auto-generate their schedule but they already have.");
                 }
             }
 
@@ -279,10 +300,12 @@ public class Main {
                         title = ActScn.nextLine();
                         Course c = new Course(title, start, end, meets);
                         cl.addClass(c, user.schedule);
+                        lg.logAction(user.username + " has added the activity " + c);
                     }
                     System.out.println("Would you like to add another activity? (Y/N)");
                     act = ActScn.next();
                     if(act.equals("N")||act.equals("No")||act.equals("n")||act.equals("no")){
+                        lg.logAction(user.username + " has elected not to add another activity.");
                         break;
                     }else if(!act.equals("Y")||!act.equals("y")||!act.equals("Yes")||!act.equals("yes")){
                         System.out.println("Invalid response, exiting to main screen.");
@@ -291,6 +314,7 @@ public class Main {
             }
 
             else if(command.equals("list")){
+                lg.logAction(user.username + " has entered the \"list\" command");
                 printCommands();
 
             }
@@ -336,11 +360,13 @@ public class Main {
                         if (answer.equalsIgnoreCase("YES") || answer.equalsIgnoreCase("Y")) {
                             System.out.println(conflicts + " conflict(s) exists.");
                             ConfirmSchedule.scheduleFile(user.schedule);
+                            lg.logAction(user.username + " has confirmed and saved their schedule with " + conflicts + " conflict(s).");
                             System.out.println("Your schedule has been confirmed. See file.");
                             confirmed = true;
 
                         } else if (answer.equalsIgnoreCase("NO") || answer.equalsIgnoreCase("N")) {
                             System.out.println("Type a new command.");
+                            lg.logAction(user.username + " has denied to confirm and saved their schedule.");
                             confirmed = true;
 
                         } else {
@@ -353,6 +379,7 @@ public class Main {
                 else {
                     System.out.println(conflicts + " conflicts exist. Confirming schedule now.");
                     ConfirmSchedule.scheduleFile(user.schedule);
+                    lg.logAction(user.username + " has confirmed and saved their schedule with zero conflicts.");
                     System.out.println("Your schedule has been confirmed. See file.");
                 }
             }
@@ -440,6 +467,7 @@ public class Main {
 
             else {
                 System.out.println("- Command '" + command + "' not recognized.");
+                lg.logger.warning("Invalid Input: " + command);
             }
 
             printScreen(user.name);
@@ -457,7 +485,9 @@ public class Main {
         System.out.println("- Goodbye.\n");
 
         if (command.equals("logout")){
+            lg.logAction(user.username + " has logged out.");
             main(null);
         }
+        lg.logAction(user.username + " has quit the application.");
     }
 }

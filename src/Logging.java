@@ -16,7 +16,7 @@ public class Logging {
         f = new File(user+".txt");
         if (!f.exists()){
             f.createNewFile();
-            System.out.println("File created: " + f.getName());
+            System.out.println("Log File created: " + f.getName());
         }
         fh = new FileHandler(user+".txt",true);
         logger = Logger.getLogger("test");
@@ -24,18 +24,18 @@ public class Logging {
         SimpleFormatter form = new SimpleFormatter();
         fh.setFormatter(form);
     }
-    public static void logaction(String s, Logging l) {
-        l.logger.info(s);
+    public void logAction(String s) {
+        this.logger.info(s);
     }
-    public static void logConflict(String s, Logging l) {
-        l.logger.warning(s);
+    public void logConflict(String s) {
+        this.logger.warning(s);
     }
 
     public static void main(String[] args) throws IOException {
         System.out.println("Hello World!");
         Logging lg1 = new Logging("tom");
         lg1.logger.setLevel(Level.ALL);
-        logConflict("hey this ain't good chief!", lg1);
+        lg1.logAction("Hi");
         //lg1.logger.info("Hello testing logger.");
         //lg1.logger.warning("conflict with scheduling accepted");//
         System.out.println("Thank you.");

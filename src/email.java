@@ -1,9 +1,9 @@
-
+/*
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+//import javax.mail.*;
+//import javax.mail.internet.*;
 
 class email {
     public static void main(String[] args) throws Exception{
@@ -82,3 +82,4 @@ class email {
 
     }
 }
+*/
