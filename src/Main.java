@@ -42,7 +42,7 @@ public class Main {
     public static void main (String[] args) throws FileNotFoundException {
         CourseList cl = new CourseList();
         User user = null;
-
+        Logging lg;
         Boolean auto = false;
 
         Scanner mainScn = new Scanner(System.in);
