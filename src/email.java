@@ -6,9 +6,9 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 class email {
-    public static void main(String[] args) throws Exception{
+    public static void emailSender(String to) throws Exception{
         // Recipient's email
-        String to = "gerellocm19@gcc.edu";
+        //String to = "gerellocm19@gcc.edu";
 
         // Sender's email
         String from = "myschedulinghelper@gmail.com";
@@ -80,5 +80,12 @@ class email {
             ex.printStackTrace();
         }
 
+    }
+
+    public static void main(String[] args) throws Exception {
+        Scanner scnr = new Scanner(System.in);
+        System.out.println("Enter your email address");
+        String to = scnr.next();
+        emailSender(to);
     }
 }
