@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity", "lucky", "auto", "resolve", "logout"};
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity", "lucky", "auto", "resolve", "logout", "message"};
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -246,6 +246,45 @@ public class Main {
                 //
                 System.out.println("Would you like to resolve conflicts");
                 lg.Action(user.username + " has resolved their schedule conflicts.");
+            }
+
+            else if(command.equals("message")){
+                CellNote c = new CellNote();
+                String provider = "";
+                String phone = "";
+                Scanner messageScan = new Scanner(System.in);
+
+                while (!provider.equals("done")){
+                    System.out.println("Who is you cell phone provider?");
+                    provider = messageScan.next();
+                    if(provider.equals("AT&T")||provider.equals("Boost")||provider.equals("Cricket")||provider.equals("Google")||provider.equals("Republic")||provider.equals("Sprint")||provider.equals("Straight")||provider.equals("T-Mobile")||provider.equals("Ting")||provider.equals("U.S.")||provider.equals("Verizon")||provider.equals("Virgin")){
+                        break;
+                    }else{
+                        System.out.println("Sorry we do not have your provider on file. Please try again or enter 'done' if finished.");
+                        provider = messageScan.next();
+                        if (provider.equals("done")||provider.equals("Done")){
+                            break;
+                        }
+                    }
+                }
+                while ((!provider.equals("done")||!provider.equals("Done")) && (!phone.equals("done")||!phone.equals("Done"))){
+                    System.out.println("Please enter your ten-digit phone number without the dashes or parenthesis(Example: 5554748044)");
+                    phone = messageScan.next();
+                    if (phone.length() == 10){
+                        break;
+                    }else{
+                        System.out.println("Incorrect length number please try again or enter 'done' now to quit");
+                        phone = messageScan.next();
+                        if (phone.equals("done")||phone.equals("Done")){
+                            break;
+                        }
+                    }
+                }
+                if((!provider.equals("done")||!provider.equals("Done")) && (!phone.equals("done")||!phone.equals("Done"))){
+                    c.sendNotification(provider, phone, user.schedule);
+                }else{
+                    System.out.println("Either invalid phone number or cell provider.");
+                }
             }
 
             else if(command.equals("auto")){
