@@ -62,7 +62,19 @@ Background: rgb(245, 238, 238)
 	-fx-background-insets: 0,1,2;
     -fx-background-radius: 4,2,1;
     -fx-alignment: center;
+}
 
+.add-buttons {
+	-fx-background-color: rgb(211, 47, 47);
+	-fx-padding: 4 4 4 4;
+	-fx-background-insets: 0,1,2;
+    -fx-background-radius: 4,2,1;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+}
+
+.add-buttons:hover {
+-fx-background-color: rgb(196, 33, 33);
 }
 
 .combo-box{
