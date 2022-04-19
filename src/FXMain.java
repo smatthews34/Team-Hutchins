@@ -47,10 +47,12 @@ public class FXMain extends Application {
     Image redoImg;
     Stage searchStage;
     GridPane searchPane;
+    GridPane btnPane;
     TextField searchField;
     Button searchBtn;
     ScrollPane resultsSPane;
     GridPane resultsPane;
+    GridPane schedulePane;
 
 
     //public static ArrayList<Course> getResultsList(String searchInput){
@@ -136,6 +138,8 @@ public class FXMain extends Application {
                 Label result = new Label(courses.get(i).toString());
                 coursePane.add(result, 1, 0);
                 Button addBtn = new Button("+");
+                addBtn.setId(courses.get(i).courseCode);
+                addBtn.setOnAction(addCourseHandler);
                 addBtn.getStyleClass();
                 addBtn.getStyleClass().add("add-buttons");
                 coursePane.add(addBtn, 0, 0);
@@ -144,6 +148,36 @@ public class FXMain extends Application {
         resultsSPane.setContent(resultsPane);
         searchPane.add(resultsSPane, 0, 2, 2, 1);
     }
+
+    final EventHandler<ActionEvent> addCourseHandler = new EventHandler<ActionEvent>(){
+        @Override
+        public void handle(ActionEvent event) {
+            String courseId = ((Button)event.getSource()).getId();
+            Course course = cl.getCourse(courseId);
+            cl.addClass(course, user.schedule);
+
+            schedulePane.getChildren().clear();
+            GridPane currCoursePane = new GridPane();
+
+            Label scheduleLbl = new Label("CURRENT SCHEDULE:");
+            scheduleLbl.getStyleClass().clear();
+            scheduleLbl.getStyleClass().add("subtitle");
+            schedulePane.add(btnPane, 0, 0);
+            schedulePane.add(scheduleLbl, 0, 1);
+
+            for(int i = 0; i < user.schedule.size(); i++){
+                Course c = user.schedule.get(i);
+                Label courseLbl = new Label(c.toString());
+                currCoursePane.add(courseLbl, 0, i);
+            }
+
+            schedulePane.add(currCoursePane, 0, 2);
+            setProperties(schedulePane, 300, 400, 10, 10, 10);
+            setProperties(currCoursePane, 300, 300, 10, 0, 10);
+
+
+        }
+    };
 
     final EventHandler<ActionEvent> loginHandler = new EventHandler<ActionEvent>(){
         @Override
@@ -164,6 +198,7 @@ public class FXMain extends Application {
             }
             else {
                 user = new User(potentialUser.username, potentialUser.password, potentialUser.name);
+                cl = new CourseList();
                 loggedIn = true;
 
                 //https://stackoverflow.com/questions/13567019/close-fxml-window-by-code-javafx
@@ -229,7 +264,7 @@ public class FXMain extends Application {
 
         //TODO: Connect fields to logic
         loginPane.add(userField, 0, 2);
-        loginPane.add(passField, 0, 3);
+        loginPane.add(passField,0, 3);
         loginPane.add(loginBtn, 0, 4);
         loginPane.add(signupBtn, 0, 5);
         loginPane.add(guestLink, 0, 6);
@@ -244,7 +279,7 @@ public class FXMain extends Application {
         searchSplit.setOrientation(Orientation.HORIZONTAL);
 
         searchPane = new GridPane();
-        setProperties(searchPane, 450, 550, 15, 10, 5);
+        setProperties(searchPane, 500, 600, 15, 10, 5);
         searchPane.setAlignment(Pos.CENTER);
 
         Button undoBtn = new Button();
@@ -256,7 +291,7 @@ public class FXMain extends Application {
         Button redoBtn = new Button();
         redoBtn.setGraphic(redoView);
 
-        GridPane btnPane = new GridPane();
+        btnPane = new GridPane();
         btnPane.add(undoBtn, 0, 0);
         btnPane.add(redoBtn, 1, 0);
         btnPane.setHgap(5);
@@ -323,7 +358,7 @@ public class FXMain extends Application {
         searchPane.add(filterPane, 0, 3, 6, 1);
         searchPane.add(searchBtn, 0, 4);
 
-        GridPane schedulePane = new GridPane();
+        schedulePane = new GridPane();
         Label scheduleLbl = new Label("CURRENT SCHEDULE:");
         scheduleLbl.getStyleClass().clear();
         scheduleLbl.getStyleClass().add("subtitle");
@@ -331,13 +366,13 @@ public class FXMain extends Application {
         schedulePane.add(btnPane, 0, 0);
         schedulePane.add(scheduleLbl, 0, 1);
 
-        setProperties(schedulePane, 200, 400, 10, 10, 10);
+        setProperties(schedulePane, 300, 400, 10, 10, 10);
 
         searchSplit.getItems().add(searchPane);
         searchSplit.getItems().add(schedulePane);
         searchGroup.getChildren().add(searchSplit);
 
-        Scene searchScene = new Scene(searchGroup, 650, 550);
+        Scene searchScene = new Scene(searchGroup, 800, 550);
         searchScene.getStylesheets().add("projStyles.css");
         searchStage.setScene(searchScene);
         searchStage.setTitle("Search");
