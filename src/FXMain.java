@@ -157,7 +157,8 @@ public class FXMain extends Application {
             cl.addClass(course, user.schedule);
 
             schedulePane.getChildren().clear();
-            GridPane currCoursePane = new GridPane();
+            GridPane allCoursePane = new GridPane();
+            setProperties(allCoursePane, 400, 40, 0, 0, 0);
 
             Label scheduleLbl = new Label("CURRENT SCHEDULE:");
             scheduleLbl.getStyleClass().clear();
@@ -166,14 +167,21 @@ public class FXMain extends Application {
             schedulePane.add(scheduleLbl, 0, 1);
 
             for(int i = 0; i < user.schedule.size(); i++){
+                GridPane coursePane = new GridPane();
+                setProperties(coursePane, 400, 25, 5, 5, 0);
                 Course c = user.schedule.get(i);
                 Label courseLbl = new Label(c.toString());
-                currCoursePane.add(courseLbl, 0, i);
+                Button removeBtn = new Button("-");
+                removeBtn.getStyleClass().clear();
+                removeBtn.getStyleClass().add("add-buttons");
+                coursePane.add(removeBtn, 0, i);
+                coursePane.add(courseLbl, 1, i);
+                allCoursePane.add(coursePane, 0, i);
             }
 
-            schedulePane.add(currCoursePane, 0, 2);
-            setProperties(schedulePane, 300, 400, 10, 10, 10);
-            setProperties(currCoursePane, 300, 300, 10, 0, 10);
+            schedulePane.add(allCoursePane, 0, 2);
+            setProperties(schedulePane, 400, 450, 5, 10, 15);
+            setProperties(allCoursePane, 400, 350, 5, 5, 10);
 
 
         }
@@ -234,7 +242,6 @@ public class FXMain extends Application {
         loginSubtitle.getStyleClass().clear();
         loginSubtitle.getStyleClass().add("subtitle");
 
-        //TODO: Something is funky w/ the labels
         userField = new TextField();
         userField.setPromptText("Username");
         userField.setOnAction(loginHandler);
@@ -262,7 +269,6 @@ public class FXMain extends Application {
         loginPane.add(loginTitle, 0, 0);
         loginPane.add(loginSubtitle, 0, 1);
 
-        //TODO: Connect fields to logic
         loginPane.add(userField, 0, 2);
         loginPane.add(passField,0, 3);
         loginPane.add(loginBtn, 0, 4);
@@ -279,7 +285,7 @@ public class FXMain extends Application {
         searchSplit.setOrientation(Orientation.HORIZONTAL);
 
         searchPane = new GridPane();
-        setProperties(searchPane, 500, 600, 15, 10, 5);
+        setProperties(searchPane, 550, 600, 15, 10, 10);
         searchPane.setAlignment(Pos.CENTER);
 
         Button undoBtn = new Button();
@@ -366,13 +372,13 @@ public class FXMain extends Application {
         schedulePane.add(btnPane, 0, 0);
         schedulePane.add(scheduleLbl, 0, 1);
 
-        setProperties(schedulePane, 300, 400, 10, 10, 10);
+        setProperties(schedulePane, 450, 400, 5, 5, 10);
 
         searchSplit.getItems().add(searchPane);
         searchSplit.getItems().add(schedulePane);
         searchGroup.getChildren().add(searchSplit);
 
-        Scene searchScene = new Scene(searchGroup, 800, 550);
+        Scene searchScene = new Scene(searchGroup, 925, 600);
         searchScene.getStylesheets().add("projStyles.css");
         searchStage.setScene(searchScene);
         searchStage.setTitle("Search");
