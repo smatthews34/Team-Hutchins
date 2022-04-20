@@ -57,16 +57,16 @@ public class CellNote {
         try{
             ProcessBuilder b = new ProcessBuilder("python", System.getProperty("user.dir") + "\\PythonScripts\\alert.py", schedule, "Schedule", to);
             Process p = b.start();
-            //BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            //BufferedReader readers = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader readers = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
-            //String lines =null;
-            //while((lines=reader.readLine())!=null){
-                //System.out.println("lines"+lines);
-            //}
-            //while((lines=readers.readLine())!=null){
-                //System.out.println("lines"+lines);
-            //}
+            String lines =null;
+            while((lines=reader.readLine())!=null){
+                System.out.println("lines"+lines);
+            }
+            while((lines=readers.readLine())!=null){
+                System.out.println("lines"+lines);
+            }
 
         }catch (Exception e){
             e.printStackTrace();
@@ -78,11 +78,11 @@ public class CellNote {
 
         Course test_c = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
         Course test_cc = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
-        Course test_ccc = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
+        //Course test_ccc = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
         ArrayList<Course> s = new ArrayList<Course>();
         s.add(test_c);
         s.add(test_cc);
-        s.add(test_ccc);
+        //s.add(test_ccc);
         sendNotification("Verizon", "9154748044",s);
     }
 }

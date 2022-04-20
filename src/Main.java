@@ -249,7 +249,8 @@ public class Main {
             }
 
             else if(command.equals("message")){
-                CellNote c = new CellNote();
+                System.out.println("Sorry :( Due To The Grove City FireWall the Feature will not work.");
+                /*CellNote c = new CellNote();
                 String provider = "";
                 String phone = "";
                 Scanner messageScan = new Scanner(System.in);
@@ -285,6 +286,8 @@ public class Main {
                 }else{
                     System.out.println("Either invalid phone number or cell provider.");
                 }
+                */
+
             }
 
             else if(command.equals("auto")){

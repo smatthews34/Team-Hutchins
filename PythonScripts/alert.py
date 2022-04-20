@@ -17,9 +17,9 @@ def message_alert():
     msg.set_content(body)
     msg['subject']=subject
     msg['to'] = to
-    user = "myschedulinghelper@gmail.com"
+    user = "cellnotificationteamh@gmail.com"
     msg['from'] = user
-    password = "zylmswnnfqhrpsio"
+    password = "xiwjixoosloxgwta"
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
     server.login(user, password)
@@ -28,6 +28,7 @@ def message_alert():
 
 message_alert()
 '''
+testing
 def message_alert(subject, body, to):
     msg = EmailMessage()
     msg.set_content(body)
