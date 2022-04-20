@@ -1,6 +1,5 @@
-/*
 import java.io.File;
-/*import java.io.IOException;
+import java.io.IOException;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -91,4 +90,4 @@ class email {
         String to = scnr.next();
         emailSender(to);
     }
-}*/
+}
