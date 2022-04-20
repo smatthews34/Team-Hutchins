@@ -37,4 +37,11 @@ public class User {
         return null;
     }
 
+    public void printSchedule(){
+        for(Course c: schedule){
+            System.out.println(c.toString());
+        }
+    }
+
+
 }

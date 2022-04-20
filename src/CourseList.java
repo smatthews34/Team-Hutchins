@@ -72,9 +72,12 @@ public class CourseList {
      * @param Schedule - user's working schedule
      */
     public void removeClass(Course course, ArrayList<Course> Schedule){
+        System.out.println(checkDouble(course, Schedule));
         if (checkDouble(course, Schedule)) {
             Schedule.remove(course);
         }
+
+        System.out.println(checkDouble(course, Schedule));
 
         updateHistory("remove", course);
     }

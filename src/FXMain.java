@@ -53,6 +53,7 @@ public class FXMain extends Application {
     ScrollPane resultsSPane;
     GridPane resultsPane;
     GridPane schedulePane;
+    GridPane allCoursePane;
 
 
     //public static ArrayList<Course> getResultsList(String searchInput){
@@ -154,11 +155,11 @@ public class FXMain extends Application {
         public void handle(ActionEvent event) {
             String courseId = ((Button)event.getSource()).getId();
             Course course = cl.getCourse(courseId);
+
             cl.addClass(course, user.schedule);
 
+            allCoursePane.getChildren().clear();
             schedulePane.getChildren().clear();
-            GridPane allCoursePane = new GridPane();
-            setProperties(allCoursePane, 400, 40, 0, 0, 0);
 
             Label scheduleLbl = new Label("CURRENT SCHEDULE:");
             scheduleLbl.getStyleClass().clear();
@@ -171,9 +172,54 @@ public class FXMain extends Application {
                 setProperties(coursePane, 400, 25, 5, 5, 0);
                 Course c = user.schedule.get(i);
                 Label courseLbl = new Label(c.toString());
+
                 Button removeBtn = new Button("-");
+                removeBtn.setId(user.schedule.get(i).courseCode);
                 removeBtn.getStyleClass().clear();
                 removeBtn.getStyleClass().add("add-buttons");
+                removeBtn.setOnAction(removeCourseHandler);
+
+                coursePane.add(removeBtn, 0, i);
+                coursePane.add(courseLbl, 1, i);
+                allCoursePane.add(coursePane, 0, i);
+            }
+
+            schedulePane.add(allCoursePane, 0, 2);
+            setProperties(schedulePane, 400, 450, 5, 10, 15);
+            setProperties(allCoursePane, 400, 350, 5, 5, 10);
+
+
+        }
+    };
+
+    final EventHandler<ActionEvent> removeCourseHandler = new EventHandler<ActionEvent>(){
+        @Override
+        public void handle(ActionEvent event) {
+            String courseId = ((Button)event.getSource()).getId();
+            Course course = user.getCourse(courseId);
+            cl.removeClass(course, user.schedule);
+
+            allCoursePane.getChildren().clear();
+            schedulePane.getChildren().clear();
+
+            Label scheduleLbl = new Label("CURRENT SCHEDULE:");
+            scheduleLbl.getStyleClass().clear();
+            scheduleLbl.getStyleClass().add("subtitle");
+            schedulePane.add(btnPane, 0, 0);
+            schedulePane.add(scheduleLbl, 0, 1);
+
+            for(int i = 0; i < user.schedule.size(); i++){
+                GridPane coursePane = new GridPane();
+                setProperties(coursePane, 400, 25, 5, 5, 0);
+                Course c = user.schedule.get(i);
+                Label courseLbl = new Label(c.toString());
+
+                Button removeBtn = new Button("-");
+                removeBtn.setOnAction(removeCourseHandler);
+                removeBtn.getStyleClass().clear();
+                removeBtn.getStyleClass().add("add-buttons");
+                removeBtn.setId(user.schedule.get(i).courseCode);
+
                 coursePane.add(removeBtn, 0, i);
                 coursePane.add(courseLbl, 1, i);
                 allCoursePane.add(coursePane, 0, i);
@@ -369,8 +415,12 @@ public class FXMain extends Application {
         scheduleLbl.getStyleClass().clear();
         scheduleLbl.getStyleClass().add("subtitle");
 
+        allCoursePane = new GridPane();
+        setProperties(allCoursePane, 400, 40, 0, 0, 0);
+
         schedulePane.add(btnPane, 0, 0);
         schedulePane.add(scheduleLbl, 0, 1);
+        schedulePane.add(allCoursePane, 0, 2);
 
         setProperties(schedulePane, 450, 400, 5, 5, 10);
 

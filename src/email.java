@@ -1,13 +1,13 @@
-/*
+
 import java.io.File;
-/*import java.io.IOException;
+import java.io.IOException;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
 // when added to main need to change to email the final schedule. For testing I emailed other txt files in our folder
 class email {
-    public static void emailSender(String to) throws Exception{
+    public static void emailSender(String to) throws Exception {
         // Recipient's email
         //String to = "gerellocm19@gcc.edu";
 
@@ -58,7 +58,7 @@ class email {
             // add everything to email
             try {
 
-                File f =new File("classFile.txt");
+                File f = new File("classFile.txt");
 
                 attachmentPart.attachFile(f);
                 textPart.setText("Here is your completed class schedule");
@@ -91,4 +91,5 @@ class email {
         String to = scnr.next();
         emailSender(to);
     }
-}*/
+}
+
