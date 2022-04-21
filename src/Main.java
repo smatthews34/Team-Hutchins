@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity", "lucky", "auto", "resolve", "logout", "message"};
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity", "lucky", "auto", "logout", "message", "resolve"};
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -59,6 +59,11 @@ public class Main {
 
         Scanner initScn = new Scanner(System.in);
         String initCommand = initScn.nextLine();
+        //fixes the quit from main screen
+        if (initCommand.equals("quit")){
+            System.out.println("Goodbye!");
+            System.exit(0);
+        }
 
         while (!loggedIn && (!initCommand.equals("quit"))){
 
@@ -273,7 +278,11 @@ public class Main {
 
             else if(command.equals("resolve")){
                 //
-                System.out.println("Would you like to resolve conflicts");
+                ArrayList<Course> con = cl.conflictResolution(user.schedule);
+                System.out.println("Conflicting Courses on your Current Schedule:");
+                for (int p = 0; p < con.size(); p++){
+                    System.out.println(con.get(p));
+                }
                 lg.Action(user.username + " has resolved their schedule conflicts.");
             }
 

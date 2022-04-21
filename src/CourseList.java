@@ -79,6 +79,22 @@ public class CourseList {
         updateHistory("remove", course);
     }
 
+    ///
+    public ArrayList<Course> conflictResolution(ArrayList<Course> s){
+        ArrayList<Course> conflictList = new ArrayList<Course>();
+        for (int p = 0; p < s.size(); p++){
+            ArrayList<Course> temp = new ArrayList<Course>();
+            for (int i = 0; i <s.size(); i++){
+                temp.add(s.get(i));
+            }
+            temp.remove(p);
+            if(checkConfliction(s.get(p), temp)){
+                conflictList.add(s.get(p));
+            }
+        }
+        return conflictList;
+    }
+
     /**
      *
      * @param course the course that is being attempted to be added to user schedule
@@ -296,7 +312,7 @@ public class CourseList {
             choice = rand.nextInt(options.size());
             c = options.get(choice);
             conflict = checkConfliction(c,schedule);
-            if(conflict == false) {
+            if(conflict == false && (!c.roomNum.equals(null)&&!c.endTime.equals(null)&&!c.startTime.equals(null)&&!c.courseCode.equals(null)&&!c.meets.equals(null)&&!c.building.equals(null)&&!c.longTitle.equals(null)&&!c.shortTitle.equals(null))) {
                 schedule.add(c);
                 break;
             }
