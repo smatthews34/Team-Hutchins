@@ -278,12 +278,27 @@ public class Main {
 
             else if(command.equals("resolve")){
                 //
-                ArrayList<Course> con = cl.conflictResolution(user.schedule);
-                System.out.println("Conflicting Courses on your Current Schedule:");
-                for (int p = 0; p < con.size(); p++){
-                    System.out.println(con.get(p));
+                Scanner res = new Scanner(System.in);
+                String resInput = "";
+                while (!resInput.equals("Done")&&!resInput.equals("done")){
+                    ArrayList<Course> con = cl.conflictResolution(user.schedule);
+                    System.out.println("Conflicting Courses on your Current Schedule:");
+                    for (int p = 0; p < con.size(); p++){
+                        System.out.println(con.get(p));
+                    }
+                    System.out.println("Which course would you remove to help resolve?");
+                    resInput =res.next();
+                    if(user.scheduleContains(resInput)) {
+                        Course c = user.getCourse(resInput);
+                        cl.removeClass(c, user.schedule);
+                        lg.Action(user.username + " Successfuly removed the course: " + c);
+                    }else if(resInput.equals("Done")||resInput.equals("done")){
+                        System.out.println("You still have " + ConfirmSchedule.countConflicts(user.schedule) + " conflict(s) remaining.");
+                        break;
+                    }else{
+                        System.out.println("Invalid Response.");
+                    }
                 }
-                lg.Action(user.username + " has resolved their schedule conflicts.");
             }
 
             else if(command.equals("message")){
