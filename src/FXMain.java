@@ -42,6 +42,14 @@ public class FXMain extends Application {
     Button loginBtn;
     Button signupBtn;
 
+    GridPane signUpPane;
+    Group signUpGroup;
+    Scene signUpScene;
+    Stage signUpStage;
+    TextField newNameField;
+    TextField newUserField;
+    TextField newPassField;
+
     //search vars
     Image undoImg;
     Image redoImg;
@@ -222,6 +230,169 @@ public class FXMain extends Application {
             updateScheduleDisplay();
         }
     };
+    final EventHandler<ActionEvent> signUpHandler = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+
+            String username = newUserField.getText();
+            String password = newPassField.getText();
+            String name = newNameField.getText();
+
+            Signup s = new Signup(username, password, name);
+
+            if (!s.checkIfUserValid()){
+                System.out.println("Username is null, please try again");
+            }
+            else if (!s.checkIfPasswordValid()){
+                System.out.println("Password is null, please try again");
+            }
+            else if (!s.checkIfNameValid()){
+                System.out.println("Name is null, please try again");
+            }
+            else{ //Username, password, and name are valid
+                int errno = s.signupSubmit();
+                if (errno == 0){
+
+                    Label lbl = new Label("Successfully Registered, please return to log in");
+                    signUpPane.add(lbl, 0, 7);
+
+                }
+                else if (errno == -1){ //There is already a registered account with these credentials
+                    Label lbl = new Label("There is already a registered account on this machine with the specified " +
+                            "username, please use the 'sign_up' command to sign up with a different username");
+                    signUpPane.add(lbl, 0, 7);
+                }
+            }
+            //Scan user input for username and password, check for validity
+            //If valid complete sign up & log in, if not valid redo prompt or exit
+        }
+
+
+    };
+
+    public void launchLogin() {
+
+            loggedIn = false;
+            isGuest = false; //Use to prevent a guest user from saving a schedule
+            //** LOGIN WINDOW **
+
+            loginGroup = new Group();
+            loginPane = new GridPane();
+            setProperties(loginPane, 400, 450, 10, 10, 0);
+
+            loginTitle = new Label("Welcome to the \nClass Scheduling Assistant!");
+            loginTitle.getStyleClass().clear();
+            loginTitle.getStyleClass().add("title");
+
+            loginSubtitle = new Label("LOG IN");
+            loginSubtitle.getStyleClass().clear();
+            loginSubtitle.getStyleClass().add("subtitle");
+
+            userField = new TextField();
+            userField.setPromptText("Username");
+            userField.setOnAction(loginHandler);
+
+            passField = new PasswordField();
+            passField.setPromptText("Password");
+            passField.setOnAction(loginHandler);
+
+            loginBtn = new Button("Log In");
+            loginBtn.getStyleClass().clear();
+            loginBtn.getStyleClass().add("buttons");
+            loginBtn.setOnAction(loginHandler);
+
+            Hyperlink guestLink = new Hyperlink("Continue as Guest");
+            guestLink.setOnAction(guestHandler);
+
+
+
+            //TODO: Sign up button action event
+            signupBtn = new Button("Sign Up");
+            signupBtn.getStyleClass().clear();
+            signupBtn.getStyleClass().add("buttons2");
+            signupBtn.setOnMouseClicked(event -> launchSignUp());
+
+            //index format is: (column, row, takes up x cols, takes up x rows)
+            loginPane.add(loginTitle, 0, 0);
+            loginPane.add(loginSubtitle, 0, 1);
+
+            loginPane.add(userField, 0, 2);
+            loginPane.add(passField,0, 3);
+            loginPane.add(loginBtn, 0, 4);
+            loginPane.add(signupBtn, 0, 5);
+            loginPane.add(guestLink, 0, 6);
+            loginPane.setPadding(new Insets(20));
+            loginPane.setAlignment(Pos.CENTER);
+
+            loginGroup.getChildren().add(loginPane);
+            loginScene = new Scene(loginGroup, 400, 450);
+            loginScene.getStylesheets().add("projStyles.css");
+            loginScene.setFill(rgb(245, 238, 238));
+
+        }
+
+    public void launchSignUp() {
+            signUpStage = new Stage();
+            signUpGroup = new Group();
+            signUpPane = new GridPane();
+            setProperties(signUpPane, 400, 450, 10, 10, 0);
+
+            Label signUpTitle = new Label("Create New Account");
+            signUpTitle.getStyleClass().clear();
+            signUpTitle.getStyleClass().add("title");
+
+            Label signUpSubtitle = new Label("SIGN UP");
+            signUpSubtitle.getStyleClass().clear();
+            signUpSubtitle.getStyleClass().add("subtitle");
+
+            newNameField = new TextField();
+            newNameField.setPromptText("Your Name");
+            newNameField.setOnAction(signUpHandler);
+
+            newUserField = new TextField();
+            newUserField.setPromptText("Username");
+            newUserField.setOnAction(signUpHandler);
+
+            newPassField = new PasswordField();
+            newPassField.setPromptText("Password");
+            newPassField.setOnAction(signUpHandler);
+
+            //TODO: Sign up button action event
+            Button newSignupBtn = new Button("Sign Up");
+            Button returnBtn = new Button("Return to Login");
+
+            returnBtn.getStyleClass().clear();
+            returnBtn.getStyleClass().add("buttons2");
+            returnBtn.setOnMouseClicked(event -> signUpStage.close());
+
+            newSignupBtn.getStyleClass().clear();
+            newSignupBtn.getStyleClass().add("buttons");
+            newSignupBtn.setOnAction(signUpHandler);
+
+            //index format is: (column, row, takes up x cols, takes up x rows)
+            signUpPane.add(signUpTitle, 0, 0);
+            signUpPane.add(signUpSubtitle, 0, 1);
+
+            signUpPane.add(newNameField, 0, 2);
+            signUpPane.add(newUserField, 0, 3);
+            signUpPane.add(newPassField,0, 4);
+            signUpPane.add(newSignupBtn, 0, 5);
+            signUpPane.add(returnBtn, 0, 6);
+
+            signUpPane.setPadding(new Insets(20));
+            signUpPane.setAlignment(Pos.CENTER);
+
+            signUpGroup.getChildren().add(signUpPane);
+            signUpScene = new Scene(signUpGroup, 400, 450);
+            signUpScene.getStylesheets().add("projStyles.css");
+            signUpScene.setFill(rgb(245, 238, 238));
+
+            signUpStage.setScene(signUpScene);
+            signUpStage.show();
+
+
+        }
+
 
     final EventHandler<ActionEvent> loginHandler = new EventHandler<ActionEvent>(){
         @Override
@@ -262,54 +433,8 @@ public class FXMain extends Application {
     public void start(Stage loginStage) {
         cl = new CourseList();
         user = null;
-        loggedIn = false;
-        isGuest = false; //Use to prevent a guest user from saving a schedule
-        //** LOGIN WINDOW **
 
-        loginGroup = new Group();
-        loginPane = new GridPane();
-        setProperties(loginPane, 400, 450, 10, 10, 0);
-
-        loginTitle = new Label("Welcome to the \nClass Scheduling Assistant!");
-        loginTitle.getStyleClass().clear();
-        loginTitle.getStyleClass().add("title");
-
-        loginSubtitle = new Label("LOG IN");
-        loginSubtitle.getStyleClass().clear();
-        loginSubtitle.getStyleClass().add("subtitle");
-
-        userField = new TextField();
-        userField.setPromptText("Username");
-        userField.setOnAction(loginHandler);
-
-        passField = new PasswordField();
-        passField.setPromptText("Password");
-        passField.setOnAction(loginHandler);
-
-        loginBtn = new Button("Log In");
-        loginBtn.getStyleClass().clear();
-        loginBtn.getStyleClass().add("buttons");
-        loginBtn.setOnAction(loginHandler);
-
-        Hyperlink guestLink = new Hyperlink("Continue as Guest");
-        guestLink.setOnAction(guestHandler);
-
-
-
-        //TODO: Sign up button action event
-        signupBtn = new Button("Sign Up");
-        signupBtn.getStyleClass().clear();
-        signupBtn.getStyleClass().add("buttons2");
-
-        //index format is: (column, row, takes up x cols, takes up x rows)
-        loginPane.add(loginTitle, 0, 0);
-        loginPane.add(loginSubtitle, 0, 1);
-
-        loginPane.add(userField, 0, 2);
-        loginPane.add(passField,0, 3);
-        loginPane.add(loginBtn, 0, 4);
-        loginPane.add(signupBtn, 0, 5);
-        loginPane.add(guestLink, 0, 6);
+        launchLogin();
 
         //SEARCH WINDOW
 
@@ -426,16 +551,11 @@ public class FXMain extends Application {
         searchStage.setScene(searchScene);
         searchStage.setTitle("Search");
 
-        loginPane.setPadding(new Insets(20));
-        loginPane.setAlignment(Pos.CENTER);
-
-        loginGroup.getChildren().add(loginPane);
-        loginScene = new Scene(loginGroup, 400, 450);
-        loginScene.getStylesheets().add("projStyles.css");
-        loginScene.setFill(rgb(245, 238, 238));
         loginStage.setTitle("Login");
         loginStage.setResizable(false);
         loginStage.setScene(loginScene);
         loginStage.show();
+
+
     }
 }
