@@ -97,6 +97,7 @@ public class CourseList {
                 answer = scn.next();
                 if (answer.equals("Y") || answer.equals("y") || answer.equals("yes") || answer.equals("Yes")) {
                     Schedule.add(course);
+                    updateHistory("add", course);
                     System.out.println("Conflicting course added.");
                     break;
                 } else if (answer.equals("N") || answer.equals("n") || answer.equals("no") || answer.equals("No")) {

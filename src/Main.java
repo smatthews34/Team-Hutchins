@@ -178,7 +178,36 @@ public class Main {
                         if (a != null) {
                             Boolean c = cl.checkConfliction(a,user.schedule);
                             Boolean d = cl.checkDouble(a, user.schedule);
-                            cl.addClass(a, user.schedule);
+                            //cl.addClass(a, user.schedule);
+                            //*****avoid the conflict and duplicate*****
+                            //checks to see if the course being added is a duplicate.
+                            if(cl.checkDouble(a, user.schedule)){
+                                System.out.println("That course already is on your schedule, cannot be added.");
+                            }else if(cl.checkConfliction(a, user.schedule)){ //checks to see if the course conflicts
+                                System.out.println("There is a time conflict with your schedule."); //alerts the user there is a conflict
+                                Scanner scn = new Scanner(System.in);
+                                String answer = "";
+                                while (!answer.equals("No")&&!answer.equals("no")&&!answer.equals("yes")&&!answer.equals("Yes")&&!answer.equals("N")&&!answer.equals("n")&&!answer.equals("Y")&&!answer.equals("y")) { //gives the user the ability to add if conflicting.
+                                    System.out.println("Would you like to add anyway? (Y/N");
+                                    answer = scn.next();
+                                    if (answer.equals("Y") || answer.equals("y") || answer.equals("yes") || answer.equals("Yes")) {
+                                        user.schedule.add(a);
+                                        System.out.println("Conflicting course added.");
+                                        //cl.updateHistory("add", a);
+                                        break;
+                                    } else if (answer.equals("N") || answer.equals("n") || answer.equals("no") || answer.equals("No")) {
+                                        System.out.println("Conflicting course was not added.");
+                                        break;
+                                    } else {
+                                        System.out.println("Invalid response please select Y or N.");
+                                    }
+                                }
+                            }else{ //if the course is not a duplicate or a not conflicting course it wil be added to the user's schedule.
+                                //cl.updateHistory("add", a);
+                                user.schedule.add(a);
+                                System.out.println("The course has successfully been added to your schedule.");
+                            }
+                            //
                             if(d){
                                 lg.logConflict(user.username + " has attempted to add the course: " + a + ", that is a duplicate of a course on their current schedule.");
                             }else if(c && user.schedule.contains(a)){
