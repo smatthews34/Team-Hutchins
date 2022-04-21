@@ -123,7 +123,15 @@ public class FXMain extends Application {
     final EventHandler<ActionEvent> undoHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-
+            cl.undo(user.schedule);
+            updateScheduleDisplay();
+        }
+    };
+    final EventHandler<ActionEvent> redoHandler = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            cl.redo(user.schedule);
+            updateScheduleDisplay();
         }
     };
 
@@ -319,11 +327,14 @@ public class FXMain extends Application {
         Button undoBtn = new Button();
         Image undoImg = new Image("undo.png");
         ImageView undoView = new ImageView(undoImg);
+        undoBtn.setGraphic(undoView);
+        undoBtn.setOnAction(undoHandler);
+
         Image redoImg = new Image("redo.png");
         ImageView redoView = new ImageView(redoImg);
-        undoBtn.setGraphic(undoView);
         Button redoBtn = new Button();
         redoBtn.setGraphic(redoView);
+        redoBtn.setOnAction(redoHandler);
 
         btnPane = new GridPane();
         btnPane.add(undoBtn, 0, 0);
