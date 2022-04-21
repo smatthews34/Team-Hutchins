@@ -240,14 +240,18 @@ public class FXMain extends Application {
 
             Signup s = new Signup(username, password, name);
 
-            if (!s.checkIfUserValid()){
-                System.out.println("Username is null, please try again");
+            if (username.equals("")){
+                Label lbl = new Label("Username is null, please try again");
+                signUpPane.add(lbl, 0, 7);
             }
-            else if (!s.checkIfPasswordValid()){
-                System.out.println("Password is null, please try again");
+            else if (password.equals("")){
+                Label lbl = new Label("Password is null, please try again");
+                signUpPane.add(lbl, 0, 7);
+
             }
-            else if (!s.checkIfNameValid()){
-                System.out.println("Name is null, please try again");
+            else if (name.equals("")){
+                Label lbl = new Label("Name is null, please try again");
+                signUpPane.add(lbl, 0, 7);
             }
             else{ //Username, password, and name are valid
                 int errno = s.signupSubmit();
@@ -258,8 +262,7 @@ public class FXMain extends Application {
 
                 }
                 else if (errno == -1){ //There is already a registered account with these credentials
-                    Label lbl = new Label("There is already a registered account on this machine with the specified " +
-                            "username, please use the 'sign_up' command to sign up with a different username");
+                    Label lbl = new Label("User already exists. Please return to log in.");
                     signUpPane.add(lbl, 0, 7);
                 }
             }
