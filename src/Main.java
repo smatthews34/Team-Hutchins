@@ -280,24 +280,30 @@ public class Main {
                 //
                 Scanner res = new Scanner(System.in);
                 String resInput = "";
-                while (!resInput.equals("Done")&&!resInput.equals("done")){
+                while (!resInput.equals("Done")&&!resInput.equals("done")&& ConfirmSchedule.countConflicts(user.schedule) > 0){
                     ArrayList<Course> con = cl.conflictResolution(user.schedule);
                     System.out.println("Conflicting Courses on your Current Schedule:");
                     for (int p = 0; p < con.size(); p++){
                         System.out.println(con.get(p));
                     }
                     System.out.println("Which course would you remove to help resolve?");
-                    resInput =res.next();
-                    if(user.scheduleContains(resInput)) {
-                        Course c = user.getCourse(resInput);
+                    resInput = res.nextLine();
+                    Course c = user.getCourse(resInput);
+                    if(user.schedule.contains(c)) {
+                        //Course c = user.getCourse(resInput);
                         cl.removeClass(c, user.schedule);
-                        lg.Action(user.username + " Successfuly removed the course: " + c);
+                        lg.Action(user.username + " Successfuly resolved a time conflict from the course: " + c);
                     }else if(resInput.equals("Done")||resInput.equals("done")){
                         System.out.println("You still have " + ConfirmSchedule.countConflicts(user.schedule) + " conflict(s) remaining.");
+                        lg.logConflict(user.username + " after trying to resolves conflicts still has " + ConfirmSchedule.countConflicts(user.schedule) + " conflict(s) remaining.");
                         break;
                     }else{
                         System.out.println("Invalid Response.");
+                        lg.logger.warning(user.username + " has enter an invalid input for the conflict resolution screen.");
                     }
+                }
+                if(ConfirmSchedule.countConflicts(user.schedule) > 0){
+                    System.out.println("There are currently no conflicts with your schedule.");
                 }
             }
 
