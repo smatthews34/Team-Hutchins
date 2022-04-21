@@ -63,6 +63,8 @@ public class FXMain extends Application {
     GridPane resultsPane;
     GridPane schedulePane;
     GridPane allCoursePane;
+    GridPane headerPane;
+    Label userLbl;
 
 
     //public static ArrayList<Course> getResultsList(String searchInput){
@@ -126,6 +128,11 @@ public class FXMain extends Application {
             stage.close();
             openQuickAlert("You are now signed in with a guest account.", "You may create a schedule, " +
                     "but will not be able to save it\nuntil you sign up.");
+            userLbl = new Label("Welcome, " + user.name + "!");
+            userLbl.getStyleClass().clear();
+            userLbl.getStyleClass().add("subtitle");
+            headerPane.add(userLbl, 0, 0);
+            searchPane.add(headerPane, 0, 0);
         }
     };
 
@@ -153,9 +160,10 @@ public class FXMain extends Application {
         courses = s.getResults(searchInput);
 
         searchPane.getChildren().clear();
+        headerPane.getChildren().clear();
         searchPane.add(searchField, 0, 0, 2, 1);
         searchPane.add(searchBtn, 0, 1, 1 ,1);
-
+        searchPane.add(headerPane, 0, 0);
 
             for (int i = 0; i < courses.size(); i++){
                 GridPane coursePane = new GridPane();
@@ -422,6 +430,12 @@ public class FXMain extends Application {
                 final Stage stage = (Stage) source.getScene().getWindow();
                 searchStage.show();
                 stage.close();
+
+                Label userLbl = new Label("Welcome, " + user.name + "!");
+                userLbl.getStyleClass().clear();
+                userLbl.getStyleClass().add("subtitle");
+                headerPane.add(userLbl, 0, 0);
+                searchPane.add(headerPane, 0, 0);
             }
         }
     };
@@ -449,6 +463,9 @@ public class FXMain extends Application {
         searchPane = new GridPane();
         setProperties(searchPane, 550, 600, 15, 10, 10);
         searchPane.setAlignment(Pos.CENTER);
+
+        headerPane = new GridPane();
+
 
         Button undoBtn = new Button();
         Image undoImg = new Image("undo.png");
@@ -523,11 +540,11 @@ public class FXMain extends Application {
         filterPane.add(timeFilterBox, 1, 0);
         filterPane.add(deptFilterBox, 2, 0);
 
-        searchPane.add(searchLbl, 0, 0);
-        searchPane.add(searchField, 0, 1, 2, 1);
-        searchPane.add(filterLbl, 0, 2);
-        searchPane.add(filterPane, 0, 3, 6, 1);
-        searchPane.add(searchBtn, 0, 4);
+        searchPane.add(searchLbl, 0, 1);
+        searchPane.add(searchField, 0, 2, 2, 1);
+        searchPane.add(filterLbl, 0, 3);
+        searchPane.add(filterPane, 0, 4, 6, 1);
+        searchPane.add(searchBtn, 0, 5);
 
         schedulePane = new GridPane();
         Label scheduleLbl = new Label("CURRENT SCHEDULE:");
