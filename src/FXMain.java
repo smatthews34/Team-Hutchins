@@ -285,6 +285,7 @@ public class FXMain extends Application {
             loginSubtitle.getStyleClass().add("subtitle");
 
             userField = new TextField();
+            userField.setText("Username");
             userField.setPromptText("Username");
             userField.setOnAction(loginHandler);
 
@@ -342,6 +343,7 @@ public class FXMain extends Application {
             signUpSubtitle.getStyleClass().add("subtitle");
 
             newNameField = new TextField();
+            newNameField.setText("Your Name");
             newNameField.setPromptText("Your Name");
             newNameField.setOnAction(signUpHandler);
 
