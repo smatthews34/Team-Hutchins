@@ -59,6 +59,8 @@ public class FXMain extends Application {
     GridPane btnPane;
     TextField searchField;
     Button searchBtn;
+    Button undoBtn;
+    Button redoBtn;
     ScrollPane resultsSPane;
     GridPane resultsPane;
     GridPane schedulePane;
@@ -186,6 +188,15 @@ public class FXMain extends Application {
 
         allCoursePane.getChildren().clear();
         schedulePane.getChildren().clear();
+
+        if(!cl.commandHist.isEmpty() && !cl.courseHist.isEmpty()) {
+            Tooltip undoTip = new Tooltip("undo" + " " + cl.commandHist.peek() + " " + cl.courseHist.peek().courseCode);
+            Tooltip.install(undoBtn, undoTip);
+        }
+        if(!cl.undoCommandHist.isEmpty() && !cl.undoCourseHist.isEmpty()) {
+            Tooltip redoTip = new Tooltip("redo" + " " + cl.undoCommandHist.peek() + " " + cl.undoCourseHist.peek().courseCode);
+            Tooltip.install(redoBtn, redoTip);
+        }
 
         Label scheduleLbl = new Label("CURRENT SCHEDULE:");
         scheduleLbl.getStyleClass().clear();
@@ -467,15 +478,16 @@ public class FXMain extends Application {
         headerPane = new GridPane();
 
 
-        Button undoBtn = new Button();
+        undoBtn = new Button();
         Image undoImg = new Image("undo.png");
         ImageView undoView = new ImageView(undoImg);
         undoBtn.setGraphic(undoView);
         undoBtn.setOnAction(undoHandler);
 
+
         Image redoImg = new Image("redo.png");
         ImageView redoView = new ImageView(redoImg);
-        Button redoBtn = new Button();
+        redoBtn = new Button();
         redoBtn.setGraphic(redoView);
         redoBtn.setOnAction(redoHandler);
 
