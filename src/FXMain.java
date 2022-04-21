@@ -49,6 +49,7 @@ public class FXMain extends Application {
     TextField newNameField;
     TextField newUserField;
     TextField newPassField;
+    Label msgLbl;
 
     //search vars
     Image undoImg;
@@ -241,35 +242,27 @@ public class FXMain extends Application {
             Signup s = new Signup(username, password, name);
 
             if (username.equals("")){
-                Label lbl = new Label("Username is null, please try again");
-                signUpPane.add(lbl, 0, 7);
+                msgLbl.setText("Username is null, please try again");
             }
             else if (password.equals("")){
-                Label lbl = new Label("Password is null, please try again");
-                signUpPane.add(lbl, 0, 7);
-
+                msgLbl.setText("Password is null, please try again");
             }
             else if (name.equals("")){
-                Label lbl = new Label("Name is null, please try again");
-                signUpPane.add(lbl, 0, 7);
+                msgLbl.setText("Name is null, please try again");
             }
             else{ //Username, password, and name are valid
                 int errno = s.signupSubmit();
                 if (errno == 0){
-
-                    Label lbl = new Label("Successfully Registered, please return to log in");
-                    signUpPane.add(lbl, 0, 7);
-
+                    msgLbl.setText("Successfully Registered, please return to log in");
                 }
                 else if (errno == -1){ //There is already a registered account with these credentials
-                    Label lbl = new Label("User already exists. Please return to log in.");
-                    signUpPane.add(lbl, 0, 7);
+                    msgLbl.setText("User already exists. Please return to log in.");
+
                 }
             }
             //Scan user input for username and password, check for validity
             //If valid complete sign up & log in, if not valid redo prompt or exit
         }
-
 
     };
 
@@ -360,6 +353,8 @@ public class FXMain extends Application {
             newPassField.setPromptText("Password");
             newPassField.setOnAction(signUpHandler);
 
+            msgLbl = new Label("");
+
             //TODO: Sign up button action event
             Button newSignupBtn = new Button("Sign Up");
             Button returnBtn = new Button("Return to Login");
@@ -381,6 +376,7 @@ public class FXMain extends Application {
             signUpPane.add(newPassField,0, 4);
             signUpPane.add(newSignupBtn, 0, 5);
             signUpPane.add(returnBtn, 0, 6);
+            signUpPane.add(msgLbl, 0, 7);
 
             signUpPane.setPadding(new Insets(20));
             signUpPane.setAlignment(Pos.CENTER);
