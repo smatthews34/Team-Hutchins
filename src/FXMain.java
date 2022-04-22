@@ -58,6 +58,7 @@ public class FXMain extends Application {
     Button undoBtn;
     Button redoBtn;
     Button confirmBtn;
+    Button calendarBtn;
     ScrollPane resultsSPane;
     GridPane resultsPane;
     GridPane schedulePane;
@@ -648,13 +649,20 @@ public class FXMain extends Application {
             confirmBtn.setGraphic(confirmView);
             confirmBtn.setOnMouseClicked(event->openConfirmAlert());
 
-            Tooltip confirmTip = new Tooltip("confirm schedule");
-            Tooltip.install(confirmBtn, confirmTip);
+            Image calendarImg = new Image("cal.png");
+            ImageView calendarView = new ImageView(calendarImg);
+            calendarBtn = new Button();
+            calendarBtn.setGraphic(calendarView);
+            //calendarBtn.setOnMouseClicked(event-> <add some stuff here>);
+
+            Tooltip calendarTip = new Tooltip("view calendar");
+            Tooltip.install(calendarBtn, calendarTip);
 
             btnPane = new GridPane();
             btnPane.add(undoBtn, 0, 0);
             btnPane.add(redoBtn, 1, 0);
             btnPane.add(confirmBtn, 2, 0);
+            btnPane.add(calendarBtn, 3, 0);
             btnPane.setHgap(5);
             btnPane.setVgap(5);
 
@@ -664,6 +672,8 @@ public class FXMain extends Application {
             redoBtn.getStyleClass().add("mini-buttons");
             confirmBtn.getStyleClass().clear();
             confirmBtn.getStyleClass().add("mini-buttons");
+            calendarBtn.getStyleClass().clear();
+            calendarBtn.getStyleClass().add("mini-buttons");
 
             Label searchLbl = new Label("Search for Courses");
             searchLbl.getStyleClass().clear();
