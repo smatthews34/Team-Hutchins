@@ -655,6 +655,9 @@ public class FXMain extends Application {
             calendarBtn.setGraphic(calendarView);
             //calendarBtn.setOnMouseClicked(event-> <add some stuff here>);
 
+            Tooltip confirmTip = new Tooltip("confirm schedule");
+            Tooltip.install(confirmBtn, confirmTip);
+
             Tooltip calendarTip = new Tooltip("view calendar");
             Tooltip.install(calendarBtn, calendarTip);
 
