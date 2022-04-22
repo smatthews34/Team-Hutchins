@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,15 +13,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import static javafx.scene.paint.Color.rgb;
 
@@ -62,6 +57,7 @@ public class FXMain extends Application {
     Button searchBtn;
     Button undoBtn;
     Button redoBtn;
+    Button confirmBtn;
     ScrollPane resultsSPane;
     GridPane resultsPane;
     GridPane schedulePane;
@@ -80,11 +76,11 @@ public class FXMain extends Application {
     //}
 
 
-    public void openConflictAlert(String courseId){
-        boolean accept = true;
+    public void openConflictAlert(String courseId) {
         Group alertGroup = new Group();
         Scene alertScene = new Scene(alertGroup, 350, 250);
         Stage alertStg = new Stage();
+        ButtonBar confirmBar = new ButtonBar();
 
         GridPane alertPane = new GridPane();
         alertPane.setAlignment(Pos.CENTER);
@@ -98,7 +94,7 @@ public class FXMain extends Application {
         yBtn.setId(courseId);
         yBtn.getStyleClass().clear();
         yBtn.getStyleClass().add("buttons");
-        yBtn.setOnAction(event-> {
+        yBtn.setOnAction(event -> {
             cl.addClass(cl.getCourse(courseId), user.schedule);
             alertStg.close();
             updateScheduleDisplay();
@@ -112,8 +108,8 @@ public class FXMain extends Application {
         setProperties(alertPane, 350, 250, 25, 20, 10);
         alertPane.add(alertTitleLbl, 0, 0, 2, 1);
         alertPane.add(alertMsgLbl, 0, 1, 2, 1);
-        alertPane.add(yBtn, 0, 2);
-        alertPane.add(nBtn, 1, 2);
+        confirmBar.getButtons().addAll(yBtn, nBtn);
+        alertPane.add(confirmBar, 0, 2);
 
         nBtn.setOnMouseClicked(event -> alertStg.close());
         alertGroup.getChildren().add(alertPane);
@@ -121,7 +117,8 @@ public class FXMain extends Application {
         alertStg.setScene(alertScene);
         alertStg.show();
     }
-    public static void openQuickAlert(String alertTitle, String alertMsg){
+
+    public static void openQuickAlert(String alertTitle, String alertMsg) {
         Group alertGroup = new Group();
         Scene alertScene = new Scene(alertGroup, 350, 200);
         Stage alertStg = new Stage();
@@ -150,7 +147,7 @@ public class FXMain extends Application {
         alertStg.show();
     }
 
-    public static void setProperties(GridPane gp, int sizeH, int sizeV, int vGap, int hGap, int insets){
+    public static void setProperties(GridPane gp, int sizeH, int sizeV, int vGap, int hGap, int insets) {
         gp.setMinSize(sizeH, sizeV);
         gp.setMaxSize(sizeH, sizeV);
 
@@ -161,7 +158,7 @@ public class FXMain extends Application {
 
     }
 
-    final EventHandler<ActionEvent> guestHandler = new EventHandler<ActionEvent>(){
+    final EventHandler<ActionEvent> guestHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             //GUEST LOGIC
@@ -204,7 +201,7 @@ public class FXMain extends Application {
 
     //}
 
-    public void updateSearchDisplay(String searchInput){
+    public void updateSearchDisplay(String searchInput) {
         resultsSPane = new ScrollPane();
         resultsPane = new GridPane();
         ArrayList<Course> courses = new ArrayList<>();
@@ -214,10 +211,10 @@ public class FXMain extends Application {
         searchPane.getChildren().clear();
         headerPane.getChildren().clear();
         searchPane.add(searchField, 0, 0, 2, 1);
-        searchPane.add(searchBtn, 0, 1, 1 ,1);
+        searchPane.add(searchBtn, 0, 1, 1, 1);
         //searchPane.add(headerPane, 0, 0);
 
-        for (int i = 0; i < courses.size(); i++){
+        for (int i = 0; i < courses.size(); i++) {
             GridPane coursePane = new GridPane();
             setProperties(coursePane, 400, 30, 5, 5, 5);
             Label result = new Label(courses.get(i).toString());
@@ -234,16 +231,16 @@ public class FXMain extends Application {
         searchPane.add(resultsSPane, 0, 2, 2, 1);
     }
 
-    public void updateScheduleDisplay(){
+    public void updateScheduleDisplay() {
 
         allCoursePane.getChildren().clear();
         schedulePane.getChildren().clear();
 
-        if(!cl.commandHist.isEmpty() && !cl.courseHist.isEmpty()) {
+        if (!cl.commandHist.isEmpty() && !cl.courseHist.isEmpty()) {
             Tooltip undoTip = new Tooltip("undo" + " " + cl.commandHist.peek() + " " + cl.courseHist.peek().courseCode);
             Tooltip.install(undoBtn, undoTip);
         }
-        if(!cl.undoCommandHist.isEmpty() && !cl.undoCourseHist.isEmpty()) {
+        if (!cl.undoCommandHist.isEmpty() && !cl.undoCourseHist.isEmpty()) {
             Tooltip redoTip = new Tooltip("redo" + " " + cl.undoCommandHist.peek() + " " + cl.undoCourseHist.peek().courseCode);
             Tooltip.install(redoBtn, redoTip);
         }
@@ -254,12 +251,11 @@ public class FXMain extends Application {
         schedulePane.add(btnPane, 0, 0);
         schedulePane.add(scheduleLbl, 0, 1);
 
-        if (user.schedule.isEmpty()){
+        if (user.schedule.isEmpty()) {
             Label emptyLbl = new Label("(There's nothing here!\nAdd some courses from Search.)");
             emptyLbl.setOpacity(.6);
             schedulePane.add(emptyLbl, 0, 2);
-        }
-        else {
+        } else {
             for (int i = 0; i < user.schedule.size(); i++) {
                 GridPane coursePane = new GridPane();
                 setProperties(coursePane, 400, 25, 5, 5, 0);
@@ -286,19 +282,16 @@ public class FXMain extends Application {
     }
 
 
-    final EventHandler<ActionEvent> addCourseHandler = new EventHandler<ActionEvent>(){
+    final EventHandler<ActionEvent> addCourseHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            String courseId = ((Button)event.getSource()).getId();
+            String courseId = ((Button) event.getSource()).getId();
             Course course = cl.getCourse(courseId);
-            if(cl.checkConfliction(course, user.schedule) && !cl.checkDouble(course, user.schedule)){
+            if (cl.checkConfliction(course, user.schedule) && !cl.checkDouble(course, user.schedule)) {
                 openConflictAlert(courseId);
-            }
-
-            else if (cl.checkDouble(course, user.schedule)){
+            } else if (cl.checkDouble(course, user.schedule)) {
                 openQuickAlert("DUPLICATE COURSE", "That course already is on your schedule,\nso it cannot be added.");
-            }
-            else {
+            } else {
                 cl.addClass(course, user.schedule);
                 updateScheduleDisplay();
             }
@@ -306,10 +299,10 @@ public class FXMain extends Application {
         }
     };
 
-    final EventHandler<ActionEvent> removeCourseHandler = new EventHandler<ActionEvent>(){
+    final EventHandler<ActionEvent> removeCourseHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            String courseId = ((Button)event.getSource()).getId();
+            String courseId = ((Button) event.getSource()).getId();
             Course course = user.getCourse(courseId);
             cl.removeClass(course, user.schedule);
 
@@ -326,21 +319,17 @@ public class FXMain extends Application {
 
             Signup s = new Signup(username, password, name);
 
-            if (username.equals("")){
+            if (username.equals("")) {
                 msgLbl.setText("Username is null, please try again");
-            }
-            else if (password.equals("")){
+            } else if (password.equals("")) {
                 msgLbl.setText("Password is null, please try again");
-            }
-            else if (name.equals("")){
+            } else if (name.equals("")) {
                 msgLbl.setText("Name is null, please try again");
-            }
-            else{ //Username, password, and name are valid
+            } else { //Username, password, and name are valid
                 int errno = s.signupSubmit();
-                if (errno == 0){
+                if (errno == 0) {
                     msgLbl.setText("Successfully Registered, please return to log in");
-                }
-                else if (errno == -1){ //There is already a registered account with these credentials
+                } else if (errno == -1) { //There is already a registered account with these credentials
                     msgLbl.setText("User already exists. Please return to log in.");
 
                 }
@@ -351,7 +340,7 @@ public class FXMain extends Application {
 
     };
 
-    final EventHandler<ActionEvent> loginHandler = new EventHandler<ActionEvent>(){
+    final EventHandler<ActionEvent> loginHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             //LOGIN LOGIC
@@ -364,11 +353,10 @@ public class FXMain extends Application {
             Login l = new Login(username, password);
             User potentialUser = l.loginSubmit();
 
-            if (potentialUser == null){
+            if (potentialUser == null) {
                 Label badLoginLbl = new Label("Username or Password are invalid, please try again");
                 loginPane.add(badLoginLbl, 0, 7);
-            }
-            else {
+            } else {
                 user = new User(potentialUser.username, potentialUser.password, potentialUser.name);
                 cl = new CourseList();
                 loggedIn = true;
@@ -424,7 +412,6 @@ public class FXMain extends Application {
         guestLink.setOnAction(guestHandler);
 
 
-
         //TODO: Sign up button action event
         signupBtn = new Button("Sign Up");
         signupBtn.getStyleClass().clear();
@@ -436,7 +423,7 @@ public class FXMain extends Application {
         loginPane.add(loginSubtitle, 0, 1);
 
         loginPane.add(userField, 0, 2);
-        loginPane.add(passField,0, 3);
+        loginPane.add(passField, 0, 3);
         loginPane.add(loginBtn, 0, 4);
         loginPane.add(signupBtn, 0, 5);
         loginPane.add(guestLink, 0, 6);
@@ -497,7 +484,7 @@ public class FXMain extends Application {
 
         signUpPane.add(newNameField, 0, 2);
         signUpPane.add(newUserField, 0, 3);
-        signUpPane.add(newPassField,0, 4);
+        signUpPane.add(newPassField, 0, 4);
         signUpPane.add(newSignupBtn, 0, 5);
         signUpPane.add(returnBtn, 0, 6);
         signUpPane.add(msgLbl, 0, 7);
@@ -533,157 +520,246 @@ public class FXMain extends Application {
         }
     };*/
 
+    public void openConfirmAlert(){
+        Group alertGroup = new Group();
+        Scene alertScene = new Scene(alertGroup, 350, 250);
+        Stage alertStg = new Stage();
+        ButtonBar confirmBar = new ButtonBar();
 
-    public static void main(String[] args) {
-        launch(args);
+        GridPane alertPane = new GridPane();
+        alertPane.setAlignment(Pos.CENTER);
+
+        Label alertTitleLbl = new Label("SCHEDULE CONFIRM");
+        alertTitleLbl.getStyleClass().clear();
+        alertTitleLbl.getStyleClass().add("subtitle");
+
+        Label alertMsgLbl;
+        Button yBtn = new Button("Yes");
+        yBtn.getStyleClass().clear();
+        yBtn.getStyleClass().add("buttons");
+
+
+        int conflicts = ConfirmSchedule.countConflicts(user.schedule);
+        if (conflicts > 0) {
+            alertMsgLbl = new Label(conflicts + " conflict(s) exist, would you still like to" +
+                    " confirm?");
+
+            yBtn.setOnMouseClicked(event -> {
+                try {
+                    ConfirmSchedule.scheduleFile(user.schedule);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                confirmBar.getButtons().clear();
+                Button okBtn = new Button("Okay");
+
+                okBtn.setOnMouseClicked(event2->alertStg.close());
+                okBtn.getStyleClass().clear();
+                okBtn.getStyleClass().add("buttons");
+                confirmBar.getButtons().add(okBtn);
+                alertMsgLbl.setText("Your schedule has been confirmed. See file.");
+
+            });
+        }
+
+        else{
+            alertMsgLbl = new Label("Would you like to confirm this schedule\nby saving to a file?");
+            yBtn.setOnMouseClicked(event -> {
+                try {
+                    ConfirmSchedule.scheduleFile(user.schedule);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                confirmBar.getButtons().clear();
+                Button okBtn = new Button("Okay");
+
+                okBtn.setOnMouseClicked(event2->alertStg.close());
+                okBtn.getStyleClass().clear();
+                okBtn.getStyleClass().add("buttons");
+                confirmBar.getButtons().add(okBtn);
+                alertMsgLbl.setText("Your schedule has been confirmed. See file.");            });
+        }
+
+
+        Button nBtn = new Button("No");
+        nBtn.getStyleClass().clear();
+        nBtn.getStyleClass().add("buttons2");
+
+        confirmBar.getButtons().addAll(yBtn, nBtn);
+
+        setProperties(alertPane, 350, 250, 25, 20, 5);
+        alertPane.add(alertTitleLbl, 0, 0, 2, 1);
+        alertPane.add(alertMsgLbl, 0, 1, 2, 1);
+        alertPane.add(confirmBar, 0, 2);
+
+        nBtn.setOnMouseClicked(event -> alertStg.close());
+        alertGroup.getChildren().add(alertPane);
+        alertScene.getStylesheets().add("projStyles.css");
+        alertStg.setScene(alertScene);
+        alertStg.show();
     }
 
-    @Override
-    public void start(Stage loginStage) {
-        cl = new CourseList();
-        user = null;
-        //Logging lg;
-
-        launchLogin();
-
-        //SEARCH WINDOW
-
-        Group searchGroup = new Group();
-        searchStage = new Stage();
-
-        SplitPane searchSplit = new SplitPane();
-        searchSplit.getStyleClass().add("pane");
-        searchSplit.setOrientation(Orientation.HORIZONTAL);
-
-        searchPane = new GridPane();
-        setProperties(searchPane, 550, 600, 15, 10, 10);
-        searchPane.setAlignment(Pos.CENTER);
-
-        headerPane = new GridPane();
 
 
-        undoBtn = new Button();
-        Image undoImg = new Image("undo.png");
-        ImageView undoView = new ImageView(undoImg);
-        undoBtn.setGraphic(undoView);
-        undoBtn.setOnAction(undoHandler);
+        public static void main(String[] args) {
+            launch(args);
+        }
+
+        @Override
+        public void start(Stage loginStage) {
+            cl = new CourseList();
+            user = null;
+            //Logging lg;
+
+            launchLogin();
+
+            //SEARCH WINDOW
+
+            Group searchGroup = new Group();
+            searchStage = new Stage();
+
+            SplitPane searchSplit = new SplitPane();
+            searchSplit.getStyleClass().add("pane");
+            searchSplit.setOrientation(Orientation.HORIZONTAL);
+
+            searchPane = new GridPane();
+            setProperties(searchPane, 550, 600, 15, 10, 10);
+            searchPane.setAlignment(Pos.CENTER);
+
+            headerPane = new GridPane();
 
 
-        Image redoImg = new Image("redo.png");
-        ImageView redoView = new ImageView(redoImg);
-        redoBtn = new Button();
-        redoBtn.setGraphic(redoView);
-        redoBtn.setOnAction(redoHandler);
-
-        btnPane = new GridPane();
-        btnPane.add(undoBtn, 0, 0);
-        btnPane.add(redoBtn, 1, 0);
-        btnPane.setHgap(5);
-        btnPane.setVgap(5);
-
-        undoBtn.getStyleClass().clear();
-        undoBtn.getStyleClass().add("mini-buttons");
-        redoBtn.getStyleClass().clear();
-        redoBtn.getStyleClass().add("mini-buttons");
-
-        Label searchLbl = new Label("Search for Courses");
-        searchLbl.getStyleClass().clear();
-        searchLbl.getStyleClass().add("title");
-
-        searchField = new TextField();
-        searchField.setPromptText("Search...");
-        searchField.setOnKeyPressed(event-> {
-            if (event.getCode() == KeyCode.ENTER) {
-                updateSearchDisplay(searchField.getText());
-            }
-        });
-
-        searchBtn = new Button("Search");
-        searchBtn.getStyleClass().clear();
-        searchBtn.getStyleClass().add("buttons");
-        searchBtn.setOnMouseClicked(event -> updateSearchDisplay(searchField.getText()));
+            undoBtn = new Button();
+            Image undoImg = new Image("undo.png");
+            ImageView undoView = new ImageView(undoImg);
+            undoBtn.setGraphic(undoView);
+            undoBtn.setOnAction(undoHandler);
 
 
-        Label filterLbl = new Label("Filter by...");
+            Image redoImg = new Image("redo.png");
+            ImageView redoView = new ImageView(redoImg);
+            redoBtn = new Button();
+            redoBtn.setGraphic(redoView);
+            redoBtn.setOnAction(redoHandler);
 
-        ObservableList<String> dayFilters =
-                FXCollections.observableArrayList(
-                        "",
-                        "MWF",
-                        "TR"
-                );
-        //TODO: Add all times
-        ObservableList<String> timeFilters =
-                FXCollections.observableArrayList(
-                        "",
-                        "8:00:00",
-                        "9:00:00",
-                        "12:30:00"
-                );
-        //TODO: Add all depts
-        ObservableList<String> deptFilters =
-                FXCollections.observableArrayList(
-                        "",
-                        "HUMA",
-                        "COMP"
-                );
-        dayFilterBox = new ComboBox(dayFilters);
-        dayFilterBox.setPromptText("Day");
-        dayFilterBox.setId("days");
+            Image confirmImg = new Image("confirm.png");
+            ImageView confirmView = new ImageView(confirmImg);
+            confirmBtn = new Button();
+            confirmBtn.setGraphic(confirmView);
+            confirmBtn.setOnMouseClicked(event->openConfirmAlert());
 
-        timeFilterBox = new ComboBox(timeFilters);
-        timeFilterBox.setPromptText("Time");
-        timeFilterBox.setId("time");
+            btnPane = new GridPane();
+            btnPane.add(undoBtn, 0, 0);
+            btnPane.add(redoBtn, 1, 0);
+            btnPane.add(confirmBtn, 2, 0);
+            btnPane.setHgap(5);
+            btnPane.setVgap(5);
 
-        deptFilterBox = new ComboBox(deptFilters);
-        deptFilterBox.setPromptText("Dept");
-        deptFilterBox.setId("dept");
+            undoBtn.getStyleClass().clear();
+            undoBtn.getStyleClass().add("mini-buttons");
+            redoBtn.getStyleClass().clear();
+            redoBtn.getStyleClass().add("mini-buttons");
+            confirmBtn.getStyleClass().clear();
+            confirmBtn.getStyleClass().add("mini-buttons");
 
-        GridPane filterPane = new GridPane();
-        setProperties(filterPane, 300, 25, 10, 5, 0);
+            Label searchLbl = new Label("Search for Courses");
+            searchLbl.getStyleClass().clear();
+            searchLbl.getStyleClass().add("title");
 
-        filterPane.add(dayFilterBox, 0, 0);
-        filterPane.add(timeFilterBox, 1, 0);
-        filterPane.add(deptFilterBox, 2, 0);
+            searchField = new TextField();
+            searchField.setPromptText("Search...");
+            searchField.setOnKeyPressed(event-> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    updateSearchDisplay(searchField.getText());
+                }
+            });
 
-        searchPane.add(searchLbl, 0, 1);
-        searchPane.add(searchField, 0, 2, 2, 1);
-        searchPane.add(filterLbl, 0, 3);
-        searchPane.add(filterPane, 0, 4, 6, 1);
-        searchPane.add(searchBtn, 0, 5);
-
-        schedulePane = new GridPane();
-        Label scheduleLbl = new Label("CURRENT SCHEDULE:");
-        scheduleLbl.getStyleClass().clear();
-        scheduleLbl.getStyleClass().add("subtitle");
-
-        Label emptyLbl = new Label("(There's nothing here!\nAdd some courses from Search.)");
-        emptyLbl.setOpacity(.6);
-
-        allCoursePane = new GridPane();
-        setProperties(allCoursePane, 400, 40, 0, 0, 0);
-
-        schedulePane.add(btnPane, 0, 0);
-        schedulePane.add(scheduleLbl, 0, 1);
-        //schedulePane.add(allCoursePane, 0, 2);
-        schedulePane.add(emptyLbl, 0, 2);
-
-        setProperties(schedulePane, 450, 400, 15, 10, 15);
-
-        searchSplit.getItems().add(searchPane);
-        searchSplit.getItems().add(schedulePane);
-        searchGroup.getChildren().add(searchSplit);
-
-        Scene searchScene = new Scene(searchGroup, 925, 600);
-        searchScene.getStylesheets().add("projStyles.css");
-        searchStage.setScene(searchScene);
-        searchStage.setTitle("Search");
-
-        loginStage.setTitle("Login");
-        loginStage.setResizable(false);
-        loginStage.setScene(loginScene);
-        loginStage.show();
+            searchBtn = new Button("Search");
+            searchBtn.getStyleClass().clear();
+            searchBtn.getStyleClass().add("buttons");
+            searchBtn.setOnMouseClicked(event -> updateSearchDisplay(searchField.getText()));
 
 
+            Label filterLbl = new Label("Filter by...");
+
+            ObservableList<String> dayFilters =
+                    FXCollections.observableArrayList(
+                            "",
+                            "MWF",
+                            "TR"
+                    );
+            //TODO: Add all times
+            ObservableList<String> timeFilters =
+                    FXCollections.observableArrayList(
+                            "",
+                            "8:00:00",
+                            "9:00:00",
+                            "12:30:00"
+                    );
+            //TODO: Add all depts
+            ObservableList<String> deptFilters =
+                    FXCollections.observableArrayList(
+                            "",
+                            "HUMA",
+                            "COMP"
+                    );
+            dayFilterBox = new ComboBox(dayFilters);
+            dayFilterBox.setPromptText("Day");
+            dayFilterBox.setId("days");
+
+            timeFilterBox = new ComboBox(timeFilters);
+            timeFilterBox.setPromptText("Time");
+            timeFilterBox.setId("time");
+
+            deptFilterBox = new ComboBox(deptFilters);
+            deptFilterBox.setPromptText("Dept");
+            deptFilterBox.setId("dept");
+
+            GridPane filterPane = new GridPane();
+            setProperties(filterPane, 300, 25, 10, 5, 0);
+
+            filterPane.add(dayFilterBox, 0, 0);
+            filterPane.add(timeFilterBox, 1, 0);
+            filterPane.add(deptFilterBox, 2, 0);
+
+            searchPane.add(searchLbl, 0, 1);
+            searchPane.add(searchField, 0, 2, 2, 1);
+            searchPane.add(filterLbl, 0, 3);
+            searchPane.add(filterPane, 0, 4, 6, 1);
+            searchPane.add(searchBtn, 0, 5);
+
+            schedulePane = new GridPane();
+            Label scheduleLbl = new Label("CURRENT SCHEDULE:");
+            scheduleLbl.getStyleClass().clear();
+            scheduleLbl.getStyleClass().add("subtitle");
+
+            Label emptyLbl = new Label("(There's nothing here!\nAdd some courses from Search.)");
+            emptyLbl.setOpacity(.6);
+
+            allCoursePane = new GridPane();
+            setProperties(allCoursePane, 400, 40, 0, 0, 0);
+
+            schedulePane.add(btnPane, 0, 0);
+            schedulePane.add(scheduleLbl, 0, 1);
+            //schedulePane.add(allCoursePane, 0, 2);
+            schedulePane.add(emptyLbl, 0, 2);
+
+            setProperties(schedulePane, 450, 400, 15, 10, 15);
+
+            searchSplit.getItems().add(searchPane);
+            searchSplit.getItems().add(schedulePane);
+            searchGroup.getChildren().add(searchSplit);
+
+            Scene searchScene = new Scene(searchGroup, 925, 600);
+            searchScene.getStylesheets().add("projStyles.css");
+            searchStage.setScene(searchScene);
+            searchStage.setTitle("Search");
+
+            loginStage.setTitle("Login");
+            loginStage.setResizable(false);
+            loginStage.setScene(loginScene);
+            loginStage.show();
+
+
+        }
     }
-}
