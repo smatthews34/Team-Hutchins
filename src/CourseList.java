@@ -104,7 +104,7 @@ public class CourseList {
         //checks to see if the course being added is a duplicate.
         if(checkDouble(course, Schedule)){
             System.out.println("That course already is on your schedule, cannot be added.");
-        }else if(checkConfliction(course, Schedule)){ //checks to see if the course conflicts
+        }/*else if(checkConfliction(course, Schedule)){ //checks to see if the course conflicts
             System.out.println("There is a time conflict with your schedule."); //alerts the user there is a conflict
             Scanner scn = new Scanner(System.in);
             String answer = "";
@@ -121,9 +121,10 @@ public class CourseList {
                     break;
                 } else {
                     System.out.println("Invalid response please select Y or N.");
-                }
-            }
-        }else{ //if the course is not a duplicate or a not conflicting course it wil be added to the user's schedule.
+                }*/
+           // }
+        //}
+        else{ //if the course is not a duplicate or a not conflicting course it wil be added to the user's schedule.
             updateHistory("add", course);
             Schedule.add(course);
             System.out.println("The course has successfully been added to your schedule.");

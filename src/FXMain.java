@@ -78,6 +78,48 @@ public class FXMain extends Application {
 
     //}
 
+
+    public void openConflictAlert(String courseId){
+        boolean accept = true;
+        Group alertGroup = new Group();
+        Scene alertScene = new Scene(alertGroup, 350, 250);
+        Stage alertStg = new Stage();
+
+        GridPane alertPane = new GridPane();
+        alertPane.setAlignment(Pos.CENTER);
+
+        Label alertTitleLbl = new Label("TIME CONFLICT DETECTED");
+        alertTitleLbl.getStyleClass().clear();
+        alertTitleLbl.getStyleClass().add("subtitle");
+
+        Label alertMsgLbl = new Label(courseId + " is causing a conflict.\nWould you like to add anyway?");
+        Button yBtn = new Button("Yes");
+        yBtn.setId(courseId);
+        yBtn.getStyleClass().clear();
+        yBtn.getStyleClass().add("buttons");
+        yBtn.setOnAction(event-> {
+            cl.addClass(cl.getCourse(courseId), user.schedule);
+            alertStg.close();
+            updateScheduleDisplay();
+        });
+
+
+        Button nBtn = new Button("No");
+        nBtn.getStyleClass().clear();
+        nBtn.getStyleClass().add("buttons2");
+
+        setProperties(alertPane, 350, 250, 25, 20, 10);
+        alertPane.add(alertTitleLbl, 0, 0, 2, 1);
+        alertPane.add(alertMsgLbl, 0, 1, 2, 1);
+        alertPane.add(yBtn, 0, 2);
+        alertPane.add(nBtn, 1, 2);
+
+        nBtn.setOnMouseClicked(event -> alertStg.close());
+        alertGroup.getChildren().add(alertPane);
+        alertScene.getStylesheets().add("projStyles.css");
+        alertStg.setScene(alertScene);
+        alertStg.show();
+    }
     public static void openQuickAlert(String alertTitle, String alertMsg){
         Group alertGroup = new Group();
         Scene alertScene = new Scene(alertGroup, 350, 200);
@@ -240,9 +282,17 @@ public class FXMain extends Application {
         public void handle(ActionEvent event) {
             String courseId = ((Button)event.getSource()).getId();
             Course course = cl.getCourse(courseId);
+            if(cl.checkConfliction(course, user.schedule) && !cl.checkDouble(course, user.schedule)){
+                openConflictAlert(courseId);
+            }
 
-            cl.addClass(course, user.schedule);
-            updateScheduleDisplay();
+            else if (cl.checkDouble(course, user.schedule)){
+                openQuickAlert("DUPLICATE COURSE", "That course already is on your schedule,\nso it cannot be added.");
+            }
+            else {
+                cl.addClass(course, user.schedule);
+                updateScheduleDisplay();
+            }
 
         }
     };
