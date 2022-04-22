@@ -215,7 +215,7 @@ public class FXMain extends Application {
         headerPane.getChildren().clear();
         searchPane.add(searchField, 0, 0, 2, 1);
         searchPane.add(searchBtn, 0, 1, 1 ,1);
-        searchPane.add(headerPane, 0, 0);
+        //searchPane.add(headerPane, 0, 0);
 
         for (int i = 0; i < courses.size(); i++){
             GridPane coursePane = new GridPane();
