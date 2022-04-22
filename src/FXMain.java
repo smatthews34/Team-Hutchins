@@ -107,6 +107,7 @@ public class FXMain extends Application {
         Button nBtn = new Button("No");
         nBtn.getStyleClass().clear();
         nBtn.getStyleClass().add("buttons2");
+        ButtonBar.setButtonData(yBtn, ButtonBar.ButtonData.LEFT);
 
         setProperties(alertPane, 350, 250, 25, 20, 10);
         alertPane.add(alertTitleLbl, 0, 0, 2, 1);
@@ -135,6 +136,7 @@ public class FXMain extends Application {
 
         Label alertMsgLbl = new Label(alertMsg);
         Button okBtn = new Button("Okay");
+        ButtonBar.setButtonData(okBtn, ButtonBar.ButtonData.LEFT);
         okBtn.getStyleClass().clear();
         okBtn.getStyleClass().add("buttons");
 
@@ -536,6 +538,7 @@ public class FXMain extends Application {
         Button yBtn = new Button("Yes");
         yBtn.getStyleClass().clear();
         yBtn.getStyleClass().add("buttons");
+        ButtonBar.setButtonData(yBtn, ButtonBar.ButtonData.LEFT);
 
 
         int conflicts = ConfirmSchedule.countConflicts(user.schedule);
@@ -556,6 +559,7 @@ public class FXMain extends Application {
                 okBtn.getStyleClass().clear();
                 okBtn.getStyleClass().add("buttons");
                 confirmBar.getButtons().add(okBtn);
+                ButtonBar.setButtonData(okBtn, ButtonBar.ButtonData.LEFT);
                 alertMsgLbl.setText("Your schedule has been confirmed. See file.");
 
             });
@@ -576,6 +580,7 @@ public class FXMain extends Application {
                 okBtn.getStyleClass().clear();
                 okBtn.getStyleClass().add("buttons");
                 confirmBar.getButtons().add(okBtn);
+                ButtonBar.setButtonData(okBtn, ButtonBar.ButtonData.LEFT);
                 alertMsgLbl.setText("Your schedule has been confirmed. See file.");            });
         }
 
@@ -748,7 +753,7 @@ public class FXMain extends Application {
             filterPane.add(deptFilterBox, 2, 0);
 
             searchPane.add(searchLbl, 0, 1);
-            searchPane.add(searchField, 0, 2, 2, 1);
+            searchPane.add(searchField, 0, 2);
             searchPane.add(filterLbl, 0, 3);
             searchPane.add(filterPane, 0, 4, 6, 1);
 
