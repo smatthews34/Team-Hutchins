@@ -303,7 +303,7 @@ public class CourseList {
      *
      * @param schedule the user's current schedule
      */
-    public static void FeelingLucky(ArrayList<Course> schedule){
+    public void FeelingLucky(ArrayList<Course> schedule){
         Boolean conflict = true;
         ArrayList<Course> options = importCourseList();
         Random rand = new Random();
@@ -315,6 +315,7 @@ public class CourseList {
             conflict = checkConfliction(c,schedule);
             if(conflict == false && (!c.roomNum.equals(null)&&!c.endTime.equals(null)&&!c.startTime.equals(null)&&!c.courseCode.equals(null)&&!c.meets.equals(null)&&!c.building.equals(null)&&!c.longTitle.equals(null)&&!c.shortTitle.equals(null))) {
                 schedule.add(c);
+                updateHistory("add", c);
                 break;
             }
         }
