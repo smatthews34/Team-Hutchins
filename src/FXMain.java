@@ -648,6 +648,9 @@ public class FXMain extends Application {
             confirmBtn.setGraphic(confirmView);
             confirmBtn.setOnMouseClicked(event->openConfirmAlert());
 
+            Tooltip confirmTip = new Tooltip("confirm schedule");
+            Tooltip.install(confirmBtn, confirmTip);
+
             btnPane = new GridPane();
             btnPane.add(undoBtn, 0, 0);
             btnPane.add(redoBtn, 1, 0);
