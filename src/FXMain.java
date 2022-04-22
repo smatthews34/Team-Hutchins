@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -583,7 +584,11 @@ public class FXMain extends Application {
 
             searchField = new TextField();
             searchField.setPromptText("Search...");
-            searchField.setOnAction(event-> updateSearchDisplay(searchField.getText()));
+            searchField.setOnKeyPressed(event-> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    updateSearchDisplay(searchField.getText());
+                }
+            });
 
             searchBtn = new Button("Search");
             searchBtn.getStyleClass().clear();
