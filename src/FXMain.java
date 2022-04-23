@@ -57,7 +57,9 @@ public class FXMain extends Application {
     GridPane searchPane;
     GridPane btnPane;
     TextField searchField;
+    TextField autoSearchField;
     Button searchBtn;
+    Button resultsSearchBtn;
     Button undoBtn;
     Button redoBtn;
     Button confirmBtn;
@@ -216,9 +218,8 @@ public class FXMain extends Application {
 
         searchPane.getChildren().clear();
         headerPane.getChildren().clear();
-        searchPane.add(searchField, 0, 0, 2, 1);
-        searchPane.add(searchBtn, 0, 1, 1, 1);
-        //searchPane.add(headerPane, 0, 0);
+        searchPane.add(autoSearchField, 0, 0, 2, 1);
+        searchPane.add(resultsSearchBtn, 0, 1, 1, 1);
 
         for (int i = 0; i < courses.size(); i++) {
             GridPane coursePane = new GridPane();
@@ -680,7 +681,9 @@ public class FXMain extends Application {
         searchLbl.getStyleClass().add("title");
 
         searchField = new TextField();
+        autoSearchField = new TextField();
         searchField.setPromptText("Search...");
+        autoSearchField.setPromptText("Search...");
         autoMenu = new ContextMenu();
         searchField.setContextMenu(autoMenu);
 
@@ -706,11 +709,24 @@ public class FXMain extends Application {
             }
         });
 
+        autoSearchField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                updateSearchDisplay(searchField.getText());
+            }
+            updateSearchDisplay(autoSearchField.getText());
+        });
+
+
 
         searchBtn = new Button("Search");
         searchBtn.getStyleClass().clear();
         searchBtn.getStyleClass().add("buttons");
         searchBtn.setOnMouseClicked(event -> updateSearchDisplay(searchField.getText()));
+
+        resultsSearchBtn = new Button("Search");
+        resultsSearchBtn.getStyleClass().clear();
+        resultsSearchBtn.getStyleClass().add("buttons");
+        resultsSearchBtn.setOnMouseClicked(event -> updateSearchDisplay(autoSearchField.getText()));
 
         luckyBtn = new Button("I'm Feeling Lucky");
         luckyBtn.getStyleClass().clear();
