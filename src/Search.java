@@ -135,10 +135,10 @@ public class Search {
                     if(data.equalsIgnoreCase("CourseCode")){ //Ensures that first line of file (info) is not used to create a new course
                         break;
                     }
-                    else if (data.equalsIgnoreCase("")){
+                    else if (searchInput.equalsIgnoreCase("")){
                         break;
                     }
-                    else if (data.toLowerCase().startsWith(searchInput.toLowerCase()) && index == 2){ //User is searching by course name
+                    else if (data.toLowerCase().contains(searchInput.toLowerCase()) && index == 2){ //User is searching by course name
                         results.add(potentialCourse);
                         break;
                     }
