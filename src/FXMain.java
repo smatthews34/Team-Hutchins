@@ -1,4 +1,6 @@
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -603,6 +606,13 @@ public class FXMain extends Application {
         alertStg.show();
     }
 
+    final EventHandler<ActionEvent>  searchRadioHandler = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+
+        }
+    };
+
 
 
         public static void main(String[] args) {
@@ -752,49 +762,99 @@ public class FXMain extends Application {
             filterPane.add(timeFilterBox, 1, 0);
             filterPane.add(deptFilterBox, 2, 0);
 
-            searchPane.add(searchLbl, 0, 1);
-            searchPane.add(searchField, 0, 2);
-            searchPane.add(filterLbl, 0, 3);
-            searchPane.add(filterPane, 0, 4, 6, 1);
+            //TODO: Make this another way later
+           /* RadioButton humaRadio = new RadioButton("Auto Generate HUMAs");
+            humaRadio.setOnMouseClicked(event-> {
+                RadioButton year1Radio = new RadioButton("Fresh");
+                RadioButton year2Radio = new RadioButton("Soph");
+                RadioButton year3Radio = new RadioButton("Junior");
+                RadioButton year4Radio = new RadioButton("Senior");
 
-            ButtonBar searchBar = new ButtonBar();
-            searchBar.getButtons().addAll(searchBtn, luckyBtn);
-            ButtonBar.setButtonData(searchBtn, ButtonBar.ButtonData.LEFT);
-
-            searchPane.add(searchBar, 0, 5);
-
-            schedulePane = new GridPane();
-            Label scheduleLbl = new Label("CURRENT SCHEDULE:");
-            scheduleLbl.getStyleClass().clear();
-            scheduleLbl.getStyleClass().add("subtitle");
-
-            Label emptyLbl = new Label("(There's nothing here!\nAdd some courses from Search.)");
-            emptyLbl.setOpacity(.6);
-
-            allCoursePane = new GridPane();
-            setProperties(allCoursePane, 400, 40, 0, 0, 0);
-
-            schedulePane.add(btnPane, 0, 0);
-            schedulePane.add(scheduleLbl, 0, 1);
-            //schedulePane.add(allCoursePane, 0, 2);
-            schedulePane.add(emptyLbl, 0, 2);
-
-            setProperties(schedulePane, 450, 400, 15, 10, 15);
-
-            searchSplit.getItems().add(searchPane);
-            searchSplit.getItems().add(schedulePane);
-            searchGroup.getChildren().add(searchSplit);
-
-            Scene searchScene = new Scene(searchGroup, 925, 600);
-            searchScene.getStylesheets().add("projStyles.css");
-            searchStage.setScene(searchScene);
-            searchStage.setTitle("Search");
-
-            loginStage.setTitle("Login");
-            loginStage.setResizable(false);
-            loginStage.setScene(loginScene);
-            loginStage.show();
+                RadioButton semester1Radio = new RadioButton("Fall");
+                RadioButton semester2Radio = new RadioButton("Spring");
 
 
-        }
+                HBox yearRadioBox = new HBox(10, year1Radio, year2Radio, year3Radio, year4Radio);
+                HBox semesterRadioBox = new HBox(10, semester1Radio, semester2Radio);
+
+                ToggleGroup yearRadios = new ToggleGroup();
+                yearRadios.getToggles().addAll(year1Radio, year2Radio, year3Radio, year4Radio);
+
+                ToggleGroup semesterRadios = new ToggleGroup();
+                semesterRadios.getToggles().addAll(semester1Radio, semester2Radio);
+                String year = "";
+                String semester = "";
+
+                for (int i = 0; i < yearRadioBox.getChildren().size(); i++) {
+
+                    ((RadioButton)yearRadioBox.getChildren().get(i)).selectedProperty().addListener(new InvalidationListener() {
+                        public void invalidated(Observable ov) {
+                            if (((RadioButton) yearRadioBox.getChildren().get(i)).isSelected()) {
+                                year = ((RadioButton) yearRadios.getSelectedToggle()).getText();
+                                System.out.println(year);
+                            }
+                        }
+
+                });
+
+                for (int i = 0; i < semesterRadioBox.getChildren().size(); i++) {
+                    if (((RadioButton) semesterRadioBox.getChildren().get(i)).isSelected()) {
+                        semester = ((RadioButton) semesterRadios.getSelectedToggle()).getText();
+                        System.out.println(semester);
+                    }
+                }
+                cl.autoFill(year, semester, user.schedule);
+                searchPane.add(yearRadioBox, 0, 5);
+                searchPane.add(semesterRadioBox, 0, 6);
+                searchPane.add(semesterRadioBox, 0, 6);
+
+            */
+
+
+                searchPane.add(searchLbl, 0, 1);
+                searchPane.add(searchField, 0, 2);
+                searchPane.add(filterLbl, 0, 3);
+               // searchPane.add(humaRadio, 0, 4);
+                searchPane.add(filterPane, 0, 4, 6, 1);
+
+                ButtonBar searchBar = new ButtonBar();
+                searchBar.getButtons().addAll(searchBtn, luckyBtn);
+                ButtonBar.setButtonData(searchBtn, ButtonBar.ButtonData.LEFT);
+
+                searchPane.add(searchBar, 0, 5);
+
+                schedulePane = new GridPane();
+                Label scheduleLbl = new Label("CURRENT SCHEDULE:");
+                scheduleLbl.getStyleClass().clear();
+                scheduleLbl.getStyleClass().add("subtitle");
+
+                Label emptyLbl = new Label("(There's nothing here!\nAdd some courses from Search.)");
+                emptyLbl.setOpacity(.6);
+
+                allCoursePane = new GridPane();
+                setProperties(allCoursePane, 400, 40, 0, 0, 0);
+
+                schedulePane.add(btnPane, 0, 0);
+                schedulePane.add(scheduleLbl, 0, 1);
+                //schedulePane.add(allCoursePane, 0, 2);
+                schedulePane.add(emptyLbl, 0, 2);
+
+                setProperties(schedulePane, 450, 400, 15, 10, 15);
+
+                searchSplit.getItems().add(searchPane);
+                searchSplit.getItems().add(schedulePane);
+                searchGroup.getChildren().add(searchSplit);
+
+                Scene searchScene = new Scene(searchGroup, 925, 600);
+                searchScene.getStylesheets().add("projStyles.css");
+                searchStage.setScene(searchScene);
+                searchStage.setTitle("Search");
+
+                loginStage.setTitle("Login");
+                loginStage.setResizable(false);
+                loginStage.setScene(loginScene);
+                loginStage.show();
+
+
+            }
     }
