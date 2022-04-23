@@ -178,7 +178,7 @@ public class FXMain extends Application {
             //https://stackoverflow.com/questions/13567019/close-fxml-window-by-code-javafx
             final Node source = (Node) event.getSource();
             final Stage stage = (Stage) source.getScene().getWindow();
-            searchStage.show();
+            launchSearch();
             stage.close();
             openQuickAlert("You are now signed in with a guest account.", "You may create a schedule, " +
                     "but will not be able to save it\nuntil you sign up.");
@@ -368,7 +368,7 @@ public class FXMain extends Application {
                 //https://stackoverflow.com/questions/13567019/close-fxml-window-by-code-javafx
                 final Node source = (Node) event.getSource();
                 final Stage stage = (Stage) source.getScene().getWindow();
-                searchStage.show();
+                launchSearch();
                 stage.close();
 
                 Label userLbl = new Label("WELCOME, " + (user.name.toUpperCase()) + "!");
@@ -506,6 +506,7 @@ public class FXMain extends Application {
 
     }
 
+    //TODO: Filter handler
     /*final EventHandler<ActionEvent> filterHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -606,163 +607,144 @@ public class FXMain extends Application {
         alertStg.show();
     }
 
-    final EventHandler<ActionEvent>  searchRadioHandler = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
+    public void launchSearch(){
 
-        }
-    };
+        //SEARCH WINDOW
 
+        Group searchGroup = new Group();
+        searchStage = new Stage();
 
+        SplitPane searchSplit = new SplitPane();
+        searchSplit.getStyleClass().add("pane");
+        searchSplit.setOrientation(Orientation.HORIZONTAL);
 
-        public static void main(String[] args) {
-            launch(args);
-        }
+        searchPane = new GridPane();
+        setProperties(searchPane, 550, 600, 20, 10, 10);
+        searchPane.setAlignment(Pos.CENTER);
 
-        @Override
-        public void start(Stage loginStage) {
-            cl = new CourseList();
-            user = null;
-            //Logging lg;
-
-            launchLogin();
-
-            //SEARCH WINDOW
-
-            Group searchGroup = new Group();
-            searchStage = new Stage();
-
-            SplitPane searchSplit = new SplitPane();
-            searchSplit.getStyleClass().add("pane");
-            searchSplit.setOrientation(Orientation.HORIZONTAL);
-
-            searchPane = new GridPane();
-            setProperties(searchPane, 550, 600, 20, 10, 10);
-            searchPane.setAlignment(Pos.CENTER);
-
-            headerPane = new GridPane();
+        headerPane = new GridPane();
 
 
-            undoBtn = new Button();
-            Image undoImg = new Image("undo.png");
-            ImageView undoView = new ImageView(undoImg);
-            undoBtn.setGraphic(undoView);
-            undoBtn.setOnAction(undoHandler);
+        undoBtn = new Button();
+        Image undoImg = new Image("undo.png");
+        ImageView undoView = new ImageView(undoImg);
+        undoBtn.setGraphic(undoView);
+        undoBtn.setOnAction(undoHandler);
 
 
-            Image redoImg = new Image("redo.png");
-            ImageView redoView = new ImageView(redoImg);
-            redoBtn = new Button();
-            redoBtn.setGraphic(redoView);
-            redoBtn.setOnAction(redoHandler);
+        Image redoImg = new Image("redo.png");
+        ImageView redoView = new ImageView(redoImg);
+        redoBtn = new Button();
+        redoBtn.setGraphic(redoView);
+        redoBtn.setOnAction(redoHandler);
 
-            Image confirmImg = new Image("confirm.png");
-            ImageView confirmView = new ImageView(confirmImg);
-            confirmBtn = new Button();
-            confirmBtn.setGraphic(confirmView);
-            confirmBtn.setOnMouseClicked(event->openConfirmAlert());
+        Image confirmImg = new Image("confirm.png");
+        ImageView confirmView = new ImageView(confirmImg);
+        confirmBtn = new Button();
+        confirmBtn.setGraphic(confirmView);
+        confirmBtn.setOnMouseClicked(event->openConfirmAlert());
 
-            Image calendarImg = new Image("cal.png");
-            ImageView calendarView = new ImageView(calendarImg);
-            calendarBtn = new Button();
-            calendarBtn.setGraphic(calendarView);
-            //calendarBtn.setOnMouseClicked(event-> <add some stuff here>);
+        Image calendarImg = new Image("cal.png");
+        ImageView calendarView = new ImageView(calendarImg);
+        calendarBtn = new Button();
+        calendarBtn.setGraphic(calendarView);
+        calendarBtn.setOnMouseClicked(event-> launchCalendar());
 
-            Tooltip confirmTip = new Tooltip("confirm schedule");
-            Tooltip.install(confirmBtn, confirmTip);
+        Tooltip confirmTip = new Tooltip("confirm schedule");
+        Tooltip.install(confirmBtn, confirmTip);
 
-            Tooltip calendarTip = new Tooltip("view calendar");
-            Tooltip.install(calendarBtn, calendarTip);
+        Tooltip calendarTip = new Tooltip("view calendar");
+        Tooltip.install(calendarBtn, calendarTip);
 
-            btnPane = new GridPane();
-            btnPane.add(undoBtn, 0, 0);
-            btnPane.add(redoBtn, 1, 0);
-            btnPane.add(confirmBtn, 2, 0);
-            btnPane.add(calendarBtn, 3, 0);
-            btnPane.setHgap(5);
-            btnPane.setVgap(5);
+        btnPane = new GridPane();
+        btnPane.add(undoBtn, 0, 0);
+        btnPane.add(redoBtn, 1, 0);
+        btnPane.add(confirmBtn, 2, 0);
+        btnPane.add(calendarBtn, 3, 0);
+        btnPane.setHgap(5);
+        btnPane.setVgap(5);
 
-            undoBtn.getStyleClass().clear();
-            undoBtn.getStyleClass().add("mini-buttons");
-            redoBtn.getStyleClass().clear();
-            redoBtn.getStyleClass().add("mini-buttons");
-            confirmBtn.getStyleClass().clear();
-            confirmBtn.getStyleClass().add("mini-buttons");
-            calendarBtn.getStyleClass().clear();
-            calendarBtn.getStyleClass().add("mini-buttons");
+        undoBtn.getStyleClass().clear();
+        undoBtn.getStyleClass().add("mini-buttons");
+        redoBtn.getStyleClass().clear();
+        redoBtn.getStyleClass().add("mini-buttons");
+        confirmBtn.getStyleClass().clear();
+        confirmBtn.getStyleClass().add("mini-buttons");
+        calendarBtn.getStyleClass().clear();
+        calendarBtn.getStyleClass().add("mini-buttons");
 
-            Label searchLbl = new Label("Search for Courses");
-            searchLbl.getStyleClass().clear();
-            searchLbl.getStyleClass().add("title");
+        Label searchLbl = new Label("Search for Courses");
+        searchLbl.getStyleClass().clear();
+        searchLbl.getStyleClass().add("title");
 
-            searchField = new TextField();
-            searchField.setPromptText("Search...");
-            searchField.setOnKeyPressed(event-> {
-                if (event.getCode() == KeyCode.ENTER) {
-                    updateSearchDisplay(searchField.getText());
-                }
-            });
+        searchField = new TextField();
+        searchField.setPromptText("Search...");
+        searchField.setOnKeyPressed(event-> {
+            if (event.getCode() == KeyCode.ENTER) {
+                updateSearchDisplay(searchField.getText());
+            }
+        });
 
-            searchBtn = new Button("Search");
-            searchBtn.getStyleClass().clear();
-            searchBtn.getStyleClass().add("buttons");
-            searchBtn.setOnMouseClicked(event -> updateSearchDisplay(searchField.getText()));
+        searchBtn = new Button("Search");
+        searchBtn.getStyleClass().clear();
+        searchBtn.getStyleClass().add("buttons");
+        searchBtn.setOnMouseClicked(event -> updateSearchDisplay(searchField.getText()));
 
-            luckyBtn = new Button("I'm Feeling Lucky");
-            luckyBtn.getStyleClass().clear();
-            luckyBtn.getStyleClass().add("buttons2");
+        luckyBtn = new Button("I'm Feeling Lucky");
+        luckyBtn.getStyleClass().clear();
+        luckyBtn.getStyleClass().add("buttons2");
 
-            luckyBtn.setOnMouseClicked(event-> {
-                cl.FeelingLucky(user.schedule);
-                updateScheduleDisplay();
-            });
+        luckyBtn.setOnMouseClicked(event-> {
+            cl.FeelingLucky(user.schedule);
+            updateScheduleDisplay();
+        });
 
 
-            Label filterLbl = new Label("Filter by...");
-            filterLbl.getStyleClass().clear();
-            filterLbl.getStyleClass().add("subtitle-black");
+        Label filterLbl = new Label("Filter by...");
+        filterLbl.getStyleClass().clear();
+        filterLbl.getStyleClass().add("subtitle-black");
 
-            ObservableList<String> dayFilters =
-                    FXCollections.observableArrayList(
-                            "",
-                            "MWF",
-                            "TR"
-                    );
-            //TODO: Add all times
-            ObservableList<String> timeFilters =
-                    FXCollections.observableArrayList(
-                            "",
-                            "8:00:00",
-                            "9:00:00",
-                            "12:30:00"
-                    );
-            //TODO: Add all depts
-            ObservableList<String> deptFilters =
-                    FXCollections.observableArrayList(
-                            "",
-                            "HUMA",
-                            "COMP"
-                    );
-            dayFilterBox = new ComboBox(dayFilters);
-            dayFilterBox.setPromptText("Day");
-            dayFilterBox.setId("days");
+        ObservableList<String> dayFilters =
+                FXCollections.observableArrayList(
+                        "",
+                        "MWF",
+                        "TR"
+                );
+        //TODO: Add all times
+        ObservableList<String> timeFilters =
+                FXCollections.observableArrayList(
+                        "",
+                        "8:00:00",
+                        "9:00:00",
+                        "12:30:00"
+                );
+        //TODO: Add all depts
+        ObservableList<String> deptFilters =
+                FXCollections.observableArrayList(
+                        "",
+                        "HUMA",
+                        "COMP"
+                );
+        dayFilterBox = new ComboBox(dayFilters);
+        dayFilterBox.setPromptText("Day");
+        dayFilterBox.setId("days");
 
-            timeFilterBox = new ComboBox(timeFilters);
-            timeFilterBox.setPromptText("Time");
-            timeFilterBox.setId("time");
+        timeFilterBox = new ComboBox(timeFilters);
+        timeFilterBox.setPromptText("Time");
+        timeFilterBox.setId("time");
 
-            deptFilterBox = new ComboBox(deptFilters);
-            deptFilterBox.setPromptText("Dept");
-            deptFilterBox.setId("dept");
+        deptFilterBox = new ComboBox(deptFilters);
+        deptFilterBox.setPromptText("Dept");
+        deptFilterBox.setId("dept");
 
-            GridPane filterPane = new GridPane();
-            setProperties(filterPane, 300, 25, 10, 5, 0);
+        GridPane filterPane = new GridPane();
+        setProperties(filterPane, 300, 25, 10, 5, 0);
 
-            filterPane.add(dayFilterBox, 0, 0);
-            filterPane.add(timeFilterBox, 1, 0);
-            filterPane.add(deptFilterBox, 2, 0);
+        filterPane.add(dayFilterBox, 0, 0);
+        filterPane.add(timeFilterBox, 1, 0);
+        filterPane.add(deptFilterBox, 2, 0);
 
-            //TODO: Make this another way later
+        //TODO: Make this another way later
            /* RadioButton humaRadio = new RadioButton("Auto Generate HUMAs");
             humaRadio.setOnMouseClicked(event-> {
                 RadioButton year1Radio = new RadioButton("Fresh");
@@ -811,49 +793,69 @@ public class FXMain extends Application {
             */
 
 
-                searchPane.add(searchLbl, 0, 1);
-                searchPane.add(searchField, 0, 2);
-                searchPane.add(filterLbl, 0, 3);
-               // searchPane.add(humaRadio, 0, 4);
-                searchPane.add(filterPane, 0, 4, 6, 1);
+        searchPane.add(searchLbl, 0, 1);
+        searchPane.add(searchField, 0, 2);
+        searchPane.add(filterLbl, 0, 3);
+        // searchPane.add(humaRadio, 0, 4);
+        searchPane.add(filterPane, 0, 4, 6, 1);
 
-                ButtonBar searchBar = new ButtonBar();
-                searchBar.getButtons().addAll(searchBtn, luckyBtn);
-                ButtonBar.setButtonData(searchBtn, ButtonBar.ButtonData.LEFT);
+        ButtonBar searchBar = new ButtonBar();
+        searchBar.getButtons().addAll(searchBtn, luckyBtn);
+        ButtonBar.setButtonData(searchBtn, ButtonBar.ButtonData.LEFT);
 
-                searchPane.add(searchBar, 0, 5);
+        searchPane.add(searchBar, 0, 5);
 
-                schedulePane = new GridPane();
-                Label scheduleLbl = new Label("CURRENT SCHEDULE:");
-                scheduleLbl.getStyleClass().clear();
-                scheduleLbl.getStyleClass().add("subtitle");
+        schedulePane = new GridPane();
+        Label scheduleLbl = new Label("CURRENT SCHEDULE:");
+        scheduleLbl.getStyleClass().clear();
+        scheduleLbl.getStyleClass().add("subtitle");
 
-                Label emptyLbl = new Label("(There's nothing here!\nAdd some courses from Search.)");
-                emptyLbl.setOpacity(.6);
+        Label emptyLbl = new Label("(There's nothing here!\nAdd some courses from Search.)");
+        emptyLbl.setOpacity(.6);
 
-                allCoursePane = new GridPane();
-                setProperties(allCoursePane, 400, 40, 0, 0, 0);
+        allCoursePane = new GridPane();
+        setProperties(allCoursePane, 400, 40, 0, 0, 0);
 
-                schedulePane.add(btnPane, 0, 0);
-                schedulePane.add(scheduleLbl, 0, 1);
-                //schedulePane.add(allCoursePane, 0, 2);
-                schedulePane.add(emptyLbl, 0, 2);
+        schedulePane.add(btnPane, 0, 0);
+        schedulePane.add(scheduleLbl, 0, 1);
+        //schedulePane.add(allCoursePane, 0, 2);
+        schedulePane.add(emptyLbl, 0, 2);
 
-                setProperties(schedulePane, 450, 400, 15, 10, 15);
+        setProperties(schedulePane, 450, 400, 15, 10, 15);
 
-                searchSplit.getItems().add(searchPane);
-                searchSplit.getItems().add(schedulePane);
-                searchGroup.getChildren().add(searchSplit);
+        searchSplit.getItems().add(searchPane);
+        searchSplit.getItems().add(schedulePane);
+        searchGroup.getChildren().add(searchSplit);
 
-                Scene searchScene = new Scene(searchGroup, 925, 600);
-                searchScene.getStylesheets().add("projStyles.css");
-                searchStage.setScene(searchScene);
-                searchStage.setTitle("Search");
+        Scene searchScene = new Scene(searchGroup, 925, 600);
+        searchScene.getStylesheets().add("projStyles.css");
+        searchStage.setScene(searchScene);
+        searchStage.setTitle("Search");
+        searchStage.show();
+    }
 
-                loginStage.setTitle("Login");
-                loginStage.setResizable(false);
-                loginStage.setScene(loginScene);
-                loginStage.show();
+    public void launchCalendar(){
+
+    }
+
+
+        public static void main(String[] args) {
+            launch(args);
+        }
+
+        @Override
+        public void start(Stage loginStage) {
+            cl = new CourseList();
+            user = null;
+            //Logging lg;
+
+            launchLogin();
+
+
+            loginStage.setTitle("Login");
+            loginStage.setResizable(false);
+            loginStage.setScene(loginScene);
+            loginStage.show();
 
 
             }
