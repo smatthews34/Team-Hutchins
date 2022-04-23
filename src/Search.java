@@ -104,6 +104,60 @@ public class Search {
     }
     //day filter code
 
+    public ArrayList<Course> getKeystroke(String searchInputWithSpace){ //Returns an ArrayList based on keystrokes
+        try {
+            File classFile = new File("classFile.txt");
+            Scanner classScan = new Scanner(classFile);
+            String course;
+            int index = 0; //Keeps track of what section of the file we're at
+            String searchInput = searchInputWithSpace.replace(" ", "");
+            ArrayList<Course> results = new ArrayList<>(); //Finished results
+            ArrayList<String> theStrings = new ArrayList<>(); //Stores the strings that will be used to make a Course
+            int potentialIndex = 0;
+            Course potentialCourse;
+            classScan.nextLine();
+            while (classScan.hasNextLine()) {
+                course = classScan.nextLine(); //grabs the line of code (the course info)
+                Scanner courseScan = new Scanner(course); //Creates a new scanner to read the line
+                courseScan.useDelimiter(",");
+                Scanner potentialScan = new Scanner(course);
+                potentialScan.useDelimiter(",");
+                while (potentialScan.hasNext()){
+                    String potentialData = potentialScan.next();
+                    theStrings.add(potentialData);
+                    potentialIndex++;
+                }
+                potentialCourse = new Course(theStrings.get(0), theStrings.get(1), theStrings.get(2),
+                        theStrings.get(3), theStrings.get(4),
+                        theStrings.get(5), theStrings.get(6), theStrings.get(7)); //Creates potential course for results
+                while (courseScan.hasNext()){ //Only search by course code and full course name
+                    String data = courseScan.next().replace(" ", "");
+                    if(data.equalsIgnoreCase("CourseCode")){ //Ensures that first line of file (info) is not used to create a new course
+                        break;
+                    }
+                    else if (data.equalsIgnoreCase("")){
+                        break;
+                    }
+                    else if (data.toLowerCase().startsWith(searchInput.toLowerCase()) && index == 2){ //User is searching by course name
+                        results.add(potentialCourse);
+                        break;
+                    }
+                    index++;
+                }
+                index = 0;
+                courseScan.close();
+                potentialScan.close();
+                theStrings.clear();
+            }
+            classScan.close();
+            return orderSearch(results);
+        }  catch (FileNotFoundException e){
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     // HashMap initialized with string as a key and a list of strings
     public static Map<String, List<String>> mapCoursesDays = null;
 
