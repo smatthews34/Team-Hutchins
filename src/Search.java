@@ -13,7 +13,7 @@ public class Search {
      * Takes in the results of the search and orginizes it to be prepared for the user to see
      * @param searchResults from the getResults method
      */
-    public ArrayList<Course> orderSearch(ArrayList<Course> searchResults){
+    public static ArrayList<Course> orderSearch(ArrayList<Course> searchResults){
         ArrayList<Course> ordered = searchResults;
         //sorts an arraylist by days then sorts the groups of day by chronological order
         Collections.sort(ordered, new Comparator<Course>() {
@@ -104,7 +104,7 @@ public class Search {
     }
     //day filter code
 
-    public ArrayList<Course> getKeystroke(String searchInputWithSpace){ //Returns an ArrayList based on keystrokes
+    public static ArrayList<Course> getKeystroke(String searchInputWithSpace){ //Returns an ArrayList based on keystrokes
         try {
             File classFile = new File("classFile.txt");
             Scanner classScan = new Scanner(classFile);
@@ -364,4 +364,11 @@ public class Search {
 
     }
 
+    public static void main(String[] args) {
+        ArrayList<Course> c = getKeystroke("SP");
+
+        for (Course course : c) {
+            System.out.println(c.toString());
+        }
+    }
 }

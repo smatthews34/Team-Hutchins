@@ -70,6 +70,8 @@ public class FXMain extends Application {
     Label userLbl;
     Button luckyBtn;
     ButtonBar searchBar;
+    Search s;
+    ContextMenu autoMenu;
 
     ComboBox dayFilterBox;
     ComboBox timeFilterBox;
@@ -209,7 +211,7 @@ public class FXMain extends Application {
         resultsSPane = new ScrollPane();
         resultsPane = new GridPane();
         ArrayList<Course> courses = new ArrayList<>();
-        Search s = new Search(searchInput);
+        s = new Search(searchInput);
         courses = s.getResults(searchInput);
 
         searchPane.getChildren().clear();
@@ -679,11 +681,31 @@ public class FXMain extends Application {
 
         searchField = new TextField();
         searchField.setPromptText("Search...");
+        autoMenu = new ContextMenu();
+        searchField.setContextMenu(autoMenu);
+
         searchField.setOnKeyPressed(event-> {
             if (event.getCode() == KeyCode.ENTER) {
                 updateSearchDisplay(searchField.getText());
             }
+            else if (event.getCode().isLetterKey() || event.getCode().isDigitKey() || event.getCode() == KeyCode.BACK_SPACE){
+                System.out.println("Reached");
+                autoMenu.getItems().clear();
+                //autoMenu.getItems().add(new MenuItem("test"));
+                //searchField.setContextMenu(autoMenu);
+
+                ArrayList<Course> autoList = s.getKeystroke(searchField.getText());
+                int count = 0;
+                for (Course c : autoList){
+                    if (count < 10) {
+                        autoMenu.getItems().add(new MenuItem(c.toString()));
+                    }
+                    count++;
+                }
+                autoMenu.show(searchField, 270.0, 330.0);
+            }
         });
+
 
         searchBtn = new Button("Search");
         searchBtn.getStyleClass().clear();
