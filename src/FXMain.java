@@ -217,9 +217,10 @@ public class FXMain extends Application {
         courses = s.getResults(searchInput);
 
         searchPane.getChildren().clear();
+        searchPane.setAlignment(Pos.TOP_CENTER);
         headerPane.getChildren().clear();
         searchPane.add(autoSearchField, 0, 0, 2, 1);
-        searchPane.add(resultsSearchBtn, 0, 1, 1, 1);
+        //searchPane.add(resultsSearchBtn, 0, 1, 1, 1);
 
         for (int i = 0; i < courses.size(); i++) {
             GridPane coursePane = new GridPane();
@@ -233,6 +234,12 @@ public class FXMain extends Application {
             addBtn.getStyleClass().add("add-buttons");
             coursePane.add(addBtn, 0, 0);
             resultsPane.add(coursePane, 0, i, 1, 1);
+        }
+
+        if(courses.isEmpty()){
+            Label emptyLbl = new Label("\t\t\t\t\tNo results\t\t\t\t\t");
+            emptyLbl.setPadding(new Insets(15));
+            resultsPane.add(emptyLbl, 0, 0);
         }
         resultsSPane.setContent(resultsPane);
         searchPane.add(resultsSPane, 0, 2, 2, 1);
@@ -868,6 +875,7 @@ public class FXMain extends Application {
         Scene searchScene = new Scene(searchGroup, 925, 600);
         searchScene.getStylesheets().add("projStyles.css");
         searchStage.setScene(searchScene);
+        searchStage.setResizable(false);
         searchStage.setTitle("Search");
         searchStage.show();
     }
