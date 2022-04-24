@@ -118,3 +118,7 @@ Background: rgb(245, 238, 238)
 .text-field {
  -fx-background-color: white;
 }
+.text-field2{
+-fx-background-color: rgb(245, 238, 238);
+}
+

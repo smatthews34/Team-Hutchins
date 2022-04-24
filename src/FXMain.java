@@ -66,6 +66,7 @@ public class FXMain extends Application {
     Button confirmBtn;
     Button calendarBtn;
     Button backBtn;
+    Button addActBtn;
     ScrollPane resultsSPane;
     GridPane resultsPane;
     GridPane schedulePane;
@@ -252,9 +253,23 @@ public class FXMain extends Application {
 
         });
 
+
         searchPane.add(backBtn,0, 0);
         searchPane.add(autoSearchField, 0, 1, 2, 1);
-        //searchPane.add(resultsSearchBtn, 0, 1, 1, 1);
+
+        GridPane addActPane = new GridPane();
+        setProperties(addActPane, 400, 20, 0, 5, 0 );
+        Label actLbl = new Label("Create Activity");
+        addActBtn = new Button("+");
+        backBtn = new Button();
+        addActBtn.getStyleClass().clear();
+        addActBtn.getStyleClass().add("add-buttons");
+        addActBtn.setOnMouseClicked(event-> {
+            launchActivity();
+        });
+        addActPane.add(addActBtn, 0, 0);
+        addActPane.add(actLbl, 1, 0);
+        searchPane.add(addActPane, 0, 2);
 
         for (int i = 0; i < courses.size(); i++) {
             GridPane coursePane = new GridPane();
@@ -836,10 +851,10 @@ public class FXMain extends Application {
         filterPane.add(timeFilterBox, 1, 0);
         filterPane.add(deptFilterBox, 2, 0);
 
-            autoLink = new Hyperlink("Auto Generate Courses");
-            autoLink.setOnMouseClicked(event-> {
-                launchAutoQs();
-            });
+        autoLink = new Hyperlink("Auto Generate Courses");
+        autoLink.setOnMouseClicked(event-> {
+            launchAutoQs();
+        });
 
 
         searchPane.add(searchLbl, 0, 2);
@@ -866,7 +881,7 @@ public class FXMain extends Application {
 
         allCoursePane = new GridPane();
         //allCoursePane.getStyleClass().clear();
-       // allCoursePane.getStyleClass().add("pane");
+        // allCoursePane.getStyleClass().add("pane");
         setProperties(allCoursePane, 400, 40, 0, 0, 0);
 
         schedulePane.add(btnPane, 0, 0);
@@ -985,28 +1000,121 @@ public class FXMain extends Application {
 
     }
 
+    public void launchActivity(){
+        Group alertGroup = new Group();
+        Scene alertScene = new Scene(alertGroup, 400, 460);
+        Stage alertStg = new Stage();
+
+        GridPane alertPane = new GridPane();
+        alertPane.getStyleClass().clear();
+        alertPane.getStyleClass().add("pane");
+        alertPane.setAlignment(Pos.CENTER);
+
+        TextField nameActField = new TextField();
+        Label nameActLbl = new Label("Enter name of activity:");
+
+        TextField startTimeField = new TextField();
+        Label startTimeLbl = new Label("Enter start time (in military time; ex. 8:00:00):");
+
+        TextField endTimeField = new TextField();
+        Label endTimeLbl = new Label("Enter end time (in military time; ex. 13:00:00):");
+
+        TextField daysField = new TextField();
+        Label daysLbl = new Label("Enter the day(s) occurring (ex. MWF):");
+
+        Label alertTitleLbl = new Label("CREATE ACTIVITY");
+        alertTitleLbl.getStyleClass().clear();
+        alertTitleLbl.getStyleClass().add("subtitle");
+
+        ButtonBar confirmBar = new ButtonBar();
+        Button yBtn = new Button("Create");
+        yBtn.getStyleClass().clear();
+        yBtn.getStyleClass().add("buttons");
+        yBtn.setOnAction(event -> {
+            String title = nameActField.getText();
+            String start = startTimeField.getText();
+            String end = endTimeField.getText();
+            String meets = daysField.getText();
+
+            Course c = new Course(title, start, end, meets);
+            Boolean cc = cl.checkConfliction(c,user.schedule);
+            Boolean d = cl.checkDouble(c, user.schedule);
+
+            if(d){
+                lg.logConflict(user.username + " has attempted to add a personal activity: " + c + " that they already have on their schedule.");
+            }else if(cc && user.schedule.contains(c)){
+                lg.logConflict(user.username + " added the activity: " + c + " that conflicts with a course/activity on their schedule.");
+            }else if(cc && !user.schedule.contains(c)){
+                lg.logConflict(user.schedule + " has attempted to add the activity: " + c + ", that conflicts with their schedule but elected not to add it.");
+            }else{
+                lg.Action(user.username + " has added the activity " + c);
+            }
+
+            cl.addClass(c, user.schedule);
+            alertStg.close();
+            updateScheduleDisplay();
+        });
+
+
+        Button nBtn = new Button("Cancel");
+        nBtn.getStyleClass().clear();
+        nBtn.getStyleClass().add("buttons2");
+        ButtonBar.setButtonData(yBtn, ButtonBar.ButtonData.LEFT);
+
+        setProperties(alertPane, 400, 460, 12, 5, 10);
+        alertPane.add(alertTitleLbl, 0, 0, 2, 1);
+        alertPane.add(nameActLbl, 0, 1);
+        alertPane.add(nameActField, 0, 2);
+
+        alertPane.add(startTimeLbl, 0, 3);
+        alertPane.add(startTimeField, 0, 4);
+
+        alertPane.add(endTimeLbl, 0, 5);
+        alertPane.add(endTimeField, 0, 6);
+
+        alertPane.add(daysLbl, 0, 7);
+        alertPane.add(daysField, 0, 8);
+
+        confirmBar.getButtons().addAll(yBtn, nBtn);
+        alertPane.add(confirmBar, 0, 9);
+
+        nBtn.setOnMouseClicked(event -> {
+            alertStg.close();
+        });
+
+        nBtn.setOnMouseClicked(event -> alertStg.close());
+        alertGroup.getChildren().add(alertPane);
+        alertScene.getStylesheets().add("projStyles.css");
+        alertStg.setScene(alertScene);
+        alertStg.show();
+
+    }
+
+
+
+
     public void launchCalendar(){
 
     }
 
-        public static void main(String[] args) {
-            launch(args);
-        }
-
-        @Override
-        public void start(Stage loginStage) throws IOException {
-            cl = new CourseList();
-            user = null;
-            auto = false;
-
-            launchLogin();
-
-
-            loginStage.setTitle("Login");
-            loginStage.setResizable(false);
-            loginStage.setScene(loginScene);
-            loginStage.show();
-
-
-            }
+    public static void main(String[] args) {
+        launch(args);
     }
+
+    @Override
+    public void start(Stage loginStage) throws IOException {
+        cl = new CourseList();
+        user = null;
+        auto = false;
+
+        launchLogin();
+
+
+        loginStage.setTitle("Login");
+        loginStage.setResizable(false);
+        loginStage.setScene(loginScene);
+        loginStage.show();
+
+
+    }
+}
