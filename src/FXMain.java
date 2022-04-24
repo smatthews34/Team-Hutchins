@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static javafx.scene.paint.Color.rgb;
@@ -76,10 +77,13 @@ public class FXMain extends Application {
     Search s;
     ContextMenu autoMenu;
     Hyperlink autoLink;
+    boolean auto;
 
     ComboBox dayFilterBox;
     ComboBox timeFilterBox;
     ComboBox deptFilterBox;
+
+    Logging lg;
 
 
     //public static ArrayList<Course> getResultsList(String searchInput){
@@ -107,6 +111,7 @@ public class FXMain extends Application {
         yBtn.getStyleClass().clear();
         yBtn.getStyleClass().add("buttons");
         yBtn.setOnAction(event -> {
+            lg.logConflict(user.username + " added the course: " + cl.getCourse(courseId).toString() + " that conflicts with a course on their schedule.");
             cl.addClass(cl.getCourse(courseId), user.schedule);
             alertStg.close();
             updateScheduleDisplay();
@@ -124,7 +129,10 @@ public class FXMain extends Application {
         confirmBar.getButtons().addAll(yBtn, nBtn);
         alertPane.add(confirmBar, 0, 2);
 
-        nBtn.setOnMouseClicked(event -> alertStg.close());
+        nBtn.setOnMouseClicked(event -> {
+            alertStg.close();
+            lg.logConflict(user.schedule + " has attempted to add the course: " + cl.getCourse(courseId).toString() + " that conflicts with their schedule but elected not to add it.");
+        });
         alertGroup.getChildren().add(alertPane);
         alertScene.getStylesheets().add("projStyles.css");
         alertStg.setScene(alertScene);
@@ -178,6 +186,12 @@ public class FXMain extends Application {
             //GUEST LOGIC
 
             user = new User("guest", "", "guest");
+            try {
+                lg = new Logging(user.username);
+                lg.Action("A Guest has started to schedule");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             loggedIn = true;
             isGuest = true;
 
@@ -200,6 +214,7 @@ public class FXMain extends Application {
         @Override
         public void handle(ActionEvent event) {
             cl.undo(user.schedule);
+            lg.Action(user.username + " has undone their last action");
             updateScheduleDisplay();
         }
     };
@@ -207,6 +222,7 @@ public class FXMain extends Application {
         @Override
         public void handle(ActionEvent event) {
             cl.redo(user.schedule);
+            lg.Action(user.username + " has redone their last action");
             updateScheduleDisplay();
         }
     };
@@ -320,8 +336,10 @@ public class FXMain extends Application {
             String courseId = ((Button) event.getSource()).getId();
             Course course = cl.getCourse(courseId);
             if (cl.checkConfliction(course, user.schedule) && !cl.checkDouble(course, user.schedule)) {
+                lg.logConflict(user.username + " added the course: " + course + " that conflicts with a course on their schedule.");
                 openConflictAlert(courseId);
             } else if (cl.checkDouble(course, user.schedule)) {
+                lg.logConflict(user.username + " has attempted to add the course: " + course + ", that is a duplicate of a course on their current schedule.");
                 openQuickAlert("DUPLICATE COURSE", "That course already is on your schedule,\nso it cannot be added.");
             } else {
                 cl.addClass(course, user.schedule);
@@ -337,6 +355,7 @@ public class FXMain extends Application {
             String courseId = ((Button) event.getSource()).getId();
             Course course = user.getCourse(courseId);
             cl.removeClass(course, user.schedule);
+            lg.Action(user.username + " Successfuly removed the course: " + course);
             System.out.println("removed " + courseId);
             updateScheduleDisplay();
         }
@@ -388,6 +407,12 @@ public class FXMain extends Application {
             } else {
                 user = new User(potentialUser.username, potentialUser.password, potentialUser.name);
                 cl = new CourseList();
+                try {
+                    lg = new Logging(user.username);
+                    lg.Action(user.username + " has logged in and begun scheduling.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 loggedIn = true;
 
                 //https://stackoverflow.com/questions/13567019/close-fxml-window-by-code-javafx
@@ -440,8 +465,6 @@ public class FXMain extends Application {
         Hyperlink guestLink = new Hyperlink("Continue as Guest");
         guestLink.setOnAction(guestHandler);
 
-
-        //TODO: Sign up button action event
         signupBtn = new Button("Sign Up");
         signupBtn.getStyleClass().clear();
         signupBtn.getStyleClass().add("buttons2");
@@ -495,7 +518,6 @@ public class FXMain extends Application {
 
         msgLbl = new Label("");
 
-        //TODO: Sign up button action event
         Button newSignupBtn = new Button("Sign Up");
         Button returnBtn = new Button("Return to Login");
 
@@ -814,7 +836,6 @@ public class FXMain extends Application {
         filterPane.add(timeFilterBox, 1, 0);
         filterPane.add(deptFilterBox, 2, 0);
 
-        //TODO: Make this another way later
             autoLink = new Hyperlink("Auto Generate Courses");
             autoLink.setOnMouseClicked(event-> {
                 launchAutoQs();
@@ -870,7 +891,7 @@ public class FXMain extends Application {
     public void launchAutoQs(){
         autoLink.setDisable(true);
         Group alertGroup = new Group();
-        Scene alertScene = new Scene(alertGroup, 400, 250);
+        Scene alertScene = new Scene(alertGroup, 400, 270);
         Stage alertStg = new Stage();
 
         GridPane alertPane = new GridPane();
@@ -930,7 +951,7 @@ public class FXMain extends Application {
 
         okCancelBar.getButtons().addAll(okBtn, cancelBtn);
 
-        setProperties(alertPane, 400, 250, 15, 10, 10);
+        setProperties(alertPane, 400, 270, 15, 10, 10);
         alertPane.add(alertTitleLbl, 0, 0);
         alertPane.add(yearLbl, 0, 1);
         alertPane.add(yearRadioBox, 0, 2);
@@ -942,10 +963,19 @@ public class FXMain extends Application {
         okBtn.setOnMouseClicked(event -> {
             String year = ((RadioButton)yearRadios.getSelectedToggle()).getId();
             String semester = ((RadioButton)semesterRadios.getSelectedToggle()).getId();
-            cl.autoFill(year,semester, user.schedule);
-            alertStg.close();
-            updateScheduleDisplay();
-            autoLink.setDisable(false);
+            if (auto !=true) {
+                cl.autoFill(year, semester, user.schedule);
+                auto = true;
+                lg.Action(user.username + " has auto-generated their course schedule for " + year + " in the " + semester + " semester.");
+                alertStg.close();
+                updateScheduleDisplay();
+                autoLink.setDisable(false);
+            }
+            else{
+                Label lbl = new Label("You have already completed an auto schedule.");
+                alertPane.add(lbl, 0,6);
+                lg.logger.warning(user.username + " attempted to auto-generate their schedule but they already have.");
+            }
 
         });
         alertGroup.getChildren().add(alertPane);
@@ -964,10 +994,10 @@ public class FXMain extends Application {
         }
 
         @Override
-        public void start(Stage loginStage) {
+        public void start(Stage loginStage) throws IOException {
             cl = new CourseList();
             user = null;
-            //Logging lg;
+            auto = false;
 
             launchLogin();
 
