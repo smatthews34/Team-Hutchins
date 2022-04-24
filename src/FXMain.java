@@ -709,7 +709,7 @@ public class FXMain extends Application {
                     }
                     count++;
                 }
-                autoMenu.show(searchField, 270.0, 330.0);
+                autoMenu.show(searchField, 270.0, 310.0);
             }
         });
 
@@ -890,7 +890,11 @@ public class FXMain extends Application {
         Button cancelBtn = new Button("Cancel");
         cancelBtn.getStyleClass().clear();
         cancelBtn.getStyleClass().add("buttons2");
-        cancelBtn.setOnAction(event->alertStg.close());
+        cancelBtn.setOnAction(event->{
+            alertStg.close();
+            autoLink.setDisable(false);
+        });
+
 
         okCancelBar.getButtons().addAll(okBtn, cancelBtn);
 
