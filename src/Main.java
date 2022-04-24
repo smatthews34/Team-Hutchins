@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter","quit", "confirm", "search", "activity", "lucky", "auto", "logout", "message", "resolve"};
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter", "quit", "confirm", "search", "activity", "lucky", "auto", "logout", "message", "resolve", "calendar", };
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -21,7 +21,7 @@ public class Main {
     static void tempPrint(ArrayList<Course> schedule){
     System.out.println("- Current Schedule:");
         for (int i = 0; i < schedule.size(); i++){
-            System.out.println(schedule.get(i).courseCode);
+            System.out.println(schedule.get(i).courseCode + " " + schedule.get(i).shortTitle + " " + schedule.get(i).meets + " " + schedule.get(i).startTime + "-" +schedule.get(i).endTime);
         }
 
     }
