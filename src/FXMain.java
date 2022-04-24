@@ -1,6 +1,4 @@
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -64,6 +62,7 @@ public class FXMain extends Application {
     Button redoBtn;
     Button confirmBtn;
     Button calendarBtn;
+    Button backBtn;
     ScrollPane resultsSPane;
     GridPane resultsPane;
     GridPane schedulePane;
@@ -191,7 +190,7 @@ public class FXMain extends Application {
             userLbl.getStyleClass().clear();
             userLbl.getStyleClass().add("subtitle");
             headerPane.add(userLbl, 0, 0);
-            searchPane.add(headerPane, 0, 0);
+            searchPane.add(headerPane, 0, 1);
         }
     };
 
@@ -217,10 +216,27 @@ public class FXMain extends Application {
         s = new Search(searchInput);
         courses = s.getResults(searchInput);
 
+
         searchPane.getChildren().clear();
         searchPane.setAlignment(Pos.TOP_CENTER);
         headerPane.getChildren().clear();
-        searchPane.add(autoSearchField, 0, 0, 2, 1);
+        Image backImg = new Image("back-arrow.png");
+        ImageView backView = new ImageView(backImg);
+        backBtn = new Button();
+        backBtn.getStyleClass().clear();
+        backBtn.getStyleClass().add("mini-buttons");
+        backBtn.setGraphic(backView);
+        backBtn.setOnMouseClicked(event-> {
+            final Node source = (Node) event.getSource();
+            final Stage stage = (Stage) source.getScene().getWindow();
+            launchSearch();
+            updateScheduleDisplay();
+            stage.close();
+
+        });
+
+        searchPane.add(backBtn,0, 0);
+        searchPane.add(autoSearchField, 0, 1, 2, 1);
         //searchPane.add(resultsSearchBtn, 0, 1, 1, 1);
 
         for (int i = 0; i < courses.size(); i++) {
@@ -243,7 +259,7 @@ public class FXMain extends Application {
             resultsPane.add(emptyLbl, 0, 0);
         }
         resultsSPane.setContent(resultsPane);
-        searchPane.add(resultsSPane, 0, 2, 2, 1);
+        searchPane.add(resultsSPane, 0, 3, 2, 1);
     }
 
     public void updateScheduleDisplay() {
@@ -383,7 +399,7 @@ public class FXMain extends Application {
                 userLbl.getStyleClass().clear();
                 userLbl.getStyleClass().add("subtitle");
                 headerPane.add(userLbl, 0, 0);
-                searchPane.add(headerPane, 0, 0);
+                searchPane.add(headerPane, 0, 1);
             }
         }
     };
@@ -632,7 +648,6 @@ public class FXMain extends Application {
 
         headerPane = new GridPane();
 
-
         undoBtn = new Button();
         Image undoImg = new Image("undo.png");
         ImageView undoView = new ImageView(undoImg);
@@ -793,17 +808,17 @@ public class FXMain extends Application {
             });
 
 
-        searchPane.add(searchLbl, 0, 1);
-        searchPane.add(searchField, 0, 2);
-        searchPane.add(filterLbl, 0, 3);
-        searchPane.add(filterPane, 0, 4, 6, 1);
+        searchPane.add(searchLbl, 0, 2);
+        searchPane.add(searchField, 0, 3);
+        searchPane.add(filterLbl, 0, 4);
+        searchPane.add(filterPane, 0, 5, 6, 1);
 
         ButtonBar searchBar = new ButtonBar();
         searchBar.getButtons().addAll(searchBtn, luckyBtn);
         ButtonBar.setButtonData(searchBtn, ButtonBar.ButtonData.LEFT);
 
-        searchPane.add(searchBar, 0, 5);
-        searchPane.add(autoLink, 0, 6);
+        searchPane.add(searchBar, 0, 6);
+        searchPane.add(autoLink, 0, 7);
 
         schedulePane = new GridPane();
         Label scheduleLbl = new Label("CURRENT SCHEDULE:");
