@@ -281,7 +281,7 @@ public class CourseList {
         }else if(classPosition.equals("Fresh") && semester.equals("S")){
             schedule.add(getCourse("WRIT 101  A"));
             schedule.add(getCourse("PHYE 102  C")); //Should be 101 but not on list
-            schedule.add(getCourse("BIOL 102  O     L"));
+            schedule.add(getCourse("BIOL 102  O    L"));
             schedule.add(getCourse("BIOL 102  B"));
         }else if(classPosition.equals("Soph") && semester.equals("S")){
             schedule.add(getCourse("HUMA 202  A"));

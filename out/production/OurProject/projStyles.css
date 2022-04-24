@@ -10,10 +10,10 @@ Background: rgb(245, 238, 238)
 
 .red-hyperlink{
    -fx-text-fill: rgb(211, 47, 47);
+   -fx-font-weight: bold;
 }
 .red-hyperlink:hover{
-    -fx-text-decoration: underline;
-
+    -fx-underline: true;
 }
 
 .pane{

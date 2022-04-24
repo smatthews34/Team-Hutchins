@@ -74,6 +74,7 @@ public class FXMain extends Application {
     ButtonBar searchBar;
     Search s;
     ContextMenu autoMenu;
+    Hyperlink autoLink;
 
     ComboBox dayFilterBox;
     ComboBox timeFilterBox;
@@ -360,9 +361,6 @@ public class FXMain extends Application {
             //LOGIN LOGIC
             String username = userField.getText();
             String password = passField.getText();
-
-            System.out.println(username);
-            System.out.println(password);
 
             Login l = new Login(username, password);
             User potentialUser = l.loginSubmit();
@@ -699,7 +697,6 @@ public class FXMain extends Application {
                 updateSearchDisplay(searchField.getText());
             }
             else if (event.getCode().isLetterKey() || event.getCode().isDigitKey() || event.getCode() == KeyCode.BACK_SPACE){
-                System.out.println("Reached");
                 autoMenu.getItems().clear();
                 //autoMenu.getItems().add(new MenuItem("test"));
                 //searchField.setContextMenu(autoMenu);
@@ -790,58 +787,15 @@ public class FXMain extends Application {
         filterPane.add(deptFilterBox, 2, 0);
 
         //TODO: Make this another way later
-           /* RadioButton humaRadio = new RadioButton("Auto Generate HUMAs");
-            humaRadio.setOnMouseClicked(event-> {
-                RadioButton year1Radio = new RadioButton("Fresh");
-                RadioButton year2Radio = new RadioButton("Soph");
-                RadioButton year3Radio = new RadioButton("Junior");
-                RadioButton year4Radio = new RadioButton("Senior");
-
-                RadioButton semester1Radio = new RadioButton("Fall");
-                RadioButton semester2Radio = new RadioButton("Spring");
-
-
-                HBox yearRadioBox = new HBox(10, year1Radio, year2Radio, year3Radio, year4Radio);
-                HBox semesterRadioBox = new HBox(10, semester1Radio, semester2Radio);
-
-                ToggleGroup yearRadios = new ToggleGroup();
-                yearRadios.getToggles().addAll(year1Radio, year2Radio, year3Radio, year4Radio);
-
-                ToggleGroup semesterRadios = new ToggleGroup();
-                semesterRadios.getToggles().addAll(semester1Radio, semester2Radio);
-                String year = "";
-                String semester = "";
-
-                for (int i = 0; i < yearRadioBox.getChildren().size(); i++) {
-
-                    ((RadioButton)yearRadioBox.getChildren().get(i)).selectedProperty().addListener(new InvalidationListener() {
-                        public void invalidated(Observable ov) {
-                            if (((RadioButton) yearRadioBox.getChildren().get(i)).isSelected()) {
-                                year = ((RadioButton) yearRadios.getSelectedToggle()).getText();
-                                System.out.println(year);
-                            }
-                        }
-
-                });
-
-                for (int i = 0; i < semesterRadioBox.getChildren().size(); i++) {
-                    if (((RadioButton) semesterRadioBox.getChildren().get(i)).isSelected()) {
-                        semester = ((RadioButton) semesterRadios.getSelectedToggle()).getText();
-                        System.out.println(semester);
-                    }
-                }
-                cl.autoFill(year, semester, user.schedule);
-                searchPane.add(yearRadioBox, 0, 5);
-                searchPane.add(semesterRadioBox, 0, 6);
-                searchPane.add(semesterRadioBox, 0, 6);
-
-            */
+            autoLink = new Hyperlink("Auto Generate Courses");
+            autoLink.setOnMouseClicked(event-> {
+                launchAutoQs();
+            });
 
 
         searchPane.add(searchLbl, 0, 1);
         searchPane.add(searchField, 0, 2);
         searchPane.add(filterLbl, 0, 3);
-        // searchPane.add(humaRadio, 0, 4);
         searchPane.add(filterPane, 0, 4, 6, 1);
 
         ButtonBar searchBar = new ButtonBar();
@@ -849,6 +803,7 @@ public class FXMain extends Application {
         ButtonBar.setButtonData(searchBtn, ButtonBar.ButtonData.LEFT);
 
         searchPane.add(searchBar, 0, 5);
+        searchPane.add(autoLink, 0, 6);
 
         schedulePane = new GridPane();
         Label scheduleLbl = new Label("CURRENT SCHEDULE:");
@@ -880,10 +835,93 @@ public class FXMain extends Application {
         searchStage.show();
     }
 
-    public void launchCalendar(){
+    public void launchAutoQs(){
+        autoLink.setDisable(true);
+        Group alertGroup = new Group();
+        Scene alertScene = new Scene(alertGroup, 400, 250);
+        Stage alertStg = new Stage();
+
+        GridPane alertPane = new GridPane();
+        alertPane.setAlignment(Pos.CENTER);
+
+        Label alertTitleLbl = new Label("AUTO GENERATE COURSES");
+        alertTitleLbl.getStyleClass().clear();
+        alertTitleLbl.getStyleClass().add("subtitle");
+
+        Label yearLbl = new Label("Select Your Year:");
+        yearLbl.getStyleClass().clear();
+        yearLbl.getStyleClass().add("black-subtitle");
+
+        RadioButton year1Radio = new RadioButton("Freshman");
+        year1Radio.setId("Fresh");
+        RadioButton year2Radio = new RadioButton("Sophomore");
+        year2Radio.setId("Soph");
+        RadioButton year3Radio = new RadioButton("Junior");
+        year3Radio.setId("Junior");
+        RadioButton year4Radio = new RadioButton("Senior");
+        year4Radio.setId("Senior");
+
+        Label semesterLbl = new Label("Select Your Semester:");
+        semesterLbl.getStyleClass().clear();
+        semesterLbl.getStyleClass().add("black-subtitle");
+        RadioButton semester1Radio = new RadioButton("Fall");
+        semester1Radio.setId("F");
+        RadioButton semester2Radio = new RadioButton("Spring");
+        semester2Radio.setId("S");
+
+        HBox yearRadioBox = new HBox(10, year1Radio, year2Radio, year3Radio, year4Radio);
+        HBox semesterRadioBox = new HBox(10, semester1Radio, semester2Radio);
+
+        ToggleGroup yearRadios = new ToggleGroup();
+        yearRadios.getToggles().addAll(year1Radio, year2Radio, year3Radio, year4Radio);
+
+
+        yearRadios.getSelectedToggle();
+
+        ToggleGroup semesterRadios = new ToggleGroup();
+        semesterRadios.getToggles().addAll(semester1Radio, semester2Radio);
+
+        ButtonBar okCancelBar = new ButtonBar();
+        Button okBtn = new Button("Okay");
+        ButtonBar.setButtonData(okBtn, ButtonBar.ButtonData.LEFT);
+        okBtn.getStyleClass().clear();
+        okBtn.getStyleClass().add("buttons");
+
+        Button cancelBtn = new Button("Cancel");
+        cancelBtn.getStyleClass().clear();
+        cancelBtn.getStyleClass().add("buttons2");
+        cancelBtn.setOnAction(event->alertStg.close());
+
+        okCancelBar.getButtons().addAll(okBtn, cancelBtn);
+
+        setProperties(alertPane, 400, 250, 15, 10, 10);
+        alertPane.add(alertTitleLbl, 0, 0);
+        alertPane.add(yearLbl, 0, 1);
+        alertPane.add(yearRadioBox, 0, 2);
+        alertPane.add(semesterLbl, 0, 3);
+        alertPane.add(semesterRadioBox, 0, 4);
+        alertPane.add(okCancelBar, 0, 5);
+
+
+        okBtn.setOnMouseClicked(event -> {
+            String year = ((RadioButton)yearRadios.getSelectedToggle()).getId();
+            String semester = ((RadioButton)semesterRadios.getSelectedToggle()).getId();
+            cl.autoFill(year,semester, user.schedule);
+            updateScheduleDisplay();
+            alertStg.close();
+            autoLink.setDisable(false);
+
+        });
+        alertGroup.getChildren().add(alertPane);
+        alertScene.getStylesheets().add("projStyles.css");
+        alertStg.setScene(alertScene);
+        alertStg.show();
 
     }
 
+    public void launchCalendar(){
+
+    }
 
         public static void main(String[] args) {
             launch(args);
