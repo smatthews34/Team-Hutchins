@@ -724,7 +724,7 @@ public class FXMain extends Application {
                         MenuItem currItem = new MenuItem();
                         autoMenu.getItems().add(currItem);
                     }
-                    else if (count < 10) {
+                    else if (count < 10 && count != 0) {
                         MenuItem currItem = new MenuItem(c.toString());
                         currItem.setOnAction(event2-> {
                             searchField.setText(c.courseCode);
