@@ -103,7 +103,7 @@ public class CourseList {
     public void addClass(Course course, ArrayList<Course> Schedule){ //static
         //checks to see if the course being added is a duplicate.
         if(checkDouble(course, Schedule)){
-            System.out.println("That course already is on your schedule, cannot be added.");
+            //System.out.println("That course already is on your schedule, cannot be added.");
         }/*else if(checkConfliction(course, Schedule)){ //checks to see if the course conflicts
             System.out.println("There is a time conflict with your schedule."); //alerts the user there is a conflict
             Scanner scn = new Scanner(System.in);

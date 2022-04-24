@@ -180,11 +180,8 @@ public class Main {
                             addOption = addOption + " " + c + "    L";
                         }else{
                             char c = addOption.charAt(addOption.length()-1);
-                            System.out.println("here: "+ addOption + " " + addOption.length());
                             addOption = addOption.substring(0,addOption.length()-1);
-                            System.out.println("here: "+ addOption);
                             addOption = addOption + " " + c;
-                            System.out.println("here: "+ addOption);
                         }
                         Course a = cl.getCourse(addOption);
 
