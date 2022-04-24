@@ -720,7 +720,11 @@ public class FXMain extends Application {
                 ArrayList<Course> autoList = s.getKeystroke(searchField.getText());
                 int count = 0;
                 for (Course c : autoList){
-                    if (count < 10) {
+                    if (count == 0){
+                        MenuItem currItem = new MenuItem();
+                        autoMenu.getItems().add(currItem);
+                    }
+                    else if (count < 10) {
                         MenuItem currItem = new MenuItem(c.toString());
                         currItem.setOnAction(event2-> {
                             searchField.setText(c.courseCode);
@@ -729,8 +733,11 @@ public class FXMain extends Application {
                         autoMenu.getItems().add(currItem);
                     }
                     count++;
+                    searchField.setFocusTraversable(true);
+
                 }
                 autoMenu.show(searchField, 270.0, 310.0);
+
             }
         });
 
