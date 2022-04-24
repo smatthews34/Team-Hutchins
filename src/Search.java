@@ -364,6 +364,54 @@ public class Search {
 
     }
 
+    public static Map<String, List<String>> mapCoursesBuildings = null;
+
+    // initlaizing map
+    static {
+        mapCoursesBuildings = new HashMap<>();
+    }
+
+    public static void filterTxtBuildings() {
+        String line;
+        BufferedReader br = null;
+        boolean header = true;
+
+        try {
+            br = new BufferedReader(new FileReader("classFile.txt"));
+            // while there is still data left in the file
+            while ((line = br.readLine()) != null) {
+                // this will make sure the header is not added to the map
+                if (header) {
+                    header = false;
+                    continue;
+                }
+                String[] split = line.split(","); // separates columns using a comma
+                populateMapBuildings(split[6], split[0]); // adds the columns for coursecode and building
+            }
+            filterCallers.promptUserBuildings(); //calls the prompt user method after
+            // error catching
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void populateMapBuildings(String building, String courseCode) {
+        List<String> courses = null;
+        // if the map contains the key, in this case the day that the class takes place on, it is added to the list
+        if (mapCoursesBuildings.containsKey(building)) {
+            courses = mapCoursesBuildings.get(building);
+            courses.add(courseCode);
+            mapCoursesBuildings.put(building, courses);
+        } else {
+            courses = new ArrayList<>();
+            courses.add(courseCode);
+            mapCoursesBuildings.put(building, courses);
+        }
+    }
+
     public static void main(String[] args) {
         ArrayList<Course> c = getKeystroke("SP");
 
@@ -371,4 +419,5 @@ public class Search {
             System.out.println(c.toString());
         }
     }
+
 }
