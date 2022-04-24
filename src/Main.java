@@ -626,7 +626,7 @@ public class Main {
                         while (true) {
                             System.out.println("Continue filtering or use command 'done' when finished");
                             //Filter, rerun
-                            System.out.println("What would you like to filter by?: Department");
+                            System.out.println("What would you like to filter by?: Department, Time");
                             String cmd = searchScan.next();
                             if (cmd.equalsIgnoreCase("department")) {
                                 //Filter by department
@@ -641,6 +641,25 @@ public class Main {
                                 }
                             } else if (cmd.equalsIgnoreCase("done")) {
                                 break;
+                            } else if (cmd.equalsIgnoreCase("time")){
+                                System.out.println("Enter course start time that you would like to filter by as 'Hours:Minutes' using Military Time (i.e. 14:00)");
+                                String time = searchScan.next();
+                                if (time.contains(":") && !time.equalsIgnoreCase("1:00")) {
+                                    for (int i = 0; i < courses.size(); i++) {
+                                        //Check to see if valid
+                                        if (courses.get(i).startTime.toLowerCase().contains(time.toLowerCase())) {
+                                            filteredResults.add(courses.get(i));
+                                        }
+                                    }
+                                }
+                                else if (time.contains(":") && time.equalsIgnoreCase("1:00")){
+                                    for (int i = 0; i < courses.size(); i++) {
+                                        //Check to see if valid
+                                        if (courses.get(i).startTime.toLowerCase().equals("1:00")) {
+                                            filteredResults.add(courses.get(i));
+                                        }
+                                    }
+                                }
                             }
                             else{
                                 System.out.println("Invalid filter. Please retry with a different filter");
