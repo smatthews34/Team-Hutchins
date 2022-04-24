@@ -13,8 +13,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -216,7 +218,6 @@ public class FXMain extends Application {
         s = new Search(searchInput);
         courses = s.getResults(searchInput);
 
-
         searchPane.getChildren().clear();
         searchPane.setAlignment(Pos.TOP_CENTER);
         headerPane.getChildren().clear();
@@ -247,7 +248,7 @@ public class FXMain extends Application {
             Button addBtn = new Button("+");
             addBtn.setId(courses.get(i).courseCode);
             addBtn.setOnAction(addCourseHandler);
-            addBtn.getStyleClass();
+            addBtn.getStyleClass().clear();
             addBtn.getStyleClass().add("add-buttons");
             coursePane.add(addBtn, 0, 0);
             resultsPane.add(coursePane, 0, i, 1, 1);
@@ -289,7 +290,7 @@ public class FXMain extends Application {
         } else {
             for (int i = 0; i < user.schedule.size(); i++) {
                 GridPane coursePane = new GridPane();
-                setProperties(coursePane, 400, 25, 5, 5, 0);
+                setProperties(coursePane, 400, 35, 0, 5, 0);
                 Course c = user.schedule.get(i);
                 Label courseLbl = new Label(c.toString());
 
@@ -336,7 +337,7 @@ public class FXMain extends Application {
             String courseId = ((Button) event.getSource()).getId();
             Course course = user.getCourse(courseId);
             cl.removeClass(course, user.schedule);
-
+            System.out.println("removed " + courseId);
             updateScheduleDisplay();
         }
     };
@@ -821,6 +822,8 @@ public class FXMain extends Application {
         searchPane.add(autoLink, 0, 7);
 
         schedulePane = new GridPane();
+        //schedulePane.getStyleClass().clear();
+        //schedulePane.getStyleClass().add("pane");
         Label scheduleLbl = new Label("CURRENT SCHEDULE:");
         scheduleLbl.getStyleClass().clear();
         scheduleLbl.getStyleClass().add("subtitle");
@@ -829,6 +832,8 @@ public class FXMain extends Application {
         emptyLbl.setOpacity(.6);
 
         allCoursePane = new GridPane();
+        //allCoursePane.getStyleClass().clear();
+       // allCoursePane.getStyleClass().add("pane");
         setProperties(allCoursePane, 400, 40, 0, 0, 0);
 
         schedulePane.add(btnPane, 0, 0);
@@ -926,8 +931,8 @@ public class FXMain extends Application {
             String year = ((RadioButton)yearRadios.getSelectedToggle()).getId();
             String semester = ((RadioButton)semesterRadios.getSelectedToggle()).getId();
             cl.autoFill(year,semester, user.schedule);
-            updateScheduleDisplay();
             alertStg.close();
+            updateScheduleDisplay();
             autoLink.setDisable(false);
 
         });

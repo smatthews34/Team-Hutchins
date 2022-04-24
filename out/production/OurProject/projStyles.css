@@ -15,6 +15,11 @@ Background: rgb(245, 238, 238)
 
 .pane{
     -fx-background-color:  rgb(245, 238, 238);
+
+}
+
+.test{
+    -fx-background-color: green;
 }
 
 
