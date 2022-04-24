@@ -721,7 +721,12 @@ public class FXMain extends Application {
                 int count = 0;
                 for (Course c : autoList){
                     if (count < 10) {
-                        autoMenu.getItems().add(new MenuItem(c.toString()));
+                        MenuItem currItem = new MenuItem(c.toString());
+                        currItem.setOnAction(event2-> {
+                            searchField.setText(c.courseCode);
+                        });
+
+                        autoMenu.getItems().add(currItem);
                     }
                     count++;
                 }
@@ -870,7 +875,7 @@ public class FXMain extends Application {
 
         Label yearLbl = new Label("Select Your Year:");
         yearLbl.getStyleClass().clear();
-        yearLbl.getStyleClass().add("black-subtitle");
+        yearLbl.getStyleClass().add("subtitle-black");
 
         RadioButton year1Radio = new RadioButton("Freshman");
         year1Radio.setId("Fresh");
@@ -883,7 +888,7 @@ public class FXMain extends Application {
 
         Label semesterLbl = new Label("Select Your Semester:");
         semesterLbl.getStyleClass().clear();
-        semesterLbl.getStyleClass().add("black-subtitle");
+        semesterLbl.getStyleClass().add("subtitle-black");
         RadioButton semester1Radio = new RadioButton("Fall");
         semester1Radio.setId("F");
         RadioButton semester2Radio = new RadioButton("Spring");
