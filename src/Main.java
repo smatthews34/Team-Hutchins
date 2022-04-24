@@ -87,8 +87,6 @@ public class Main {
                     user = new User(potentialUser.username, potentialUser.password, potentialUser.name);
                     //May copy to global User variable here
                     loggedIn = true;
-                    //lg = new Logging(potentialUser.username);
-                    //lg.logAction(potentialUser.username + " has begun scheduling.");
                     break;
                 }
             }
@@ -99,8 +97,6 @@ public class Main {
                 user = new User("guest", "", "guest");
                 loggedIn = true;
                 isGuest = true;
-                //lg = new Logging("guest");
-                //lg.logAction("A Guest has started to schedule");
                 break;
             }
 
@@ -174,10 +170,22 @@ public class Main {
                 Scanner add = new Scanner(System.in);
                 String addOption = "";
                 while(!addOption.equals("done")) {
-                    System.out.println("Enter course in the format: CODE ### A, to be added or enter 'done' if finished adding: ");
+                    System.out.println("Enter course in the format: \"CODE ### A\" or for a lab \"CODE ### A L\", to be added or enter 'done' if finished adding: ");
                     System.out.print(">");
                     addOption = add.nextLine();
                     if (!addOption.equals("done")) {
+                        if(addOption.charAt(addOption.length()-1) == 'L' && addOption.length() == 12){
+                            char c = addOption.charAt(addOption.length()-3);
+                            addOption = addOption.substring(0,addOption.length()-3);
+                            addOption = addOption + " " + c + "    L";
+                        }else{
+                            char c = addOption.charAt(addOption.length()-1);
+                            System.out.println("here: "+ addOption + " " + addOption.length());
+                            addOption = addOption.substring(0,addOption.length()-1);
+                            System.out.println("here: "+ addOption);
+                            addOption = addOption + " " + c;
+                            System.out.println("here: "+ addOption);
+                        }
                         Course a = cl.getCourse(addOption);
 
                         if (a != null) {
@@ -197,6 +205,7 @@ public class Main {
                                     answer = scn.next();
                                     if (answer.equals("Y") || answer.equals("y") || answer.equals("yes") || answer.equals("Yes")) {
                                         user.schedule.add(a);
+                                        cl.addClass(a,user.schedule);
                                         System.out.println("Conflicting course added.");
                                         //cl.updateHistory("add", a);
                                         break;
@@ -210,6 +219,7 @@ public class Main {
                             }else{ //if the course is not a duplicate or a not conflicting course it wil be added to the user's schedule.
                                 //cl.updateHistory("add", a);
                                 user.schedule.add(a);
+                                cl.addClass(a,user.schedule);
                                 System.out.println("The course has successfully been added to your schedule.");
                             }
                             //
