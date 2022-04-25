@@ -588,7 +588,7 @@ public class FXMain extends Application {
                 }
                 filteredResults.clear();
                 for (int i = 0; i < prevCourses.size(); i++) {
-                    if (prevCourses.get(i).startTime.contains(timeFilterBox.getValue().toString())) {
+                    if (prevCourses.get(i).startTime.equals(timeFilterBox.getValue().toString())) {
                         filteredResults.add(prevCourses.get(i));
                     }
                 }
