@@ -88,19 +88,13 @@ public class FXMain extends Application {
     Hyperlink autoLink;
     boolean auto;
     boolean hasConflict;
+    GridPane conflictsPane;
 
     ComboBox dayFilterBox;
     ComboBox timeFilterBox;
     ComboBox deptFilterBox;
 
     Logging lg;
-
-
-    //public static ArrayList<Course> getResultsList(String searchInput){
-
-
-    //}
-
 
     public void openConflictAlert(String courseId) {
         Group alertGroup = new Group();
@@ -143,6 +137,118 @@ public class FXMain extends Application {
             alertStg.close();
             lg.logConflict(user.schedule + " has attempted to add the course: " + cl.getCourse(courseId).toString() + " that conflicts with their schedule but elected not to add it.");
         });
+        alertGroup.getChildren().add(alertPane);
+        alertScene.getStylesheets().add("projStyles.css");
+        alertStg.setScene(alertScene);
+        alertStg.show();
+    }
+
+    public void updateResolutionScreen(){
+
+        conflictsPane.getChildren().clear();
+        ArrayList<Course> con = cl.conflictResolution(user.schedule);
+        if(!con.isEmpty()) {
+            for (int p = 0; p < con.size(); p++) {
+                GridPane coursePane = new GridPane();
+                setProperties(coursePane, 400, 35, 0, 5, 0);
+                Course c = user.schedule.get(p);
+                Label courseLbl = new Label(c.toString());
+
+                Button removeBtn = new Button("-");
+                removeBtn.setId(user.schedule.get(p).courseCode);
+                removeBtn.getStyleClass().clear();
+                removeBtn.getStyleClass().add("add-buttons");
+                removeBtn.setOnAction(event -> {
+                    String courseId = ((Button) event.getSource()).getId();
+                    Course course = user.getCourse(courseId);
+                    cl.removeClass(course, user.schedule);
+                    lg.Action(user.username + " Successfuly removed the course: " + course);
+                    System.out.println("removed " + courseId);
+                    updateResolutionScreen();
+                    updateScheduleDisplay();
+                    lg.Action(user.username + " Successfuly resolved a time conflict from the course: " + c);
+                });
+
+                coursePane.add(removeBtn, 0, p);
+                coursePane.add(courseLbl, 1, p);
+                conflictsPane.add(coursePane, 0, p);
+            }
+        }
+
+        else{
+            GridPane coursePane = new GridPane();
+            setProperties(coursePane, 400, 35, 0, 0, 0);
+            Label emptyLbl = new Label("All conflicts resolved.\n");
+            coursePane.add(emptyLbl, 0, 0);
+            conflictsPane.add(coursePane, 0, 3);
+
+        }
+    }
+
+
+    public void openResolutionScreen() {
+        Group alertGroup = new Group();
+        Scene alertScene = new Scene(alertGroup, 450, 450);
+        Stage alertStg = new Stage();
+        ButtonBar confirmBar = new ButtonBar();
+
+        GridPane alertPane = new GridPane();
+        alertPane.setAlignment(Pos.CENTER);
+
+        Label alertTitleLbl = new Label("RESOLVE CONFLICTS");
+        alertTitleLbl.getStyleClass().clear();
+        alertTitleLbl.getStyleClass().add("subtitle");
+        GridPane topPane = new GridPane();
+        topPane.add(alertTitleLbl, 0, 0);
+        topPane.setAlignment(Pos.TOP_LEFT);
+
+        conflictsPane = new GridPane();
+
+        ArrayList<Course> con = cl.conflictResolution(user.schedule);
+        for (int p = 0; p < con.size(); p++){
+            GridPane coursePane = new GridPane();
+            setProperties(coursePane, 400, 35, 0, 5, 0);
+            Course c = user.schedule.get(p);
+            Label courseLbl = new Label(c.toString());
+
+            Button removeBtn = new Button("-");
+            removeBtn.setId(user.schedule.get(p).courseCode);
+            removeBtn.getStyleClass().clear();
+            removeBtn.getStyleClass().add("add-buttons");
+            removeBtn.setOnAction(event->{
+                String courseId = ((Button) event.getSource()).getId();
+                Course course = user.getCourse(courseId);
+                cl.removeClass(course, user.schedule);
+                lg.Action(user.username + " Successfuly removed the course: " + course);
+                System.out.println("removed " + courseId);
+                updateResolutionScreen();
+                updateScheduleDisplay();
+                lg.Action(user.username + " Successfuly resolved a time conflict from the course: " + c);
+            });
+
+            coursePane.add(removeBtn, 0, p);
+            coursePane.add(courseLbl, 1, p);
+            conflictsPane.add(coursePane, 0, p);
+        }
+        Label alertMsgLbl = new Label("Current Conflicts (remove to resolve):");
+        alertMsgLbl.getStyleClass().clear();
+        alertMsgLbl.getStyleClass().add("subtitle-black");
+        Button yBtn = new Button("Done");
+        yBtn.getStyleClass().clear();
+        yBtn.getStyleClass().add("buttons");
+        yBtn.setOnAction(event -> {
+
+            alertStg.close();
+            updateScheduleDisplay();
+        });
+        ButtonBar.setButtonData(yBtn, ButtonBar.ButtonData.LEFT);
+
+        setProperties(alertPane, 450, 450, 15, 5, 5);
+        alertPane.add(topPane, 0, 0);
+        alertPane.add(alertMsgLbl, 0, 1);
+        alertPane.add(conflictsPane, 0, 2);
+        alertPane.add(yBtn, 0, 3);
+
         alertGroup.getChildren().add(alertPane);
         alertScene.getStylesheets().add("projStyles.css");
         alertStg.setScene(alertScene);
@@ -343,8 +449,14 @@ public class FXMain extends Application {
                 allCoursePane.add(coursePane, 0, i);
             }
             schedulePane.add(allCoursePane, 0, 2);
+            if (hasConflict){
+                GridPane bottomPane = new GridPane();
+                Hyperlink conResLink = new Hyperlink("Resolve Conflicts");
+                conResLink.setOnAction(event-> openResolutionScreen());
+                bottomPane.add(conResLink, 0, 0);
+                schedulePane.add(bottomPane, 0, 3);
+            }
         }
-
 
         setProperties(schedulePane, 450, 400, 15, 10, 15);
         setProperties(allCoursePane, 400, 350, 5, 5, 10);
