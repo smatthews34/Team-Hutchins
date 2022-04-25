@@ -179,8 +179,10 @@ public class FXMain extends Application {
             GridPane coursePane = new GridPane();
             setProperties(coursePane, 400, 35, 0, 0, 0);
             Label emptyLbl = new Label("All conflicts resolved.\n");
+            hasConflict = false;
             coursePane.add(emptyLbl, 0, 0);
             conflictsPane.add(coursePane, 0, 3);
+            updateScheduleDisplay();
 
         }
     }
@@ -346,7 +348,6 @@ public class FXMain extends Application {
     public void updateSearchDisplay(ArrayList<Course> courseList) {
         resultsSPane = new ScrollPane();
         resultsPane = new GridPane();
-
 
         searchPane.getChildren().clear();
         searchPane.setAlignment(Pos.TOP_CENTER);
