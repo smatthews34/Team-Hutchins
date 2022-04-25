@@ -87,6 +87,7 @@ public class FXMain extends Application {
     ContextMenu autoMenu;
     Hyperlink autoLink;
     boolean auto;
+    boolean hasConflict;
 
     ComboBox dayFilterBox;
     ComboBox timeFilterBox;
@@ -355,8 +356,12 @@ public class FXMain extends Application {
         @Override
         public void handle(ActionEvent event) {
             String courseId = ((Button) event.getSource()).getId();
+            System.out.println(courseId);
             Course course = cl.getCourse(courseId);
+            System.out.println(course);
+
             if (cl.checkConfliction(course, user.schedule) && !cl.checkDouble(course, user.schedule)) {
+                hasConflict = cl.checkConfliction(course, user.schedule);
                 lg.logConflict(user.username + " added the course: " + course + " that conflicts with a course on their schedule.");
                 openConflictAlert(courseId);
             } else if (cl.checkDouble(course, user.schedule)) {
@@ -1088,6 +1093,7 @@ public class FXMain extends Application {
                 lg.logConflict(user.username + " has attempted to add a personal activity: " + c + " that they already have on their schedule.");
             }else if(cc && user.schedule.contains(c)){
                 lg.logConflict(user.username + " added the activity: " + c + " that conflicts with a course/activity on their schedule.");
+                hasConflict = cc;
             }else if(cc && !user.schedule.contains(c)){
                 lg.logConflict(user.schedule + " has attempted to add the activity: " + c + ", that conflicts with their schedule but elected not to add it.");
             }else{
@@ -1195,6 +1201,7 @@ public class FXMain extends Application {
         cl = new CourseList();
         user = null;
         auto = false;
+        hasConflict = false;
 
         launchLogin();
 
