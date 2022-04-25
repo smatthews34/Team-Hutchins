@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static javafx.scene.paint.Color.rgb;
 
@@ -228,12 +229,10 @@ public class FXMain extends Application {
         }
     };
 
-    public void updateSearchDisplay(String searchInput) {
+    public void updateSearchDisplay(ArrayList<Course> courseList) {
         resultsSPane = new ScrollPane();
         resultsPane = new GridPane();
-        ArrayList<Course> courses = new ArrayList<>();
-        s = new Search(searchInput);
-        courses = s.getResults(searchInput);
+
 
         searchPane.getChildren().clear();
         searchPane.setAlignment(Pos.TOP_CENTER);
@@ -271,13 +270,13 @@ public class FXMain extends Application {
         addActPane.add(actLbl, 1, 0);
         searchPane.add(addActPane, 0, 2);
 
-        for (int i = 0; i < courses.size(); i++) {
+        for (int i = 0; i < courseList.size(); i++) {
             GridPane coursePane = new GridPane();
             setProperties(coursePane, 400, 30, 5, 5, 5);
-            Label result = new Label(courses.get(i).toString());
+            Label result = new Label(courseList.get(i).toString());
             coursePane.add(result, 1, 0);
             Button addBtn = new Button("+");
-            addBtn.setId(courses.get(i).courseCode);
+            addBtn.setId(courseList.get(i).courseCode);
             addBtn.setOnAction(addCourseHandler);
             addBtn.getStyleClass().clear();
             addBtn.getStyleClass().add("add-buttons");
@@ -285,7 +284,7 @@ public class FXMain extends Application {
             resultsPane.add(coursePane, 0, i, 1, 1);
         }
 
-        if(courses.isEmpty()){
+        if(courseList.isEmpty()){
             Label emptyLbl = new Label("\t\t\t\t\tNo results\t\t\t\t\t");
             emptyLbl.setPadding(new Insets(15));
             resultsPane.add(emptyLbl, 0, 0);
@@ -569,23 +568,53 @@ public class FXMain extends Application {
     }
 
     //TODO: Filter handler
-    /*final EventHandler<ActionEvent> filterHandler = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            String filter = ((ComboBox)event.getSource()).getId();;
 
-            if (filter.equals("days")) {
-                Search.filterTxtDays();
-                //lg.Action(user.username + " applied a filter to all of the courses by day(s) the course meets");
-            } else if (filter.equals("time")) {
-                Search.filterTxtTimes();
-                //lg.Action(user.username + " applied a filter to all of the courses by the time the course occurs.");
-            } else if (filter.equals("dept")) {
-                Search.filterTxtDepts();
-                //lg.Action(user.username + " applied a filter to all of the courses by the department of the courses.");
+    public void checkApplyFilters() {
+        ArrayList<Course> filteredResults = new ArrayList<>();
+
+        if (!dayFilterBox.getSelectionModel().isEmpty()) {
+            s = new Search(searchField.getText());
+            ArrayList<Course> courses = s.getResults(searchField.getText());
+            ;
+            for (int i = 0; i < courses.size(); i++) {
+                if (courses.get(i).meets.contains(dayFilterBox.getValue().toString())) {
+                    filteredResults.add(courses.get(i));
+                }
+            }
+            if (!timeFilterBox.getSelectionModel().isEmpty()) {
+                ArrayList<Course> prevCourses = new ArrayList<>();
+                for (Course c : filteredResults) {
+                    prevCourses.add(c);
+                }
+                filteredResults.clear();
+                for (int i = 0; i < prevCourses.size(); i++) {
+                    if (prevCourses.get(i).startTime.contains(timeFilterBox.getValue().toString())) {
+                        filteredResults.add(prevCourses.get(i));
+                    }
+                }
+                updateSearchDisplay(filteredResults);
+            } else {
+                updateSearchDisplay(filteredResults);
             }
         }
-    };*/
+
+        if (!timeFilterBox.getSelectionModel().isEmpty() && dayFilterBox.getSelectionModel().isEmpty()) {
+            s = new Search(searchField.getText());
+            ArrayList<Course> courses = s.getResults(searchField.getText());
+            for (int i = 0; i < courses.size(); i++) {
+                if (courses.get(i).startTime.contains(timeFilterBox.getValue().toString())) {
+                    filteredResults.add(courses.get(i));
+                }
+            }
+            updateSearchDisplay(filteredResults);
+        }
+
+        if (dayFilterBox.getSelectionModel().isEmpty() && timeFilterBox.getSelectionModel().isEmpty()) {
+            s = new Search(searchField.getText());
+            ArrayList<Course> courses = s.getResults(searchField.getText());
+            updateSearchDisplay(courses);
+        }
+    }
 
     public void openConfirmAlert(){
         Group alertGroup = new Group();
@@ -672,7 +701,6 @@ public class FXMain extends Application {
     public void launchSearch(){
 
         //SEARCH WINDOW
-
         Group searchGroup = new Group();
         searchStage = new Stage();
 
@@ -747,7 +775,7 @@ public class FXMain extends Application {
 
         searchField.setOnKeyPressed(event-> {
             if (event.getCode() == KeyCode.ENTER) {
-                updateSearchDisplay(searchField.getText());
+                checkApplyFilters();
             }
             else if (event.getCode().isLetterKey() || event.getCode().isDigitKey() || event.getCode() == KeyCode.BACK_SPACE){
                 autoMenu.getItems().clear();
@@ -779,10 +807,13 @@ public class FXMain extends Application {
         });
 
         autoSearchField.setOnKeyPressed(event -> {
+            ArrayList<Course> courses = new ArrayList<>();
             if (event.getCode() == KeyCode.ENTER) {
-                updateSearchDisplay(searchField.getText());
+                s = new Search(autoSearchField.getText());
+                courses = s.getResults(autoSearchField.getText());
+                updateSearchDisplay(courses);
             }
-            updateSearchDisplay(autoSearchField.getText());
+            updateSearchDisplay(courses);
         });
 
 
@@ -790,12 +821,18 @@ public class FXMain extends Application {
         searchBtn = new Button("Search");
         searchBtn.getStyleClass().clear();
         searchBtn.getStyleClass().add("buttons");
-        searchBtn.setOnMouseClicked(event -> updateSearchDisplay(searchField.getText()));
+        searchBtn.setOnMouseClicked(event -> {
+            checkApplyFilters();
+        });
+
 
         resultsSearchBtn = new Button("Search");
         resultsSearchBtn.getStyleClass().clear();
         resultsSearchBtn.getStyleClass().add("buttons");
-        resultsSearchBtn.setOnMouseClicked(event -> updateSearchDisplay(autoSearchField.getText()));
+        resultsSearchBtn.setOnMouseClicked(event -> {
+            ArrayList<Course> courses = s.getResults(searchField.getText());
+            updateSearchDisplay(courses);
+        });
 
         luckyBtn = new Button("I'm Feeling Lucky");
         luckyBtn.getStyleClass().clear();
@@ -823,7 +860,7 @@ public class FXMain extends Application {
                         "",
                         "8:00:00",
                         "9:00:00",
-                        "12:30:00"
+                        "13:00:00"
                 );
         //TODO: Add all depts
         ObservableList<String> deptFilters =
@@ -849,7 +886,7 @@ public class FXMain extends Application {
 
         filterPane.add(dayFilterBox, 0, 0);
         filterPane.add(timeFilterBox, 1, 0);
-        filterPane.add(deptFilterBox, 2, 0);
+        //filterPane.add(deptFilterBox, 2, 0);
 
         autoLink = new Hyperlink("Auto Generate Courses");
         autoLink.setOnMouseClicked(event-> {
