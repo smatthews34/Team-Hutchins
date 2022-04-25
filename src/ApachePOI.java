@@ -69,8 +69,8 @@ public class ApachePOI {
                 else {
                     cellWSpace = cell.getStringCellValue();
                 }
-                String cellNoSpace = cellWSpace.replace(" ", "");
-                cells.add(cellNoSpace);
+                //String cellNoSpace = cellWSpace.replace(" ", "");
+                cells.add(cellWSpace);
             }
             //create course to be added
             Course temp = new Course(cells.get(0), cells.get(1),cells.get(2), cells.get(3), cells.get(4),

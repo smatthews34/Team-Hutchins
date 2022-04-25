@@ -97,22 +97,22 @@ public class ConfirmSchedule {
             for (int j = ((i == 0) ? dayOfWeek - 1 : 0); j < 7 && (dayOfMonth <= daysInMonth); j++) {
                 System.out.printf("%13d ", dayOfMonth);
                 if(j == 1) {
-                    System.out.print(classesPerDay(S, j, false).size() + " Class(es)");
+                    System.out.print(classesPerDay(S, j+1, false).size() + " Class(es)");
                 }
                 if(j==0 || j==6) {
                     System.out.print("            ");
                 }
                 if(j == 2) {
-                    System.out.print(classesPerDay(S, j, false).size() + " Class(es)");
+                    System.out.print(classesPerDay(S, j+1, false).size() + " Class(es)");
                 }
                 if(j == 3) {
-                    System.out.print(classesPerDay(S, j, false).size() + " Class(es)");
+                    System.out.print(classesPerDay(S, j+1, false).size() + " Class(es)");
                 }
                 if(j == 4) {
-                    System.out.print(classesPerDay(S, j, false).size() + " Class(es)");
+                    System.out.print(classesPerDay(S, j+1, false).size() + " Class(es)");
                 }
                 if(j == 5) {
-                    System.out.print(classesPerDay(S, j, false).size() + " Class(es)");
+                    System.out.print(classesPerDay(S, j+6, false).size() + " Class(es)");
                 }
                 dayOfMonth++;
             }
