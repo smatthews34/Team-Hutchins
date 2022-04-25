@@ -69,5 +69,19 @@ public class Course {
         return String.format(courseCode + " " + shortTitle + " " + startTime + "-" + endTime + " " + meets);
     }
 
+    public String getCourseCode() {
+        return courseCode;
+    }
 
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
 }
