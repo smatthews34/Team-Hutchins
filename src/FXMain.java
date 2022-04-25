@@ -32,6 +32,7 @@ import java.util.List;
 
 import static javafx.scene.paint.Color.rgb;
 
+
 public class FXMain extends Application {
     User user;
     CourseList cl;

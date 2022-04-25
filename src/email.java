@@ -4,6 +4,7 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+
 // when added to main need to change to email the final schedule. For testing I emailed other txt files in our folder
 class email {
     public static void emailSender(String to) throws Exception{
