@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.NumberFormat;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -523,7 +524,7 @@ public class Main {
             else if(command.equals("calendar")){
                 int conflicts = ConfirmSchedule.countConflicts(user.schedule);
 
-                ConfirmSchedule.printCalendar();
+                ConfirmSchedule.printCalendar(user.schedule);
                 System.out.println("There are " + conflicts + " conflict(s) in your schedule.");
 
                 Scanner calendarScan = new Scanner(System.in);
@@ -544,8 +545,16 @@ public class Main {
                     }
                     if(!calendar.equals("ind") && !calendar.equals("done")) {
                         try {
-                            //need to catch exceptions if the integer is > days in month
+                            //catch if int is out of bounds
                             dayOfMonth = Integer.parseInt(calendar);
+                            if(dayOfMonth > 31){
+                                System.out.println("That integer is out of bounds.");
+                                continue;
+                            }
+
+                            //print the day
+                            LocalDate userDate = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), dayOfMonth);
+                            System.out.println(userDate.getDayOfWeek() + " " + userDate.getMonth() + " " + dayOfMonth);
 
                             if (ConfirmSchedule.findDayOfWeek(dayOfMonth) == 1 || ConfirmSchedule.findDayOfWeek(dayOfMonth) == 7) {
                                 System.out.println("There are no classes on the weekend");

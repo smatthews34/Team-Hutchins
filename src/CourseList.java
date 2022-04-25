@@ -1,6 +1,4 @@
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.io.*;
 
 
 public class CourseList {
@@ -221,41 +219,43 @@ public class CourseList {
      * @return the grand course list for finding and adding a course that the user requested for.
      */
     public static ArrayList<Course> importCourseList(){
-        try {
-            File classFile = new File("classFile.txt");
-            Scanner classScan = new Scanner(classFile);
-            String course;
-            int index = 0;
-            ArrayList<Course> courseList = new ArrayList<>();
-            ArrayList<String> theStrings = new ArrayList<>();
-            int potentialIndex = 0;
-            Course potentialCourse;
-            classScan.nextLine();
-            while (classScan.hasNextLine()) {
-                course = classScan.nextLine(); //grabs the line of code (the course info)
-                Scanner courseScan = new Scanner(course); //Creates a new scanner to read the line
-                courseScan.useDelimiter(",");
-                Scanner potentialScan = new Scanner(course);
-                potentialScan.useDelimiter(",");
-                while (potentialScan.hasNext()){
-                    String potentialData = potentialScan.next();
-                    theStrings.add(potentialData);
-                    potentialIndex++;
-                }
-                potentialCourse = new Course(theStrings.get(0), theStrings.get(1), theStrings.get(2), theStrings.get(3), theStrings.get(4), theStrings.get(5), theStrings.get(6), theStrings.get(7));
-                courseList.add(potentialCourse);
-                index = 0;
-                courseScan.close();
-                potentialScan.close();
-                theStrings.clear();
-            }
-            classScan.close();
-            return courseList;
-        } catch (FileNotFoundException e) {
-            System.out.println("Could Not Import Courses.");
-            e.printStackTrace();
-            return null;
-        }
+        ApachePOI poi = new ApachePOI();
+        return poi.courseList();
+//        try {
+//            File classFile = new File("classFile.txt");
+//            Scanner classScan = new Scanner(classFile);
+//            String course;
+//            int index = 0;
+//            ArrayList<Course> courseList = new ArrayList<>();
+//            ArrayList<String> theStrings = new ArrayList<>();
+//            int potentialIndex = 0;
+//            Course potentialCourse;
+//            classScan.nextLine();
+//            while (classScan.hasNextLine()) {
+//                course = classScan.nextLine(); //grabs the line of code (the course info)
+//                Scanner courseScan = new Scanner(course); //Creates a new scanner to read the line
+//                courseScan.useDelimiter(",");
+//                Scanner potentialScan = new Scanner(course);
+//                potentialScan.useDelimiter(",");
+//                while (potentialScan.hasNext()){
+//                    String potentialData = potentialScan.next();
+//                    theStrings.add(potentialData);
+//                    potentialIndex++;
+//                }
+//                potentialCourse = new Course(theStrings.get(0), theStrings.get(1), theStrings.get(2), theStrings.get(3), theStrings.get(4), theStrings.get(5), theStrings.get(6), theStrings.get(7));
+//                courseList.add(potentialCourse);
+//                index = 0;
+//                courseScan.close();
+//                potentialScan.close();
+//                theStrings.clear();
+//            }
+//            classScan.close();
+//            return courseList;
+//        } catch (FileNotFoundException e) {
+//            System.out.println("Could Not Import Courses.");
+//            e.printStackTrace();
+//            return null;
+//        }
     }
 
     /**

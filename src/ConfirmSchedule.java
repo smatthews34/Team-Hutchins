@@ -73,30 +73,50 @@ public class ConfirmSchedule {
     /**
      * Returns a calendar for the current month
      */
-    public static void printCalendar(){
+    public static void printCalendar(ArrayList<Course> S){
         Calendar currentDate = Calendar.getInstance();
         Calendar calendar = new GregorianCalendar(currentDate.get(Calendar.YEAR),
                 currentDate.get(Calendar.MONTH),1);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        System.out.println(new SimpleDateFormat("MMMM yyyy").format(calendar.getTime()));
-        System.out.println("  S   M   T   W   T   F   S");
+        System.out.println("             "+new SimpleDateFormat("MMMM yyyy").format(calendar.getTime()));
+        System.out.println("             SUNDAY                   MONDAY                   " +
+                "TUESDAY                  WEDNESDAY                THURSDAY                 " +
+                "FRIDAY                   SATURDAY");
 
         //print initial spaces
         String initialSpace = "";
         for (int i = 0; i < dayOfWeek - 1; i++) {
-            initialSpace += "    ";
+            initialSpace += "                         ";
         }
         System.out.print(initialSpace);
 
         //print the days of the month starting from 1
         for (int i = 0, dayOfMonth = 1; dayOfMonth <= daysInMonth; i++) {
             for (int j = ((i == 0) ? dayOfWeek - 1 : 0); j < 7 && (dayOfMonth <= daysInMonth); j++) {
-                System.out.printf("%3d ", dayOfMonth);
+                System.out.printf("%13d ", dayOfMonth);
+                if(j == 1) {
+                    System.out.print(classesPerDay(S, j, false).size() + " Class(es)");
+                }
+                if(j==0 || j==6) {
+                    System.out.print("            ");
+                }
+                if(j == 2) {
+                    System.out.print(classesPerDay(S, j, false).size() + " Class(es)");
+                }
+                if(j == 3) {
+                    System.out.print(classesPerDay(S, j, false).size() + " Class(es)");
+                }
+                if(j == 4) {
+                    System.out.print(classesPerDay(S, j, false).size() + " Class(es)");
+                }
+                if(j == 5) {
+                    System.out.print(classesPerDay(S, j, false).size() + " Class(es)");
+                }
                 dayOfMonth++;
             }
-            System.out.println();
+            System.out.println("\n\n\n");
         }
     }
 
@@ -157,6 +177,10 @@ public class ConfirmSchedule {
             }
         }
         return classesForDay;
+    }
+
+    public static void weeklyView(ArrayList<Course> S){
+
     }
 
     /**

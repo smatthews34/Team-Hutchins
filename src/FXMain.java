@@ -1,8 +1,12 @@
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -10,17 +14,19 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1129,9 +1135,54 @@ public class FXMain extends Application {
 
 
 
+    TableView calendarPane;
+    Group calendarGroup;
+    Scene calendarScene;
+    Stage calendarStage;
+
+    //static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
 
     public void launchCalendar(){
+        calendarStage = new Stage();
+        calendarGroup = new Group();
+        calendarPane = new TableView<Course>();
+        //setProperties(calendarPane, 500, 550, 3, 10, 0);
 
+        TableColumn timeCol = new TableColumn<Course, String>("  ");
+        timeCol.setCellValueFactory(new PropertyValueFactory<Course,String>("startTime"));
+        TableColumn monCol = new TableColumn<Course, String>("Monday");
+        monCol.setCellValueFactory(new PropertyValueFactory<Course,String>("courseCode"));
+        TableColumn tueCol = new TableColumn<Course, String>("Tuesday");
+        monCol.setCellValueFactory(new PropertyValueFactory<Course,String>("courseCode"));
+        TableColumn wedCol = new TableColumn<Course, String>("Wednesday");
+        monCol.setCellValueFactory(new PropertyValueFactory<Course,String>("courseCode"));
+        TableColumn thuCol = new TableColumn<Course, String>("Thursday");
+        monCol.setCellValueFactory(new PropertyValueFactory<Course,String>("courseCode"));
+        TableColumn friCol = new TableColumn<Course, String>("Friday");
+        monCol.setCellValueFactory(new PropertyValueFactory<Course,String>("courseCode"));
+        TableColumn satCol = new TableColumn<Course, String>("Saturday");
+        monCol.setCellValueFactory(new PropertyValueFactory<Course,String>("courseCode"));
+        TableColumn sunCol = new TableColumn<Course, String>("Sunday");
+        monCol.setCellValueFactory(new PropertyValueFactory<Course,String>("courseCode"));
+
+        calendarPane.getColumns().add(timeCol);
+        calendarPane.getColumns().add(monCol);
+        calendarPane.getColumns().add(tueCol);
+        calendarPane.getColumns().add(wedCol);
+        calendarPane.getColumns().add(thuCol);
+        calendarPane.getColumns().add(friCol);
+        calendarPane.getColumns().add(satCol);
+        calendarPane.getColumns().add(sunCol);
+
+        VBox table = new VBox(calendarPane);
+
+        calendarGroup.getChildren().add(table);
+        calendarScene = new Scene(calendarGroup, 645, 400);
+        calendarScene.getStylesheets().add("projStyles.css");
+        calendarScene.setFill(rgb(245, 238, 238));
+
+        calendarStage.setScene(calendarScene);
+        calendarStage.show();
     }
 
     public static void main(String[] args) {

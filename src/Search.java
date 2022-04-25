@@ -47,60 +47,70 @@ public class Search {
 
     }
     public ArrayList<Course> getResults(String searchInputWithSpace){ //Get rid of static afterwards and return string, get rid of parameter
-        try {
-            File classFile = new File("classFile.txt");
-            Scanner classScan = new Scanner(classFile);
-            String course;
-            int index = 0; //Keeps track of what section of the file we're at
-            String searchInput = searchInputWithSpace.replace(" ", "");
-            ArrayList<Course> results = new ArrayList<>(); //Finished results
-            ArrayList<String> theStrings = new ArrayList<>(); //Stores the strings that will be used to make a Course
-            int potentialIndex = 0;
-            Course potentialCourse;
-            classScan.nextLine();
-            while (classScan.hasNextLine()) {
-                course = classScan.nextLine(); //grabs the line of code (the course info)
-                Scanner courseScan = new Scanner(course); //Creates a new scanner to read the line
-                courseScan.useDelimiter(",");
-                Scanner potentialScan = new Scanner(course);
-                potentialScan.useDelimiter(",");
-                while (potentialScan.hasNext()){
-                    String potentialData = potentialScan.next();
-                    theStrings.add(potentialData);
-                    potentialIndex++;
-                }
-                potentialCourse = new Course(theStrings.get(0), theStrings.get(1), theStrings.get(2),
-                        theStrings.get(3), theStrings.get(4),
-                        theStrings.get(5), theStrings.get(6), theStrings.get(7)); //Creates potential course for results
-                while (courseScan.hasNext()){ //Only search by course code and full course name
-                    String data = courseScan.next().replace(" ", "");
-                    if(data.equalsIgnoreCase("CourseCode")){ //Ensures that first line of file (info) is not used to create a new course
-                        break;
-                    }
-                    if (data.equalsIgnoreCase(searchInput) && index == 0 ||
-                            data.toLowerCase().contains(searchInput.toLowerCase()) && index == 0){ //User is searching by course code
-                        results.add(potentialCourse);//zack
-                        break;
-                    }
-                    else if (data.equalsIgnoreCase(searchInput) && index == 2 ||
-                            data.toLowerCase().contains(searchInput.toLowerCase()) && index == 2){ //User is searching by course name
-                        results.add(potentialCourse);
-                        break;
-                    }
-                    index++;
-                }
-                index = 0;
-                courseScan.close();
-                potentialScan.close();
-                theStrings.clear();
-            }
-            classScan.close();
-            return orderSearch(results);
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-            return null;
+        //Search by course code and then course title
+        if(!ApachePOI.searchByColumn(searchInputWithSpace,0).isEmpty()){
+            return ApachePOI.searchByColumn(searchInputWithSpace,0);
         }
+        if(!ApachePOI.searchByColumn(searchInputWithSpace,2).isEmpty()){
+            return ApachePOI.searchByColumn(searchInputWithSpace,2);
+        }
+        ArrayList<Course> empty = new ArrayList<>();
+        return empty;
+
+//        try {
+//            File classFile = new File("classFile.txt");
+//            Scanner classScan = new Scanner(classFile);
+//            String course;
+//            int index = 0; //Keeps track of what section of the file we're at
+//            String searchInput = searchInputWithSpace.replace(" ", "");
+//            ArrayList<Course> results = new ArrayList<>(); //Finished results
+//            ArrayList<String> theStrings = new ArrayList<>(); //Stores the strings that will be used to make a Course
+//            int potentialIndex = 0;
+//            Course potentialCourse;
+//            classScan.nextLine();
+//            while (classScan.hasNextLine()) {
+//                course = classScan.nextLine(); //grabs the line of code (the course info)
+//                Scanner courseScan = new Scanner(course); //Creates a new scanner to read the line
+//                courseScan.useDelimiter(",");
+//                Scanner potentialScan = new Scanner(course);
+//                potentialScan.useDelimiter(",");
+//                while (potentialScan.hasNext()){
+//                    String potentialData = potentialScan.next();
+//                    theStrings.add(potentialData);
+//                    potentialIndex++;
+//                }
+//                potentialCourse = new Course(theStrings.get(0), theStrings.get(1), theStrings.get(2),
+//                        theStrings.get(3), theStrings.get(4),
+//                        theStrings.get(5), theStrings.get(6), theStrings.get(7)); //Creates potential course for results
+//                while (courseScan.hasNext()){ //Only search by course code and full course name
+//                    String data = courseScan.next().replace(" ", "");
+//                    if(data.equalsIgnoreCase("CourseCode")){ //Ensures that first line of file (info) is not used to create a new course
+//                        break;
+//                    }
+//                    if (data.equalsIgnoreCase(searchInput) && index == 0 ||
+//                            data.toLowerCase().contains(searchInput.toLowerCase()) && index == 0){ //User is searching by course code
+//                        results.add(potentialCourse);//zack
+//                        break;
+//                    }
+//                    else if (data.equalsIgnoreCase(searchInput) && index == 2 ||
+//                            data.toLowerCase().contains(searchInput.toLowerCase()) && index == 2){ //User is searching by course name
+//                        results.add(potentialCourse);
+//                        break;
+//                    }
+//                    index++;
+//                }
+//                index = 0;
+//                courseScan.close();
+//                potentialScan.close();
+//                theStrings.clear();
+//            }
+//            classScan.close();
+//            return orderSearch(results);
+//        } catch (FileNotFoundException e) {
+//            System.out.println("An error occurred.");
+//            e.printStackTrace();
+//            return null;
+//        }
     }
     //day filter code
 

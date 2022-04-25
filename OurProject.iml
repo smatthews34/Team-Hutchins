@@ -7,20 +7,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="library" name="javafx-sdk-18" level="project" />
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://C:/Desktop/javax.mail.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://C:/Desktop/activation.jar!/" />
+          <root url="jar://C:/Program Files/Java/activation (1).jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -29,20 +20,12 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/OneDrive - Grove City College/Desktop/javax.mail.jar!/" />
+          <root url="jar://C:/Program Files/Java/javax.mail (1).jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/OneDrive - Grove City College/Desktop/activation.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="poi-bin-5.2.2" level="project" />
   </component>
 </module>
