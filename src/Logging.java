@@ -4,6 +4,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import java.util.*;
 
 public class Logging {
     String username;
@@ -31,9 +32,23 @@ public class Logging {
         this.logger.warning(s);
     }
 
+    public static void recreatScheduleFromLog(String user){
+        try {
+            File file = new File(user + ".txt");
+            Scanner sc = new Scanner(file);
+
+            while (sc.hasNextLine()) {
+                System.out.println(sc.nextLine());
+            }
+        }catch (Exception e){
+            System.out.println("Sorry");
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         System.out.println("Welcom to Logging Testing!");
         //Logging lg1 = new Logging("tom");
+        recreatScheduleFromLog("guest");
         //lg1.logger.setLevel(Level.ALL);
         //lg1.Action("Hi");
         //lg1.logger.info("Hello testing logger.");
