@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter", "quit", "confirm", "search", "activity", "lucky", "auto", "logout", "message", "resolve", "calendar", };
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter", "quit", "confirm", "search", "activity", "lucky", "auto", "logout", "message", "resolve", "calendar", "clear"};
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -457,6 +457,26 @@ public class Main {
                 lg.Action(user.username + " has entered the \"list\" command");
                 printCommands();
 
+            }
+
+            else if(command.equals("clear")){
+                String clear = "";
+                Scanner clearer = new Scanner(System.in);
+                clear = clearer.next();
+                System.out.println("Would you like to clear the schedule? (yes/no) Enter done to quit");
+                while(!clear.equals("done")){
+                    if(clear.equalsIgnoreCase("yes")){
+                        CourseList.courseList.clear();
+                    }
+                    else if(clear.equalsIgnoreCase("no")){
+                        System.out.println("Here are the list of commands");
+                        printCommands();
+                    }
+                    else{
+                        System.out.println("Please enter yes, no, or done");
+                        clear = clearer.next();
+                    }
+                }
             }
 
             else if(command.equals("filter")) {
