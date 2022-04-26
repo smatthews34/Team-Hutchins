@@ -42,7 +42,7 @@ public class Main {
     }
 
 
-    public static void main (String[] args) throws FileNotFoundException, IOException {
+    public static void main (String[] args) throws Exception {
         CourseList cl = new CourseList();
         User user = null;
         Logging lg;
@@ -620,6 +620,22 @@ public class Main {
                     ConfirmSchedule.scheduleFile(user.schedule);
                     lg.Action(user.username + " has confirmed and saved their schedule with zero conflicts.");
                     System.out.println("Your schedule has been confirmed. See file.");
+                }
+                System.out.println("Would you like to have the schedule emailed to you? (yes/no)");
+                Scanner mailScanner = new Scanner(System.in);
+                String mail = mailScanner.next();
+                if(mail.equalsIgnoreCase("Yes")){
+                    System.out.println("Please enter your email address");
+                    Scanner address = new Scanner(System.in);
+                    String send = address.next();
+                    email.emailSender(send);
+                }
+                else if(mail.equalsIgnoreCase("no")){
+                    System.out.println("Schedule was not emailed. Thank you!");
+                }
+                else{
+                    System.out.println("Please enter yes or no");
+                    mail = mailScanner.next();
                 }
             }
             else if(command.equals("calendar")){
