@@ -57,6 +57,8 @@ public class FXMain extends Application {
     TextField newNameField;
     TextField newUserField;
     TextField newPassField;
+    TextField emailField;
+    String email;
     Label msgLbl;
 
     //search vars
@@ -502,7 +504,7 @@ public class FXMain extends Application {
     final EventHandler<ActionEvent> signUpHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-
+            String email = emailField.getText();
             String username = newUserField.getText();
             String password = newPassField.getText();
             String name = newNameField.getText();
@@ -515,7 +517,11 @@ public class FXMain extends Application {
                 msgLbl.setText("Password is null, please try again");
             } else if (name.equals("")) {
                 msgLbl.setText("Name is null, please try again");
-            } else { //Username, password, and name are valid
+            }
+            else if(!email.contains(".") || !email.contains("@")){
+                msgLbl.setText("Email is invalid, please try again");
+            }
+            else { //Username, password, and name are valid
                 int errno = s.signupSubmit();
                 if (errno == 0) {
                     msgLbl.setText("Successfully Registered, please return to log in");
@@ -545,6 +551,7 @@ public class FXMain extends Application {
                 loginPane.add(badLoginLbl, 0, 7);
             } else {
                 user = new User(potentialUser.username, potentialUser.password, potentialUser.name);
+                user.setEmail(email);
                 cl = new CourseList();
                 try {
                     lg = new Logging(user.username);
@@ -647,6 +654,10 @@ public class FXMain extends Application {
         newNameField.setPromptText("Your Name");
         newNameField.setOnAction(signUpHandler);
 
+        emailField = new TextField();
+        emailField.setPromptText("Email");
+        emailField.setOnAction(signUpHandler);
+
         newUserField = new TextField();
         newUserField.setPromptText("Username");
         newUserField.setOnAction(signUpHandler);
@@ -673,11 +684,12 @@ public class FXMain extends Application {
         signUpPane.add(signUpSubtitle, 0, 1);
 
         signUpPane.add(newNameField, 0, 2);
-        signUpPane.add(newUserField, 0, 3);
-        signUpPane.add(newPassField, 0, 4);
-        signUpPane.add(newSignupBtn, 0, 5);
-        signUpPane.add(returnBtn, 0, 6);
-        signUpPane.add(msgLbl, 0, 7);
+        signUpPane.add(emailField, 0, 3);
+        signUpPane.add(newUserField, 0, 4);
+        signUpPane.add(newPassField, 0, 5);
+        signUpPane.add(newSignupBtn, 0, 6);
+        signUpPane.add(returnBtn, 0, 7);
+        signUpPane.add(msgLbl, 0, 8);
 
         signUpPane.setPadding(new Insets(20));
         signUpPane.setAlignment(Pos.CENTER);
@@ -766,6 +778,7 @@ public class FXMain extends Application {
             alertMsgLbl = new Label(conflicts + " conflict(s) exist, would you still like to" +
                     " confirm?");
 
+
             yBtn.setOnMouseClicked(event -> {
                 try {
                     ConfirmSchedule.scheduleFile(user.schedule);
@@ -814,7 +827,22 @@ public class FXMain extends Application {
         setProperties(alertPane, 350, 250, 25, 20, 5);
         alertPane.add(alertTitleLbl, 0, 0, 2, 1);
         alertPane.add(alertMsgLbl, 0, 1, 2, 1);
-        alertPane.add(confirmBar, 0, 2);
+       if (user.username != "guest") {
+            CheckBox cb = new CheckBox("Send to my email");
+            /*cb.setOnAction(event-> {
+                try {
+                    sendToEmail();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });*/
+            alertPane.add(cb, 0, 2);
+            alertPane.add(confirmBar, 0, 3);
+        }
+        else{
+            alertPane.add(confirmBar, 0, 2);
+        }
+
 
         nBtn.setOnMouseClicked(event -> alertStg.close());
         alertGroup.getChildren().add(alertPane);
@@ -823,6 +851,10 @@ public class FXMain extends Application {
         alertStg.show();
     }
 
+    public void sendToEmail() throws Exception {
+        email e = new email();
+        e.emailSender(email);
+    }
     public void launchSearch(){
 
         //SEARCH WINDOW
