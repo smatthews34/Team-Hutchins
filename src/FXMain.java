@@ -95,6 +95,7 @@ public class FXMain extends Application {
     boolean hasMax;
     GridPane conflictsPane;
     GridPane logOutPane;
+    Image appImg;
 
     ComboBox dayFilterBox;
     ComboBox timeFilterBox;
@@ -695,6 +696,8 @@ public class FXMain extends Application {
 
     public void launchSignUp() {
         signUpStage = new Stage();
+        signUpStage.getIcons().add(appImg);
+
         signUpGroup = new Group();
         signUpPane = new GridPane();
         setProperties(signUpPane, 400, 450, 10, 10, 0);
@@ -918,6 +921,7 @@ public class FXMain extends Application {
         //SEARCH WINDOW
         Group searchGroup = new Group();
         searchStage = new Stage();
+        searchStage.getIcons().add(appImg);
 
         SplitPane searchSplit = new SplitPane();
         searchSplit.getStyleClass().add("pane");
@@ -1421,6 +1425,7 @@ public class FXMain extends Application {
         hasConflict = false;
         hasMax = false;
         loginStageC = loginStage;
+        appImg = new Image("app-icn.png");
 
         launchLogin();
 
@@ -1428,6 +1433,7 @@ public class FXMain extends Application {
         loginStage.setTitle("Login");
         loginStage.setResizable(false);
         loginStage.setScene(loginScene);
+        loginStage.getIcons().add(appImg);
         loginStage.show();
 
 
