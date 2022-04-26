@@ -136,13 +136,7 @@ public class ApachePOI {
             for(int i = 0; i < allRows.size(); i++) {
                 ArrayList<String> cells = new ArrayList<>();
                 for (Cell cell : allRows.get(i)) {
-                    String cellWSpace = "";
-                    if (cell.getCellType() != CellType.STRING) {
-                        cellWSpace = formatDate.formatCellValue(cell);
-                    } else {
-                        cellWSpace = cell.getStringCellValue();
-                    }
-                    //String cellNoSpace = cellWSpace.replace(" ", "");
+                    String cellWSpace = formatDate.formatCellValue(cell);
                     cells.add(cellWSpace);
                 }
                 //create course to be added
@@ -177,15 +171,7 @@ public class ApachePOI {
         for(int i = 0; i < allRows.size(); i++){
             ArrayList<String> cells = new ArrayList<>();
             for(Cell cell : allRows.get(i)){
-                String cellWSpace = "";
-                //remove spaces
-                //if(cell.getCellType() != CellType.STRING){
-                    cellWSpace = formatDate.formatCellValue(cell);
-                //}
-                //else {
-                    //cellWSpace = cell.getStringCellValue();
-                //}
-                //String cellNoSpace = cellWSpace.replace(" ", "");
+                String cellWSpace = formatDate.formatCellValue(cell);
                 cells.add(cellWSpace);
             }
             //create course to be added
@@ -194,6 +180,27 @@ public class ApachePOI {
             completeList.add(temp);
         }
         return completeList;
+    }
+
+    public static Course findByCourseCode(String courseCode){
+        boolean skipHeader = true;
+        for(Row row : sheet) {
+            if (skipHeader) {
+                skipHeader = false;
+                continue;
+            }
+            Cell cell = row.getCell(0);
+            String toCompare = formatDate.formatCellValue(cell);
+
+            if(courseCode.equals(toCompare)){
+                Course temp = new Course(row.getCell(0).getStringCellValue(), row.getCell(1).getStringCellValue(),
+                        row.getCell(2).getStringCellValue(), formatDate.formatCellValue(row.getCell(3)),
+                        formatDate.formatCellValue(row.getCell(4)), formatDate.formatCellValue(row.getCell(5)),
+                        formatDate.formatCellValue(row.getCell(6)), formatDate.formatCellValue(row.getCell(7)));
+                return temp;
+            }
+        }
+        return null;
     }
 
     /**
@@ -211,13 +218,8 @@ public class ApachePOI {
                 continue;
             }
             Cell cell = row.getCell(col);
-            String toCompare = "";
-            if(cell.getCellType() != CellType.STRING){
-                toCompare = formatDate.formatCellValue(cell);
-            }
-            else {
-                toCompare = cell.getStringCellValue();
-            }
+            String toCompare = formatDate.formatCellValue(cell);
+
             toCompare = toCompare.replace(" ", "");
 
             //make both capital so I can use .contains();

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,11 +10,21 @@ public class filterCallers {
         while(scnr.hasNextLine()){
             String daysEntered = scnr.nextLine();
             List<String> courses = Search.mapCoursesDays.get(daysEntered);
+
             if(courses == null){
                 System.out.println("Please enter valid input");
             }
             else{
-                courses.forEach(System.out::println); // prints out the list of appropriate courses
+                ArrayList<Course> toPrint = new ArrayList<>();
+                for(String string : courses){
+                    if(ApachePOI.findByCourseCode(string) == null){
+                        System.out.println("That class does not exist.");
+                    }
+                    else {
+                        toPrint.add(ApachePOI.findByCourseCode(string));
+                    }
+                }
+                toPrint.forEach(System.out::println); // prints out the list of appropriate courses
             }
             break;
         }
@@ -29,7 +40,16 @@ public class filterCallers {
             if(courses == null){
                 System.out.println("Please enter a valid time");
             }else{
-                courses.forEach(System.out::println); // prints list of appropriate courses
+                ArrayList<Course> toPrint = new ArrayList<>();
+                for(String string : courses){
+                    if(ApachePOI.findByCourseCode(string) == null){
+                        System.out.println("That class does not exist.");
+                    }
+                    else {
+                        toPrint.add(ApachePOI.findByCourseCode(string));
+                    }
+                }
+                toPrint.forEach(System.out::println); // prints out the list of appropriate courses
             }
             break;
         }
@@ -46,7 +66,16 @@ public class filterCallers {
             if(courses == null){
                 System.out.println("Please enter a valid department");
             }else{
-                courses.forEach(System.out::println); // prints the array of course codes
+                ArrayList<Course> toPrint = new ArrayList<>();
+                for(String string : courses){
+                    if(ApachePOI.findByCourseCode(string) == null){
+                        System.out.println("That class does not exist.");
+                    }
+                    else {
+                        toPrint.add(ApachePOI.findByCourseCode(string));
+                    }
+                }
+                toPrint.forEach(System.out::println); // prints out the list of appropriate courses
             }
             break;
         }
@@ -65,7 +94,16 @@ public class filterCallers {
                 System.out.println("Please enter valid input");
             }
             else{
-                courses.forEach(System.out::println); // prints out the list of appropriate courses
+                ArrayList<Course> toPrint = new ArrayList<>();
+                for(String string : courses){
+                    if(ApachePOI.findByCourseCode(string) == null){
+                        System.out.println("That class does not exist.");
+                    }
+                    else {
+                        toPrint.add(ApachePOI.findByCourseCode(string));
+                    }
+                }
+                toPrint.forEach(System.out::println); // prints out the list of appropriate courses
             }
             break;
         }
