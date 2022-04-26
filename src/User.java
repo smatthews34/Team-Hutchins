@@ -5,6 +5,7 @@ public class User {
     String username;
     String password;
     String name;
+    String email;
     String major;   //I think he made some comment about the amt of info, so I made these optional
     int gradYear;
 
@@ -42,6 +43,11 @@ public class User {
             System.out.println(c.toString());
         }
     }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
 
 
 }
