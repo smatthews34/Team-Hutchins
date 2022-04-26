@@ -83,6 +83,7 @@ public class FXMain extends Application {
     GridPane schedulePane;
     GridPane allCoursePane;
     GridPane headerPane;
+    GridPane bottomPane;
     Label userLbl;
     Button luckyBtn;
     ButtonBar searchBar;
@@ -91,12 +92,15 @@ public class FXMain extends Application {
     Hyperlink autoLink;
     boolean auto;
     boolean hasConflict;
+    boolean hasMax;
     GridPane conflictsPane;
     GridPane logOutPane;
+    Image appImg;
 
     ComboBox dayFilterBox;
     ComboBox timeFilterBox;
     ComboBox deptFilterBox;
+    final int MAX_SIZE = 8;
 
 
     Logging lg;
@@ -122,6 +126,9 @@ public class FXMain extends Application {
         yBtn.setOnAction(event -> {
             lg.logConflict(user.username + " added the course: " + cl.getCourse(courseId).toString() + " that conflicts with a course on their schedule.");
             cl.addClass(cl.getCourse(courseId), user.schedule);
+            if(user.schedule.size() > MAX_SIZE){
+                hasMax = true;
+            }
             alertStg.close();
             updateScheduleDisplay();
         });
@@ -155,7 +162,7 @@ public class FXMain extends Application {
         if(!con.isEmpty()) {
             for (int p = 0; p < con.size(); p++) {
                 GridPane coursePane = new GridPane();
-                setProperties(coursePane, 400, 35, 0, 5, 0);
+                setProperties(coursePane, 350, 35, 0, 5, 0);
                 Course c = con.get(p);
                 Label courseLbl = new Label(c.toString());
 
@@ -181,7 +188,7 @@ public class FXMain extends Application {
 
         else{
             GridPane coursePane = new GridPane();
-            setProperties(coursePane, 400, 35, 0, 0, 0);
+            setProperties(coursePane, 350, 35, 0, 0, 0);
             Label emptyLbl = new Label("All conflicts resolved.\n");
             hasConflict = false;
             coursePane.add(emptyLbl, 0, 0);
@@ -194,7 +201,7 @@ public class FXMain extends Application {
 
     public void openResolutionScreen() {
         Group alertGroup = new Group();
-        Scene alertScene = new Scene(alertGroup, 450, 450);
+        Scene alertScene = new Scene(alertGroup, 400, 450);
         Stage alertStg = new Stage();
         ButtonBar confirmBar = new ButtonBar();
 
@@ -213,7 +220,7 @@ public class FXMain extends Application {
         ArrayList<Course> con = cl.conflictResolution(user.schedule);
         for (int p = 0; p < con.size(); p++){
             GridPane coursePane = new GridPane();
-            setProperties(coursePane, 400, 35, 0, 5, 0);
+            setProperties(coursePane, 350, 35, 0, 5, 0);
             Course c = con.get(p);
             Label courseLbl = new Label(c.toString());
 
@@ -249,7 +256,7 @@ public class FXMain extends Application {
         });
         ButtonBar.setButtonData(yBtn, ButtonBar.ButtonData.LEFT);
 
-        setProperties(alertPane, 450, 450, 15, 5, 5);
+        setProperties(alertPane, 400, 450, 10, 5, 0);
         alertPane.add(topPane, 0, 0);
         alertPane.add(alertMsgLbl, 0, 1);
         alertPane.add(conflictsPane, 0, 2);
@@ -356,6 +363,7 @@ public class FXMain extends Application {
         searchPane.getChildren().clear();
         searchPane.setAlignment(Pos.TOP_CENTER);
         headerPane.getChildren().clear();
+
         Image backImg = new Image("back-arrow.png");
         ImageView backView = new ImageView(backImg);
         backBtn = new Button();
@@ -413,7 +421,11 @@ public class FXMain extends Application {
     }
 
     public void updateScheduleDisplay() {
-
+        bottomPane = new GridPane();
+        //bottomPane.getStyleClass().clear();
+        //bottomPane.getStyleClass().add("test");
+        setProperties(bottomPane, 400, 40, 5, 0, 0);
+        bottomPane.getChildren().clear();
         allCoursePane.getChildren().clear();
         schedulePane.getChildren().clear();
 
@@ -463,7 +475,9 @@ public class FXMain extends Application {
             Label emptyLbl = new Label("(There's nothing here!\nAdd some courses from Search.)");
             emptyLbl.setOpacity(.6);
             schedulePane.add(emptyLbl, 0, 3);
-        } else {
+        }
+
+        else {
             for (int i = 0; i < user.schedule.size(); i++) {
                 GridPane coursePane = new GridPane();
                 setProperties(coursePane, 400, 35, 0, 5, 0);
@@ -481,16 +495,27 @@ public class FXMain extends Application {
                 allCoursePane.add(coursePane, 0, i);
             }
             schedulePane.add(allCoursePane, 0, 3);
+            if(hasMax) {
+                Label maxLbl = new Label("Schedule size limit reached.");
+                maxLbl.setTextFill(rgb(211, 47, 47));
+                bottomPane.add(maxLbl, 0, 0);
+            }
+
             if (hasConflict){
-                GridPane bottomPane = new GridPane();
                 Hyperlink conResLink = new Hyperlink("Resolve Conflicts");
                 conResLink.setOnAction(event-> openResolutionScreen());
-                bottomPane.add(conResLink, 0, 0);
+                if(hasMax) {
+                    bottomPane.add(conResLink, 0, 1);
+                }
+                else{
+                    bottomPane.add(conResLink, 0, 0);
+                }
                 schedulePane.add(bottomPane, 0, 4);
             }
+
         }
 
-        setProperties(schedulePane, 450, 450, 15, 10, 15);
+        setProperties(schedulePane, 450, 450, 10, 10, 15);
         setProperties(allCoursePane, 400, 350, 5, 5, 10);
 
     }
@@ -502,18 +527,24 @@ public class FXMain extends Application {
             String courseId = ((Button) event.getSource()).getId();
             Course course = cl.getCourse(courseId);
 
-            if (cl.checkConfliction(course, user.schedule) && !cl.checkDouble(course, user.schedule)) {
-                hasConflict = cl.checkConfliction(course, user.schedule);
-                lg.logConflict(user.username + " added the course: " + course + " that conflicts with a course on their schedule.");
-                openConflictAlert(courseId);
-            } else if (cl.checkDouble(course, user.schedule)) {
-                lg.logConflict(user.username + " has attempted to add the course: " + course + ", that is a duplicate of a course on their current schedule.");
-                openQuickAlert("DUPLICATE COURSE", "That course already is on your schedule,\nso it cannot be added.");
-            } else {
-                cl.addClass(course, user.schedule);
+            if (user.schedule.size() < MAX_SIZE) {
+
+                if (cl.checkConfliction(course, user.schedule) && !cl.checkDouble(course, user.schedule)) {
+                    hasConflict = cl.checkConfliction(course, user.schedule);
+                    lg.logConflict(user.username + " added the course: " + course + " that conflicts with a course on their schedule.");
+                    openConflictAlert(courseId);
+                } else if (cl.checkDouble(course, user.schedule)) {
+                    lg.logConflict(user.username + " has attempted to add the course: " + course + ", that is a duplicate of a course on their current schedule.");
+                    openQuickAlert("DUPLICATE COURSE", "That course already is on your schedule,\nso it cannot be added.");
+                } else {
+                    cl.addClass(course, user.schedule);
+                    updateScheduleDisplay();
+                }
+            }
+            else {
+                hasMax = true;
                 updateScheduleDisplay();
             }
-
         }
     };
 
@@ -523,6 +554,9 @@ public class FXMain extends Application {
             String courseId = ((Button) event.getSource()).getId();
             Course course = user.getCourse(courseId);
             cl.removeClass(course, user.schedule);
+            if(user.schedule.size() < MAX_SIZE){
+                hasMax = false;
+            }
             lg.Action(user.username + " Successfuly removed the course: " + course);
             updateScheduleDisplay();
         }
@@ -662,6 +696,8 @@ public class FXMain extends Application {
 
     public void launchSignUp() {
         signUpStage = new Stage();
+        signUpStage.getIcons().add(appImg);
+
         signUpGroup = new Group();
         signUpPane = new GridPane();
         setProperties(signUpPane, 400, 450, 10, 10, 0);
@@ -816,8 +852,8 @@ public class FXMain extends Application {
                 okBtn.setOnMouseClicked(event2->alertStg.close());
                 okBtn.getStyleClass().clear();
                 okBtn.getStyleClass().add("buttons");
-                confirmBar.getButtons().add(okBtn);
                 ButtonBar.setButtonData(okBtn, ButtonBar.ButtonData.LEFT);
+                confirmBar.getButtons().add(okBtn);
                 alertMsgLbl.setText("Your schedule has been confirmed. See file.");
 
             });
@@ -885,6 +921,7 @@ public class FXMain extends Application {
         //SEARCH WINDOW
         Group searchGroup = new Group();
         searchStage = new Stage();
+        searchStage.getIcons().add(appImg);
 
         SplitPane searchSplit = new SplitPane();
         searchSplit.getStyleClass().add("pane");
@@ -1386,7 +1423,9 @@ public class FXMain extends Application {
         user = null;
         auto = false;
         hasConflict = false;
+        hasMax = false;
         loginStageC = loginStage;
+        appImg = new Image("app-icn.png");
 
         launchLogin();
 
@@ -1394,6 +1433,7 @@ public class FXMain extends Application {
         loginStage.setTitle("Login");
         loginStage.setResizable(false);
         loginStage.setScene(loginScene);
+        loginStage.getIcons().add(appImg);
         loginStage.show();
 
 
