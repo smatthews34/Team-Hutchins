@@ -608,16 +608,19 @@ public class Main {
                 //a while loop structure so they can observe multiple days
                 while (!calendar.equals("done")){
                     System.out.println("Enter a day of the month to view classes, type 'ind' to view independent studies," +
-                            " or enter 'done' to exit");
+                            " type 'weekly' to see your weekly schedule or, enter 'done' to exit");
                     System.out.print(">");
                     calendar = calendarScan.next();
 
-                    if(calendar.equals("ind")){
+                    if(calendar.equalsIgnoreCase("ind")){
                         ArrayList<Course> classes = ConfirmSchedule.classesPerDay(user.schedule
                                 , 8, true);
                         System.out.println(ConfirmSchedule.courseListString(classes));
                     }
-                    if(!calendar.equals("ind") && !calendar.equals("done")) {
+                    if(calendar.equalsIgnoreCase("weekly")){
+                        ConfirmSchedule.weeklyView(user.schedule);
+                    }
+                    if(!calendar.equals("ind") && !calendar.equalsIgnoreCase("done") && !calendar.equalsIgnoreCase("weekly")) {
                         try {
                             //catch if int is out of bounds
                             dayOfMonth = Integer.parseInt(calendar);

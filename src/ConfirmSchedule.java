@@ -12,27 +12,84 @@ public class ConfirmSchedule {
      */
     public static void scheduleFile(ArrayList<Course> S) throws FileNotFoundException {
         PrintWriter pw = new PrintWriter("FinishedSchedule.txt");
-        //pw.printf("%-50s%-50s%-50s%-50s%-50s\n","Monday","Tuesday","Wednesday","Thursday","Friday");
-        ArrayList<Course> mon = classesPerDay(S,2,true);
-        ArrayList<Course> tue = classesPerDay(S,3,false);
-        ArrayList<Course> wed = classesPerDay(S,4,false);
-        ArrayList<Course> thu = classesPerDay(S,5,false);
-        ArrayList<Course> fri = classesPerDay(S,6,false);
+        ArrayList<String> startTimesInOrder = new ArrayList<>();
+        startTimesInOrder.add("8:00:00");
+        startTimesInOrder.add("9:00:00");
+        startTimesInOrder.add("9:15:00");
+        startTimesInOrder.add("10:00:00");
+        startTimesInOrder.add("10:05:00");
+        startTimesInOrder.add("11:00:00");
+        startTimesInOrder.add("11:30:00");
+        startTimesInOrder.add("12:00:00");
+        startTimesInOrder.add("13:00:00");
+        startTimesInOrder.add("14:00:00");
+        startTimesInOrder.add("14:30:00");
+        startTimesInOrder.add("15:00:00");
+        startTimesInOrder.add("16:00:00");
+        startTimesInOrder.add("18:30:00");
+        startTimesInOrder.add("19:00:00");
 
-        mon = orderList(mon);
-        tue = orderList(tue);
-        wed = orderList(wed);
-        thu = orderList(thu);
-        fri = orderList(fri);
+        pw.printf("%-20s%-50s%-50s%-50s%-50s%-50s\n","        ","Monday","Tuesday","Wednesday","Thursday","Friday");
+        for(int i = 0; i < startTimesInOrder.size(); i++){
+            ArrayList<Course> temp = classesByTime(S,startTimesInOrder.get(i));
+            ArrayList<Course> mon = classesPerDay(temp, 2,false);
+            ArrayList<Course> tue = classesPerDay(temp,3,false);
+            ArrayList<Course> wed = classesPerDay(temp,4,false);
+            ArrayList<Course> thu = classesPerDay(temp,5,false);
+            ArrayList<Course> fri = classesPerDay(temp,6,false);
 
-        String monString = courseListString(mon);
-        String tueString = courseListString(tue);
-        String wedString = courseListString(wed);
-        String thuString = courseListString(thu);
-        String friString = courseListString(fri);
+            while(!mon.isEmpty() || !tue.isEmpty() || !wed.isEmpty() || !thu.isEmpty() || !fri.isEmpty()){
+                //System.out.println();
+                String monString = "";
+                String tueString = "";
+                String wedString = "";
+                String thuString = "";
+                String friString = "";
+                if(!mon.isEmpty()){
+                    monString = mon.get(0).toString();
+                    mon.remove(0);
+                }
+                if(!tue.isEmpty()){
+                    tueString = tue.get(0).toString();
+                    tue.remove(0);
+                }
+                if(!wed.isEmpty()){
+                    wedString = wed.get(0).toString();
+                    wed.remove(0);
+                }
+                if(!thu.isEmpty()){
+                    thuString = thu.get(0).toString();
+                    thu.remove(0);
+                }
+                if(!fri.isEmpty()){
+                    friString = fri.get(0).toString();
+                    fri.remove(0);
+                }
+                pw.printf("%-20s%-50s%-50s%-50s%-50s%-50s\n",startTimesInOrder.get(i),monString,tueString,wedString,thuString,friString);
+            }
+        }
+//        //pw.printf("%-50s%-50s%-50s%-50s%-50s\n","Monday","Tuesday","Wednesday","Thursday","Friday");
+//        ArrayList<Course> mon = classesPerDay(S,2,true);
+//        ArrayList<Course> tue = classesPerDay(S,3,false);
+//        ArrayList<Course> wed = classesPerDay(S,4,false);
+//        ArrayList<Course> thu = classesPerDay(S,5,false);
+//        ArrayList<Course> fri = classesPerDay(S,6,false);
+//
+//        mon = orderList(mon);
+//        tue = orderList(tue);
+//        wed = orderList(wed);
+//        thu = orderList(thu);
+//        fri = orderList(fri);
+//
+//        String monString = courseListString(mon);
+//        String tueString = courseListString(tue);
+//        String wedString = courseListString(wed);
+//        String thuString = courseListString(thu);
+//        String friString = courseListString(fri);
+//
+//        pw.println("Monday\n" + monString + "\nTuesday\n" + tueString + "\nWednesday\n" + wedString
+//        + "\nThursday\n" + thuString + "\nFriday\n" + friString);
 
-        pw.println("Monday\n" + monString + "\nTuesday\n" + tueString + "\nWednesday\n" + wedString
-        + "\nThursday\n" + thuString + "\nFriday\n" + friString);
         if(countConflicts(S) > 0) {
             pw.println("Conflicts Still Exist");
         }
@@ -112,7 +169,7 @@ public class ConfirmSchedule {
                     System.out.print(classesPerDay(S, j+1, false).size() + " Class(es)");
                 }
                 if(j == 5) {
-                    System.out.print(classesPerDay(S, j+6, false).size() + " Class(es)");
+                    System.out.print(classesPerDay(S, j+1, false).size() + " Class(es)");
                 }
                 dayOfMonth++;
             }
@@ -179,8 +236,80 @@ public class ConfirmSchedule {
         return classesForDay;
     }
 
-    public static void weeklyView(ArrayList<Course> S){
+    /**
+     *
+     * @param S
+     * @param time, time in military time
+     * @return
+     */
+    public static ArrayList<Course> classesByTime(ArrayList<Course> S, String time){
+        ArrayList<Course> results = new ArrayList<>();
 
+        for(int i = 0; i < S.size(); i++) {
+            if (S.get(i).startTime != null && S.get(i).startTime.equals(time)) {
+                results.add(S.get(i));
+            }
+        }
+        return results;
+    }
+
+    public static void weeklyView(ArrayList<Course> S){
+        ArrayList<String> startTimesInOrder = new ArrayList<>();
+        startTimesInOrder.add("8:00:00");
+        startTimesInOrder.add("9:00:00");
+        startTimesInOrder.add("9:15:00");
+        startTimesInOrder.add("10:00:00");
+        startTimesInOrder.add("10:05:00");
+        startTimesInOrder.add("11:00:00");
+        startTimesInOrder.add("11:30:00");
+        startTimesInOrder.add("12:00:00");
+        startTimesInOrder.add("13:00:00");
+        startTimesInOrder.add("14:00:00");
+        startTimesInOrder.add("14:30:00");
+        startTimesInOrder.add("15:00:00");
+        startTimesInOrder.add("16:00:00");
+        startTimesInOrder.add("18:30:00");
+        startTimesInOrder.add("19:00:00");
+
+        System.out.printf("%-50s%-50s%-50s%-50s%-50s%-50s\n","        ","Monday","Tuesday","Wednesday","Thursday","Friday");
+        for(int i = 0; i < startTimesInOrder.size(); i++){
+            ArrayList<Course> temp = classesByTime(S,startTimesInOrder.get(i));
+            ArrayList<Course> mon = classesPerDay(temp, 2,false);
+            ArrayList<Course> tue = classesPerDay(temp,3,false);
+            ArrayList<Course> wed = classesPerDay(temp,4,false);
+            ArrayList<Course> thu = classesPerDay(temp,5,false);
+            ArrayList<Course> fri = classesPerDay(temp,6,false);
+
+            while(!mon.isEmpty() || !tue.isEmpty() || !wed.isEmpty() || !thu.isEmpty() || !fri.isEmpty()){
+                //System.out.println();
+                String monString = "";
+                String tueString = "";
+                String wedString = "";
+                String thuString = "";
+                String friString = "";
+                if(!mon.isEmpty()){
+                    monString = mon.get(0).toString();
+                    mon.remove(0);
+                }
+                if(!tue.isEmpty()){
+                    tueString = tue.get(0).toString();
+                    tue.remove(0);
+                }
+                if(!wed.isEmpty()){
+                    wedString = wed.get(0).toString();
+                    wed.remove(0);
+                }
+                if(!thu.isEmpty()){
+                    thuString = thu.get(0).toString();
+                    thu.remove(0);
+                }
+                if(!fri.isEmpty()){
+                    friString = fri.get(0).toString();
+                    fri.remove(0);
+                }
+                System.out.printf("%-50s%-50s%-50s%-50s%-50s%-50s\n",startTimesInOrder.get(i),monString,tueString,wedString,thuString,friString);
+            }
+        }
     }
 
     /**
