@@ -2,11 +2,38 @@
 Main red (buttons, subtitles): rgb(211, 47, 47)
 Background: rgb(245, 238, 238)
 */
+
+.scroll-pane {
+    -fx-background-color: white;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: white;
+    -fx-border-color: white;
+    -fx-background-radius: 0em;
+}
+
 .radio-button .radio{
  -fx-background-color:  white;
     -fx-border-radius: 15px;
   -fx-border-width: 1px;
   -fx-border-color: #000;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: rgb(161, 161, 161);
+    -fx-background-radius: 5em;
 }
 
 .check-box .box{
