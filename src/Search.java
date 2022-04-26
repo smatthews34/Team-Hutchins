@@ -193,7 +193,7 @@ public class Search {
                 String[] split = line.split(","); // separates columns using a comma
                 populateMapDays(split[5], split[0]); // adds the columns for coursecode and days
             }
-            promptUserDays(); //calls the prompt user method after
+            filterCallers.promptUserDays(); //calls the prompt user method after
             // error catching
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -263,7 +263,7 @@ public class Search {
                 String[] split = line.split(","); // separates columns using a comma
                 populateMapTimes(split[3], split[0]); // adds the columns for coursecode and start time
             }
-            promptUserTimes(); // then calls the prompt user method
+            filterCallers.promptUserTimes(); // then calls the prompt user method
             // error catching
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -331,7 +331,7 @@ public class Search {
                 String[] split = line.split(","); // separates columns using a comma
                 populateMapDepts(split[10], split[0]); // adds the columns for coursecode and department
             }
-            promptUserDepts(); //calls the method to prompt the user
+            filterCallers.promptUserDepts(); //calls the method to prompt the user
             // error catching
         } catch (FileNotFoundException e) {
             e.printStackTrace();
