@@ -849,8 +849,8 @@ public class FXMain extends Application {
                 okBtn.setOnMouseClicked(event2->alertStg.close());
                 okBtn.getStyleClass().clear();
                 okBtn.getStyleClass().add("buttons");
-                confirmBar.getButtons().add(okBtn);
                 ButtonBar.setButtonData(okBtn, ButtonBar.ButtonData.LEFT);
+                confirmBar.getButtons().add(okBtn);
                 alertMsgLbl.setText("Your schedule has been confirmed. See file.");
 
             });

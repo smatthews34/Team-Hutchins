@@ -2,6 +2,18 @@
 Main red (buttons, subtitles): rgb(211, 47, 47)
 Background: rgb(245, 238, 238)
 */
+.radio-button .radio{
+ -fx-background-color:  white;
+    -fx-border-radius: 15px;
+  -fx-border-width: 1px;
+  -fx-border-color: #000;
+}
+
+.check-box .box{
+ -fx-background-color:  white;
+ -fx-border-width: 1px;
+ -fx-border-color: #000;
+}
 
 .hyperlink{
  -fx-text-fill: rgb(59, 54, 66);
