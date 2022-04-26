@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static void printCommands(){
-        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter", "quit", "confirm", "search", "activity", "lucky", "auto", "logout", "message", "resolve", "calendar", };
+        String[] commands = {"view", "add", "remove", "undo", "redo", "list", "filter", "quit", "confirm", "search", "activity", "lucky", "auto", "logout", "message", "resolve", "calendar", "clear"};
         System.out.println("- Valid commands:");
         for(String s : commands){
             System.out.println("\t" + s);
@@ -160,51 +160,50 @@ public class Main {
         String command = st.nextToken();
         System.out.println(command);
 
-        while (!command.equals("quit") && !command.equals("logout")){
+        while (!command.equals("quit") && !command.equals("logout")) {
 
-            if(command.equals("view")){
+            if (command.equals("view")) {
                 //TODO: This may be changed later
                 lg.Action(user.username + " entered \"view\".");
                 tempPrint(user.schedule);
-            }
-           else if(command.equals("add")){
+            } else if (command.equals("add")) {
                 //TODO
                 Scanner add = new Scanner(System.in);
                 String addOption = "";
-                while(!addOption.equals("done")) {
+                while (!addOption.equals("done")) {
                     System.out.println("Enter course in the format: \"CODE ### A\" or for a lab \"CODE ### A L\", to be added or enter 'done' if finished adding: ");
                     System.out.print(">");
                     addOption = add.nextLine();
                     if (!addOption.equals("done")) {
-                        if(addOption.charAt(addOption.length()-1) == 'L' && addOption.length() == 12){
-                            char c = addOption.charAt(addOption.length()-3);
-                            addOption = addOption.substring(0,addOption.length()-3);
+                        if (addOption.charAt(addOption.length() - 1) == 'L' && addOption.length() == 12) {
+                            char c = addOption.charAt(addOption.length() - 3);
+                            addOption = addOption.substring(0, addOption.length() - 3);
                             addOption = addOption + " " + c + "    L";
-                        }else{
-                            char c = addOption.charAt(addOption.length()-1);
-                            addOption = addOption.substring(0,addOption.length()-1);
+                        } else {
+                            char c = addOption.charAt(addOption.length() - 1);
+                            addOption = addOption.substring(0, addOption.length() - 1);
                             addOption = addOption + " " + c;
                         }
                         Course a = cl.getCourse(addOption);
 
                         if (a != null) {
-                            Boolean c = cl.checkConfliction(a,user.schedule);
+                            Boolean c = cl.checkConfliction(a, user.schedule);
                             Boolean d = cl.checkDouble(a, user.schedule);
                             //cl.addClass(a, user.schedule);
                             //*****avoid the conflict and duplicate*****
                             //checks to see if the course being added is a duplicate.
-                            if(cl.checkDouble(a, user.schedule)){
+                            if (cl.checkDouble(a, user.schedule)) {
                                 System.out.println("That course already is on your schedule, cannot be added.");
-                            }else if(cl.checkConfliction(a, user.schedule)){ //checks to see if the course conflicts
+                            } else if (cl.checkConfliction(a, user.schedule)) { //checks to see if the course conflicts
                                 System.out.println("There is a time conflict with your schedule."); //alerts the user there is a conflict
                                 Scanner scn = new Scanner(System.in);
                                 String answer = "";
-                                while (!answer.equals("No")&&!answer.equals("no")&&!answer.equals("yes")&&!answer.equals("Yes")&&!answer.equals("N")&&!answer.equals("n")&&!answer.equals("Y")&&!answer.equals("y")) { //gives the user the ability to add if conflicting.
+                                while (!answer.equals("No") && !answer.equals("no") && !answer.equals("yes") && !answer.equals("Yes") && !answer.equals("N") && !answer.equals("n") && !answer.equals("Y") && !answer.equals("y")) { //gives the user the ability to add if conflicting.
                                     System.out.println("Would you like to add anyway? (Y/N");
                                     answer = scn.next();
                                     if (answer.equals("Y") || answer.equals("y") || answer.equals("yes") || answer.equals("Yes")) {
                                         user.schedule.add(a);
-                                        cl.addClass(a,user.schedule);
+                                        cl.addClass(a, user.schedule);
                                         System.out.println("Conflicting course added.");
                                         //cl.updateHistory("add", a);
                                         break;
@@ -215,20 +214,20 @@ public class Main {
                                         System.out.println("Invalid response please select Y or N.");
                                     }
                                 }
-                            }else{ //if the course is not a duplicate or a not conflicting course it wil be added to the user's schedule.
+                            } else { //if the course is not a duplicate or a not conflicting course it wil be added to the user's schedule.
                                 //cl.updateHistory("add", a);
                                 user.schedule.add(a);
-                                cl.addClass(a,user.schedule);
+                                cl.addClass(a, user.schedule);
                                 System.out.println("The course has successfully been added to your schedule.");
                             }
                             //
-                            if(d){
+                            if (d) {
                                 lg.logConflict(user.username + " has attempted to add the course: " + a + ", that is a duplicate of a course on their current schedule.");
-                            }else if(c && user.schedule.contains(a)){
+                            } else if (c && user.schedule.contains(a)) {
                                 lg.logConflict(user.username + " added the course: " + a + " that conflicts with a course on their schedule.");
-                            }else if(c && !user.schedule.contains(a)){
+                            } else if (c && !user.schedule.contains(a)) {
                                 lg.logConflict(user.schedule + " has attempted to add the course: " + a + " that conflicts with their schedule but elected not to add it.");
-                            }else{
+                            } else {
                                 lg.Action(user.username + " has added the course: " + a + ".");
                             }
                         } else {
@@ -238,85 +237,72 @@ public class Main {
                     }
                 }
                 //add.close();
-            }
-
-            else if(command.equals("remove")){  //user input should take the form 'remove ACCT 202 B'
+            } else if (command.equals("remove")) {  //user input should take the form 'remove ACCT 202 B'
                 String code = "";
                 int codeSection = 1;
-                    while(st.hasMoreTokens()) {
-                        code += st.nextToken();     //Concat course code like ACCT 202 B
+                while (st.hasMoreTokens()) {
+                    code += st.nextToken();     //Concat course code like ACCT 202 B
 
-                        if (st.hasMoreTokens()) {
-                            if (codeSection != 2) {
-                                code += " ";
-                            }
-                            else {
-                                code += "  ";
-                            }
+                    if (st.hasMoreTokens()) {
+                        if (codeSection != 2) {
+                            code += " ";
+                        } else {
+                            code += "  ";
                         }
-                        codeSection++;
                     }
+                    codeSection++;
+                }
 
-                    if(user.scheduleContains(code)) {
-                        Course c = user.getCourse(code);
-                        cl.removeClass(c, user.schedule);
-                        lg.Action(user.username + " Successfuly removed the course: " + c);
-                        System.out.println("Course removed.");
-                        tempPrint(user.schedule);
-                    }
-
-                    else {
-                        System.out.println("Error: Course not found.");
-                        lg.logger.warning(user.username + " has tried to remove the invalid course: " + code );
-                    }
-            }
-
-            else if(command.equals("undo")){
+                if (user.scheduleContains(code)) {
+                    Course c = user.getCourse(code);
+                    cl.removeClass(c, user.schedule);
+                    lg.Action(user.username + " Successfuly removed the course: " + c);
+                    System.out.println("Course removed.");
+                    tempPrint(user.schedule);
+                } else {
+                    System.out.println("Error: Course not found.");
+                    lg.logger.warning(user.username + " has tried to remove the invalid course: " + code);
+                }
+            } else if (command.equals("undo")) {
                 cl.undo(user.schedule);
                 tempPrint(user.schedule);
                 lg.Action(user.username + " has undone their last action");
 
-            }
-
-            else if(command.equals("redo")){
+            } else if (command.equals("redo")) {
                 cl.redo(user.schedule);
                 tempPrint(user.schedule);
                 lg.Action(user.username + " has redone their last action");
 
-            }
-
-            else if(command.equals("resolve")){
+            } else if (command.equals("resolve")) {
                 //
                 Scanner res = new Scanner(System.in);
                 String resInput = "";
-                while (!resInput.equals("Done")&&!resInput.equals("done")&& ConfirmSchedule.countConflicts(user.schedule) > 0){
+                while (!resInput.equals("Done") && !resInput.equals("done") && ConfirmSchedule.countConflicts(user.schedule) > 0) {
                     ArrayList<Course> con = cl.conflictResolution(user.schedule);
                     System.out.println("Conflicting Courses on your Current Schedule:");
-                    for (int p = 0; p < con.size(); p++){
+                    for (int p = 0; p < con.size(); p++) {
                         System.out.println(con.get(p));
                     }
                     System.out.println("Which course would you remove to help resolve?");
                     resInput = res.nextLine();
                     Course c = user.getCourse(resInput);
-                    if(user.schedule.contains(c)) {
+                    if (user.schedule.contains(c)) {
                         //Course c = user.getCourse(resInput);
                         cl.removeClass(c, user.schedule);
                         lg.Action(user.username + " Successfuly resolved a time conflict from the course: " + c);
-                    }else if(resInput.equals("Done")||resInput.equals("done")){
+                    } else if (resInput.equals("Done") || resInput.equals("done")) {
                         System.out.println("You still have " + ConfirmSchedule.countConflicts(user.schedule) + " conflict(s) remaining.");
                         lg.logConflict(user.username + " after trying to resolves conflicts still has " + ConfirmSchedule.countConflicts(user.schedule) + " conflict(s) remaining.");
                         break;
-                    }else{
+                    } else {
                         System.out.println("Invalid Response.");
                         lg.logger.warning(user.username + " has enter an invalid input for the conflict resolution screen.");
                     }
                 }
-                if(ConfirmSchedule.countConflicts(user.schedule) > 0){
+                if (ConfirmSchedule.countConflicts(user.schedule) > 0) {
                     System.out.println("There are currently no conflicts with your schedule.");
                 }
-            }
-
-            else if(command.equals("message")){
+            } else if (command.equals("message")) {
                 System.out.println("Sorry :( Due To The Grove City FireWall the Feature will not work.");
                 /*CellNote c = new CellNote();
                 String provider = "";
@@ -356,62 +342,56 @@ public class Main {
                 }
                 */
 
-            }
-
-            else if(command.equals("auto")){
+            } else if (command.equals("auto")) {
                 Scanner autoScn = new Scanner(System.in);
-                String year ="";
-                String semester ="";
-                if (auto !=true){
-                    while(!year.equals("Fresh")&&!year.equals("Soph")&&!year.equals("Junior")&&!year.equals("Senior")&&!year.equals("fresh")&&!year.equals("soph")&&!year.equals("junior")&&!year.equals("senior")){
+                String year = "";
+                String semester = "";
+                if (auto != true) {
+                    while (!year.equals("Fresh") && !year.equals("Soph") && !year.equals("Junior") && !year.equals("Senior") && !year.equals("fresh") && !year.equals("soph") && !year.equals("junior") && !year.equals("senior")) {
                         System.out.println("What year are you? (Fresh, Soph, Junior, Senior)");
                         year = autoScn.next();
                     }
-                    while(!semester.equals("F")&&!semester.equals("S")&&!semester.equals("f")&&!semester.equals("s")){
+                    while (!semester.equals("F") && !semester.equals("S") && !semester.equals("f") && !semester.equals("s")) {
                         System.out.println("What Semester? ('F' for Fall or 'S' for Spring)");
                         semester = autoScn.next();
                     }
-                    cl.autoFill(year,semester, user.schedule);
+                    cl.autoFill(year, semester, user.schedule);
                     System.out.println("Your Schedule has successfully been generated with the base requirements of a " + year + " during the " + semester + " semester.");
                     lg.Action(user.username + " has auto-generated their course schedule for " + year + " in the " + semester + " semester.");
                     auto = true;
-                }else{
+                } else {
                     System.out.println("You have already completed an auto schedule.");
                     lg.logger.warning(user.username + " attempted to auto-generate their schedule but they already have.");
                 }
-            }
-
-            else if(command.equals("lucky")){
+            } else if (command.equals("lucky")) {
                 Scanner luckyScn = new Scanner(System.in);
                 String lucky = "";
-                while(!lucky.equals("N")||!lucky.equals("n")) {
+                while (!lucky.equals("N") || !lucky.equals("n")) {
                     System.out.println("Are you feeling lucky? (Y/N)");
                     lucky = luckyScn.next();
                     if (lucky.equals("Y") || lucky.equals("y")) {
                         cl.FeelingLucky(user.schedule);
-                        lg.Action(user.username + " was feeling lucky and added the course: " + user.schedule.get(user.schedule.size()-1) + " to their schedule.");
+                        lg.Action(user.username + " was feeling lucky and added the course: " + user.schedule.get(user.schedule.size() - 1) + " to their schedule.");
                         System.out.println("Would you like to try again?(Y/N)");
-                        if(lucky.equals("N") || lucky.equals("n")){
+                        if (lucky.equals("N") || lucky.equals("n")) {
                             System.out.println("Guess you're not feeling lucky anymore...");
                             lg.Action(user.username + " was not feeling lucky anymore.");
                         }
-                    }else{
+                    } else {
                         System.out.println("Not feeling lucky I guess...");
                         lg.Action(user.username + " is not feeling lucky anymore.");
                         break;
                     }
                 }
 
-            }
-
-            else if(command.equals("activity")){
+            } else if (command.equals("activity")) {
                 Scanner ActScn = new Scanner(System.in);
                 String act = "";
                 String title, start, end, meets;
-                while(!act.equals("done") || !act.equals("Done")){
+                while (!act.equals("done") || !act.equals("Done")) {
                     System.out.println("Would you like to add an activity to your schedule? If yes enter 'yes'. If not enter 'done'");
                     act = ActScn.next();
-                    if(act.equals("yes")||act.equals("Yes")||act.equals("Y")||act.equals("y")){
+                    if (act.equals("yes") || act.equals("Yes") || act.equals("Y") || act.equals("y")) {
 
                         System.out.println("Enter the start time of the Activity.(In military time; ex. 8:00:00)");
                         start = ActScn.next();
@@ -422,35 +402,48 @@ public class Main {
                         System.out.println("What is the Name of your Activity you are participating in?");
                         title = ActScn.nextLine();
                         Course c = new Course(title, start, end, meets);
-                        Boolean cc = cl.checkConfliction(c,user.schedule);
+                        Boolean cc = cl.checkConfliction(c, user.schedule);
                         Boolean d = cl.checkDouble(c, user.schedule);
                         cl.addClass(c, user.schedule);
-                        if(d){
+                        if (d) {
                             lg.logConflict(user.username + " has attempted to add a personal activity: " + c + " that they already have on their schedule.");
-                        }else if(cc && user.schedule.contains(c)){
+                        } else if (cc && user.schedule.contains(c)) {
                             lg.logConflict(user.username + " added the activity: " + c + " that conflicts with a course/activity on their schedule.");
-                        }else if(cc && !user.schedule.contains(c)){
+                        } else if (cc && !user.schedule.contains(c)) {
                             lg.logConflict(user.schedule + " has attempted to add the activity: " + c + ", that conflicts with their schedule but elected not to add it.");
-                        }else{
+                        } else {
                             lg.Action(user.username + " has added the activity " + c);
                         }
                     }
                     System.out.println("Would you like to add another activity? (Y/N)");
                     act = ActScn.next();
-                    if(act.equals("N")||act.equals("No")||act.equals("n")||act.equals("no")){
+                    if (act.equals("N") || act.equals("No") || act.equals("n") || act.equals("no")) {
                         lg.Action(user.username + " has elected not to add another activity.");
                         break;
-                    }else if(!act.equals("Y")||!act.equals("y")||!act.equals("Yes")||!act.equals("yes")){
+                    } else if (!act.equals("Y") || !act.equals("y") || !act.equals("Yes") || !act.equals("yes")) {
                         System.out.println("Invalid response, exiting to main screen.");
                         lg.logger.warning(user.username + " has inputted an invalid response when asked if they would like to add another personal activity.");
                     }
                 }
-            }
-
-            else if(command.equals("list")){
+            } else if (command.equals("list")) {
                 lg.Action(user.username + " has entered the \"list\" command");
                 printCommands();
 
+            } else if (command.equals("clear")) {
+                String choice = " ";
+                System.out.println("Please confirm you want to clear your schedule(yes/no)");
+                System.out.print(">");
+                Scanner clear = new Scanner(System.in);
+                choice = clear.next();
+                if (choice.equalsIgnoreCase("yes")) {
+                    CourseList.courseList.clear();
+                } else if (choice.equalsIgnoreCase("no")) {
+                    System.out.println("Here are the possible commands");
+                    printCommands();
+                } else {
+                    System.out.println("Invalid command, here are the list of commands");
+                    printCommands();
+        }
             }
 
             else if(command.equals("filter")) {
@@ -485,6 +478,7 @@ public class Main {
                     }
 
                     System.out.println("Would you like to add from the filtered results (Yes/No)");
+                    System.out.print(">");
                     if(filter.equalsIgnoreCase("yes")){
                         String addO = "";
                         while(!addO.equals("done")) {
