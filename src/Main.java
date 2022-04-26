@@ -63,6 +63,10 @@ public class Main {
         String initCommand = initScn.nextLine();
         //fixes the quit from main screen
         if (initCommand.equals("quit")){
+            //save schedule if logged in
+            if(loggedIn && !isGuest){
+                ApachePOI.writeSchedule(user.username,user.schedule);
+            }
             System.out.println("Goodbye!");
             System.exit(0);
         }
@@ -87,6 +91,8 @@ public class Main {
                 else {
                     System.out.println("Welcome, " + potentialUser.name + "!");
                     user = new User(potentialUser.username, potentialUser.password, potentialUser.name);
+                    //if user has old schedule, read it in
+                    user.schedule = ApachePOI.readSchedule(user.username);
                     //May copy to global User variable here
                     loggedIn = true;
                     break;
@@ -870,6 +876,10 @@ public class Main {
         System.out.println("- Goodbye.\n");
 
         if (command.equals("logout")){
+            //save schedule if logout
+            if(!isGuest) {
+                ApachePOI.writeSchedule(user.username, user.schedule);
+            }
             lg.Action(user.username + " has logged out.");
             main(null);
         }
