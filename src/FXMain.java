@@ -151,11 +151,11 @@ public class FXMain extends Application {
             for (int p = 0; p < con.size(); p++) {
                 GridPane coursePane = new GridPane();
                 setProperties(coursePane, 400, 35, 0, 5, 0);
-                Course c = user.schedule.get(p);
+                Course c = con.get(p);
                 Label courseLbl = new Label(c.toString());
 
                 Button removeBtn = new Button("-");
-                removeBtn.setId(user.schedule.get(p).courseCode);
+                removeBtn.setId(con.get(p).courseCode);
                 removeBtn.getStyleClass().clear();
                 removeBtn.getStyleClass().add("add-buttons");
                 removeBtn.setOnAction(event -> {
@@ -210,11 +210,11 @@ public class FXMain extends Application {
         for (int p = 0; p < con.size(); p++){
             GridPane coursePane = new GridPane();
             setProperties(coursePane, 400, 35, 0, 5, 0);
-            Course c = user.schedule.get(p);
+            Course c = con.get(p);
             Label courseLbl = new Label(c.toString());
 
             Button removeBtn = new Button("-");
-            removeBtn.setId(user.schedule.get(p).courseCode);
+            removeBtn.setId(con.get(p).courseCode);
             removeBtn.getStyleClass().clear();
             removeBtn.getStyleClass().add("add-buttons");
             removeBtn.setOnAction(event->{
