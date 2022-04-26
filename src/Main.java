@@ -163,12 +163,10 @@ public class Main {
         while (!command.equals("quit") && !command.equals("logout")){
 
             if(command.equals("view")){
-                //TODO: This may be changed later
                 lg.Action(user.username + " entered \"view\".");
                 tempPrint(user.schedule);
             }
            else if(command.equals("add")){
-                //TODO
                 Scanner add = new Scanner(System.in);
                 String addOption = "";
                 while(!addOption.equals("done")) {
@@ -301,7 +299,7 @@ public class Main {
                     if(user.schedule.contains(c)) {
                         //Course c = user.getCourse(resInput);
                         cl.removeClass(c, user.schedule);
-                        lg.Action(user.username + " Successfuly resolved a time conflict from the course: " + c);
+                        lg.Action(user.username + " Successfuly resolved a time conflict with the course: " + c);
                     }else if(resInput.equals("Done")||resInput.equals("done")){
                         System.out.println("You still have " + ConfirmSchedule.countConflicts(user.schedule) + " conflict(s) remaining.");
                         lg.logConflict(user.username + " after trying to resolves conflicts still has " + ConfirmSchedule.countConflicts(user.schedule) + " conflict(s) remaining.");
@@ -312,6 +310,7 @@ public class Main {
                     }
                 }
                 if(ConfirmSchedule.countConflicts(user.schedule) > 0){
+                    lg.Action(user.username + " has resolved all conflicting courses on their schedule.");
                     System.out.println("There are currently no conflicts with your schedule.");
                 }
             }
@@ -329,6 +328,7 @@ public class Main {
                     if(provider.equals("AT&T")||provider.equals("Boost")||provider.equals("Cricket")||provider.equals("Google")||provider.equals("Republic")||provider.equals("Sprint")||provider.equals("Straight")||provider.equals("T-Mobile")||provider.equals("Ting")||provider.equals("U.S.")||provider.equals("Verizon")||provider.equals("Virgin")){
                         break;
                     }else{
+                        lg.logger.warning(user.username + " has entered an invalid cell phone provider."
                         System.out.println("Sorry we do not have your provider on file. Please try again or enter 'done' if finished.");
                         provider = messageScan.next();
                         if (provider.equals("done")||provider.equals("Done")){
@@ -340,18 +340,24 @@ public class Main {
                     System.out.println("Please enter your ten-digit phone number without the dashes or parenthesis(Example: 5554748044)");
                     phone = messageScan.next();
                     if (phone.length() == 10){
+                        lg.Action(user.username + " has entered a valid length number: " + phone);
                         break;
+
                     }else{
+                        lg.logger.warning(user.username + " has entered an invalid phone number: " + phone);
                         System.out.println("Incorrect length number please try again or enter 'done' now to quit");
                         phone = messageScan.next();
                         if (phone.equals("done")||phone.equals("Done")){
+                            lg.logger.warning(user.username + " has elected to exit the phone number request.");
                             break;
                         }
                     }
                 }
                 if((!provider.equals("done")||!provider.equals("Done")) && (!phone.equals("done")||!phone.equals("Done"))){
                     c.sendNotification(provider, phone, user.schedule);
+                    lg.Action(user.username + " has sent their current schedule to the phone number: " + phone + " with the provider: " + provider);
                 }else{
+                    lg.logger.warning(user.username + " has entered either an invalid number or cell provider");
                     System.out.println("Either invalid phone number or cell provider.");
                 }
                 */
