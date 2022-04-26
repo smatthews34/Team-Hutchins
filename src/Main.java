@@ -464,7 +464,7 @@ public class Main {
                 Scanner clearer = new Scanner(System.in);
                 clear = clearer.next();
                 System.out.println("Would you like to clear the schedule? (yes/no) Enter done to quit");
-                while(!clear.equals("done")){
+                while(!clear.equalsIgnoreCase("done")){
                     if(clear.equalsIgnoreCase("yes")){
                         CourseList.courseList.clear();
                     }
@@ -477,6 +477,7 @@ public class Main {
                         clear = clearer.next();
                     }
                 }
+                auto = false;
             }
 
             else if(command.equals("filter")) {
