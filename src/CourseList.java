@@ -204,7 +204,6 @@ public class CourseList {
      */
     public static Course getCourse(String code){
         ArrayList<Course> courseList = importCourseList(); //Gathers all of the possible courses from the given data.
-        System.out.println(courseList.isEmpty());
         Course c; //a temp Course that will hold the value of the course that the user is looking for.
         for(int j = 0; j < courseList.size(); j++){
             //if the course is found it will set the empty course and have it set to the course the user wants

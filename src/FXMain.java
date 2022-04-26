@@ -168,7 +168,6 @@ public class FXMain extends Application {
                     Course course = user.getCourse(courseId);
                     cl.removeClass(course, user.schedule);
                     lg.Action(user.username + " Successfuly removed the course: " + course);
-                    System.out.println("removed " + courseId);
                     updateResolutionScreen();
                     updateScheduleDisplay();
                     lg.Action(user.username + " Successfuly resolved a time conflict from the course: " + c);
@@ -501,9 +500,7 @@ public class FXMain extends Application {
         @Override
         public void handle(ActionEvent event) {
             String courseId = ((Button) event.getSource()).getId();
-            System.out.println(courseId);
             Course course = cl.getCourse(courseId);
-            System.out.println(course);
 
             if (cl.checkConfliction(course, user.schedule) && !cl.checkDouble(course, user.schedule)) {
                 hasConflict = cl.checkConfliction(course, user.schedule);
@@ -527,7 +524,6 @@ public class FXMain extends Application {
             Course course = user.getCourse(courseId);
             cl.removeClass(course, user.schedule);
             lg.Action(user.username + " Successfuly removed the course: " + course);
-            System.out.println("removed " + courseId);
             updateScheduleDisplay();
         }
     };
