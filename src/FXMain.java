@@ -161,7 +161,7 @@ public class FXMain extends Application {
         if(!con.isEmpty()) {
             for (int p = 0; p < con.size(); p++) {
                 GridPane coursePane = new GridPane();
-                setProperties(coursePane, 400, 35, 0, 5, 0);
+                setProperties(coursePane, 350, 35, 0, 5, 0);
                 Course c = con.get(p);
                 Label courseLbl = new Label(c.toString());
 
@@ -187,7 +187,7 @@ public class FXMain extends Application {
 
         else{
             GridPane coursePane = new GridPane();
-            setProperties(coursePane, 400, 35, 0, 0, 0);
+            setProperties(coursePane, 350, 35, 0, 0, 0);
             Label emptyLbl = new Label("All conflicts resolved.\n");
             hasConflict = false;
             coursePane.add(emptyLbl, 0, 0);
@@ -200,7 +200,7 @@ public class FXMain extends Application {
 
     public void openResolutionScreen() {
         Group alertGroup = new Group();
-        Scene alertScene = new Scene(alertGroup, 450, 450);
+        Scene alertScene = new Scene(alertGroup, 400, 450);
         Stage alertStg = new Stage();
         ButtonBar confirmBar = new ButtonBar();
 
@@ -219,7 +219,7 @@ public class FXMain extends Application {
         ArrayList<Course> con = cl.conflictResolution(user.schedule);
         for (int p = 0; p < con.size(); p++){
             GridPane coursePane = new GridPane();
-            setProperties(coursePane, 400, 35, 0, 5, 0);
+            setProperties(coursePane, 350, 35, 0, 5, 0);
             Course c = con.get(p);
             Label courseLbl = new Label(c.toString());
 
@@ -255,7 +255,7 @@ public class FXMain extends Application {
         });
         ButtonBar.setButtonData(yBtn, ButtonBar.ButtonData.LEFT);
 
-        setProperties(alertPane, 450, 450, 15, 5, 5);
+        setProperties(alertPane, 400, 450, 10, 5, 0);
         alertPane.add(topPane, 0, 0);
         alertPane.add(alertMsgLbl, 0, 1);
         alertPane.add(conflictsPane, 0, 2);
