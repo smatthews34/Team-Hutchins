@@ -43,6 +43,7 @@ public class FXMain extends Application {
     Group loginGroup;
     GridPane loginPane;
     Scene loginScene;
+    Stage loginStageC;
     TextField userField;
     PasswordField passField;
     Label loginTitle;
@@ -91,10 +92,12 @@ public class FXMain extends Application {
     boolean auto;
     boolean hasConflict;
     GridPane conflictsPane;
+    GridPane logOutPane;
 
     ComboBox dayFilterBox;
     ComboBox timeFilterBox;
     ComboBox deptFilterBox;
+
 
     Logging lg;
 
@@ -423,17 +426,44 @@ public class FXMain extends Application {
             Tooltip redoTip = new Tooltip("redo" + " " + cl.undoCommandHist.peek() + " " + cl.undoCourseHist.peek().courseCode);
             Tooltip.install(redoBtn, redoTip);
         }
+        Hyperlink logOutLink = new Hyperlink("Log Out");
+        logOutLink.setOnAction(event->{
+            user = null;
+            final Node source = (Node) event.getSource();
+            final Stage stage = (Stage) source.getScene().getWindow();
+            launchLogin();
+            stage.close();
 
+        });
         Label scheduleLbl = new Label("CURRENT SCHEDULE:");
         scheduleLbl.getStyleClass().clear();
         scheduleLbl.getStyleClass().add("subtitle");
-        schedulePane.add(btnPane, 0, 0);
-        schedulePane.add(scheduleLbl, 0, 1);
+
+        if(!user.username.equals("guest")) {
+            logOutPane = new GridPane();
+            logOutPane.add(logOutLink, 0, 0);
+            schedulePane.add(logOutPane, 0, 0);
+
+            logOutLink.setOnAction(event->{
+                user = null;
+                final Node source = (Node) event.getSource();
+                final Stage stage = (Stage) source.getScene().getWindow();
+                try {
+                    start(loginStageC);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                stage.close();
+
+            });
+        }
+        schedulePane.add(btnPane, 0, 1);
+        schedulePane.add(scheduleLbl, 0, 2);
 
         if (user.schedule.isEmpty()) {
             Label emptyLbl = new Label("(There's nothing here!\nAdd some courses from Search.)");
             emptyLbl.setOpacity(.6);
-            schedulePane.add(emptyLbl, 0, 2);
+            schedulePane.add(emptyLbl, 0, 3);
         } else {
             for (int i = 0; i < user.schedule.size(); i++) {
                 GridPane coursePane = new GridPane();
@@ -451,17 +481,17 @@ public class FXMain extends Application {
                 coursePane.add(courseLbl, 1, i);
                 allCoursePane.add(coursePane, 0, i);
             }
-            schedulePane.add(allCoursePane, 0, 2);
+            schedulePane.add(allCoursePane, 0, 3);
             if (hasConflict){
                 GridPane bottomPane = new GridPane();
                 Hyperlink conResLink = new Hyperlink("Resolve Conflicts");
                 conResLink.setOnAction(event-> openResolutionScreen());
                 bottomPane.add(conResLink, 0, 0);
-                schedulePane.add(bottomPane, 0, 3);
+                schedulePane.add(bottomPane, 0, 4);
             }
         }
 
-        setProperties(schedulePane, 450, 400, 15, 10, 15);
+        setProperties(schedulePane, 450, 450, 15, 10, 15);
         setProperties(allCoursePane, 400, 350, 5, 5, 10);
 
     }
@@ -577,7 +607,6 @@ public class FXMain extends Application {
     };
 
     public void launchLogin() {
-
         loggedIn = false;
         isGuest = false; //Use to prevent a guest user from saving a schedule
         //** LOGIN WINDOW **
@@ -1064,8 +1093,24 @@ public class FXMain extends Application {
         searchPane.add(autoLink, 0, 7);
 
         schedulePane = new GridPane();
-        //schedulePane.getStyleClass().clear();
-        //schedulePane.getStyleClass().add("pane");
+        Hyperlink logOutLink = new Hyperlink("Log Out");
+        logOutLink.setOnAction(event->{
+            user = null;
+            final Node source = (Node) event.getSource();
+            final Stage stage = (Stage) source.getScene().getWindow();
+            try {
+                start(loginStageC);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            stage.close();
+
+        });
+        if(!user.username.equals("guest")) {
+            logOutPane = new GridPane();
+            logOutPane.add(logOutLink, 0, 0);
+            schedulePane.add(logOutPane, 0, 0);
+        }
         Label scheduleLbl = new Label("CURRENT SCHEDULE:");
         scheduleLbl.getStyleClass().clear();
         scheduleLbl.getStyleClass().add("subtitle");
@@ -1074,16 +1119,14 @@ public class FXMain extends Application {
         emptyLbl.setOpacity(.6);
 
         allCoursePane = new GridPane();
-        //allCoursePane.getStyleClass().clear();
-        // allCoursePane.getStyleClass().add("pane");
         setProperties(allCoursePane, 400, 40, 0, 0, 0);
 
-        schedulePane.add(btnPane, 0, 0);
-        schedulePane.add(scheduleLbl, 0, 1);
+        schedulePane.add(btnPane, 0, 1);
+        schedulePane.add(scheduleLbl, 0, 2);
         //schedulePane.add(allCoursePane, 0, 2);
-        schedulePane.add(emptyLbl, 0, 2);
+        schedulePane.add(emptyLbl, 0, 3);
 
-        setProperties(schedulePane, 450, 400, 15, 10, 15);
+        setProperties(schedulePane, 450, 450, 15, 10, 15);
 
         searchSplit.getItems().add(searchPane);
         searchSplit.getItems().add(schedulePane);
@@ -1347,6 +1390,7 @@ public class FXMain extends Application {
         user = null;
         auto = false;
         hasConflict = false;
+        loginStageC = loginStage;
 
         launchLogin();
 
