@@ -415,7 +415,7 @@ public class Main {
                 boolean startT = true,endT = true;
                 Scanner ActScn = new Scanner(System.in);
                 String act = "";
-                String title, start ="", end="", meets="";
+                String title = "", start ="", end="", meets="";
                 while(!act.equals("done") || !act.equals("Done")){
                     System.out.println("Would you like to add an activity to your schedule? If yes enter 'yes'. If not enter 'done'");
                     act = ActScn.next();
@@ -443,11 +443,23 @@ public class Main {
                                 break;
                             }
                         }
-                        while (!meets.contains("M")&&!meets.contains("T")&&!meets.contains("W")&&!meets.contains("R")&&!meets.contains("F"))
-                        System.out.println("Enter the day(s) that the Activity occurs on.(Ex MWF)");
-                        meets = ActScn.next();
-                        System.out.println("What is the Name of your Activity you are participating in?");
-                        title = ActScn.nextLine();
+                        while (!meets.matches("[M,T,W,R,F]*")) {
+                            System.out.println("Enter the day(s) that the Activity occurs on.(Ex MWF)");
+                            meets = ActScn.next();
+                            if(meets.matches("[M,T,W,R,F]*")&&(!meets.contains("MM")&&!meets.contains("TT")&&!meets.contains("WW")&&!meets.contains("RR")&&!meets.contains("FF"))) {
+                                break;
+                            }else {
+                                lg.logger.warning(user.username + " has entered and invalid day(s) for the activity with the response: " + meets);
+                            }
+                        }
+                        while(title.equals("")) {
+                            System.out.println("What is the Name of your Activity you are participating in?");
+                            title = ActScn.nextLine();
+                            if(title.equals("")){
+                                System.out.println("Please enter the name of activity.");
+                                lg.logger.warning(user.username + " has not entered a name of the activity.");
+                            }
+                        }
                         Course c = new Course(title, start, end, meets);
                         Boolean cc = cl.checkConfliction(c,user.schedule);
                         Boolean d = cl.checkDouble(c, user.schedule);
