@@ -58,7 +58,7 @@ class email {
             // add everything to email
             try {
 
-                File f =new File("classFile.txt");
+                File f =new File("FinishedSchedule.txt");
 
                 attachmentPart.attachFile(f);
                 textPart.setText("Here is your completed class schedule");

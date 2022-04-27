@@ -43,7 +43,7 @@ public class Main {
     }
 
 
-    public static void main (String[] args) throws FileNotFoundException, IOException {
+    public static void main (String[] args) throws Exception {
         CourseList cl = new CourseList();
         User user = null;
         Logging lg;
@@ -267,7 +267,7 @@ public class Main {
                     if(user.scheduleContains(code)) {
                         Course c = user.getCourse(code);
                         cl.removeClass(c, user.schedule);
-                        lg.Action(user.username + " Successfuly removed the course: " + c);
+                        lg.Action(user.username + " Successfully removed the course: " + c);
                         System.out.println("Course removed.");
                         tempPrint(user.schedule);
                     }
@@ -507,10 +507,11 @@ public class Main {
                 String filter = "";
                 while(!filter.equals("done")) {
                     System.out.println("What would you like to filter by?");
-                    System.out.println("The options are to filter by: days, time, department or done to exit");
+                    System.out.println("The options are to filter by: days, time, department, building or done to exit");
                     System.out.println("To search by days, enter the first capital letter of that day, ex: MWF");
                     System.out.println("To search by times, enter the start time in military time, ex: 8:00:00");
                     System.out.println("To search by department, enter the code in all capital letters. ex: COMP");
+                    System.out.println("To search by building, enter the building code in all capital letters. ex: STEM");
                     System.out.println("Or enter 'done' if you are done filtering the course.");
                     filter = filterSCNR.nextLine();
                     if(filter.equals("done")||filter.equals("Done")){
@@ -527,7 +528,12 @@ public class Main {
                         Search.filterTxtDepts();
                         lg.Action(user.username + " applied a filter to all of the courses by the department of the courses.");
                         //break;
-                    }else {
+                    }else if(filter.equals("building")){
+                        Search.filterTxtBuildings();
+                        lg.Action(user.username + " applied a filter to all of the courses by the building of the courses.");
+                            //break;
+                    }
+                    else {
                         System.out.println("Invalid filter.");
                         lg.logger.warning(user.username + " username tried filter the courses by an invalid filter option.");
                     }
@@ -641,6 +647,22 @@ public class Main {
                     ConfirmSchedule.scheduleFile(user.schedule);
                     lg.Action(user.username + " has confirmed and saved their schedule with zero conflicts.");
                     System.out.println("Your schedule has been confirmed. See file.");
+                }
+                System.out.println("Would you like to have the schedule emailed to you? (yes/no)");
+                Scanner mailScanner = new Scanner(System.in);
+                String mail = mailScanner.next();
+                if(mail.equalsIgnoreCase("Yes")){
+                    System.out.println("Please enter your email address");
+                    Scanner address = new Scanner(System.in);
+                    String send = address.next();
+                    email.emailSender(send);
+                }
+                else if(mail.equalsIgnoreCase("no")){
+                    System.out.println("Schedule was not emailed. Thank you!");
+                }
+                else{
+                    System.out.println("Please enter yes or no");
+                    mail = mailScanner.next();
                 }
             }
             else if(command.equals("calendar")){
