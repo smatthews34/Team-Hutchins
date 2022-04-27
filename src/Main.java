@@ -27,6 +27,7 @@ public class Main {
 
     }
 
+
     static void printInitScreen(){
         System.out.println("\n____________________________________________________________________________");
         System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
@@ -411,18 +412,38 @@ public class Main {
             }
 
             else if(command.equals("activity")){
+                boolean startT = true,endT = true;
                 Scanner ActScn = new Scanner(System.in);
                 String act = "";
-                String title, start, end, meets;
+                String title, start ="", end="", meets="";
                 while(!act.equals("done") || !act.equals("Done")){
                     System.out.println("Would you like to add an activity to your schedule? If yes enter 'yes'. If not enter 'done'");
                     act = ActScn.next();
                     if(act.equals("yes")||act.equals("Yes")||act.equals("Y")||act.equals("y")){
 
-                        System.out.println("Enter the start time of the Activity.(In military time; ex. 8:00:00)");
-                        start = ActScn.next();
-                        System.out.println("Enter the start time of the Activity.(In military time; ex. 13:00:00)");
-                        end = ActScn.next();
+                        while(startT) {
+                            System.out.println("Enter the start time of the Activity.(In military time; ex. 8:00:00)");
+                            start = ActScn.next();
+                            if(!start.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")){
+                                System.out.println("Invalid Time Please try Again in Military Time Please.");
+                                lg.logger.warning(user.username + " has attempted to set the invalid time of: " + start + " for the start time of their personal activity");
+                            }else{
+                                startT = false;
+                                break;
+                            }
+                        }
+                        while (endT) {
+                            System.out.println("Enter the start time of the Activity.(In military time; ex. 13:00:00)");
+                            end = ActScn.next();
+                            if(!end.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")){
+                                System.out.println("Invalid Time Please try again in military time please.");
+                                lg.logger.warning(user.username + " has attempted to set the invalid time of: " + end + " for the end time of their personal activity");
+                            }else{
+                                endT = false;
+                                break;
+                            }
+                        }
+                        while (!meets.contains("M")&&!meets.contains("T")&&!meets.contains("W")&&!meets.contains("R")&&!meets.contains("F"))
                         System.out.println("Enter the day(s) that the Activity occurs on.(Ex MWF)");
                         meets = ActScn.next();
                         System.out.println("What is the Name of your Activity you are participating in?");
