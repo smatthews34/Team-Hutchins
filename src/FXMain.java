@@ -571,7 +571,7 @@ public class FXMain extends Application {
     final EventHandler<ActionEvent> signUpHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            String email = emailField.getText();
+            email = emailField.getText();
             String username = newUserField.getText();
             String password = newPassField.getText();
             String name = newNameField.getText();
@@ -922,7 +922,7 @@ public class FXMain extends Application {
 
     public void sendToEmail() throws Exception {
         email e = new email();
-        e.emailSender(email);
+        e.emailSender(user.email);
     }
     public void launchSearch(){
 
