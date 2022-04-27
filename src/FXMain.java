@@ -96,6 +96,13 @@ public class FXMain extends Application {
     GridPane conflictsPane;
     GridPane logOutPane;
     Image appImg;
+    GridPane actPane;
+    GridPane errPane;
+    Stage actStg;
+    TextField nameActField;
+    TextField startTimeField;
+    TextField endTimeField;
+    TextField daysField;
 
     ComboBox dayFilterBox;
     ComboBox timeFilterBox;
@@ -890,13 +897,14 @@ public class FXMain extends Application {
         alertPane.add(alertMsgLbl, 0, 1, 2, 1);
        if (user.username != "guest") {
             CheckBox cb = new CheckBox("Send to my email");
-            /*cb.setOnAction(event-> {
+            cb.setOnAction(event-> {
                 try {
+                    System.out.println(user.email);
                     sendToEmail();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            });*/
+            });
             alertPane.add(cb, 0, 2);
             alertPane.add(confirmBar, 0, 3);
         }
@@ -1026,13 +1034,11 @@ public class FXMain extends Application {
         });
 
         autoSearchField.setOnKeyPressed(event -> {
-            ArrayList<Course> courses = new ArrayList<>();
-            if (event.getCode() == KeyCode.ENTER) {
+                ArrayList<Course> courses = new ArrayList<>();
                 s = new Search(autoSearchField.getText());
                 courses = s.getResults(autoSearchField.getText());
                 updateSearchDisplay(courses);
-            }
-            updateSearchDisplay(courses);
+
         });
 
 
@@ -1284,41 +1290,31 @@ public class FXMain extends Application {
 
     }
 
-    public void launchActivity(){
-        Group alertGroup = new Group();
-        Scene alertScene = new Scene(alertGroup, 400, 460);
-        Stage alertStg = new Stage();
+    public void updateActivityDisplay(){
+        errPane.getChildren().clear();
 
-        GridPane alertPane = new GridPane();
-        alertPane.getStyleClass().clear();
-        alertPane.getStyleClass().add("pane");
-        alertPane.setAlignment(Pos.CENTER);
+        String title = nameActField.getText();
+        String start = startTimeField.getText();
+        String end = endTimeField.getText();
 
-        TextField nameActField = new TextField();
-        Label nameActLbl = new Label("Enter name of activity:");
+            if(!start.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$") ||!end.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")) {
+                errPane.getChildren().clear();
+                Label timeErrLbl = new Label("Invalid Time.");
+                errPane.add(timeErrLbl, 0, 0);
+                actPane.add(errPane, 0, 10);
+                lg.logger.warning(user.username + " has attempted to set the invalid time of: " + start + " for the start time of their personal activity");
+                updateActivityDisplay();
+            }
 
-        TextField startTimeField = new TextField();
-        Label startTimeLbl = new Label("Enter start time (in military time; ex. 8:00:00):");
-
-        TextField endTimeField = new TextField();
-        Label endTimeLbl = new Label("Enter end time (in military time; ex. 13:00:00):");
-
-        TextField daysField = new TextField();
-        Label daysLbl = new Label("Enter the day(s) occurring (ex. MWF):");
-
-        Label alertTitleLbl = new Label("CREATE ACTIVITY");
-        alertTitleLbl.getStyleClass().clear();
-        alertTitleLbl.getStyleClass().add("subtitle");
-
-        ButtonBar confirmBar = new ButtonBar();
-        Button yBtn = new Button("Create");
-        yBtn.getStyleClass().clear();
-        yBtn.getStyleClass().add("buttons");
-        yBtn.setOnAction(event -> {
-            String title = nameActField.getText();
-            String start = startTimeField.getText();
-            String end = endTimeField.getText();
             String meets = daysField.getText();
+            if((!meets.matches("[M,T,W,R,F]*"))){
+                errPane.getChildren().clear();
+                Label meetsErrLbl = new Label("Invalid Days.");
+                errPane.add(meetsErrLbl, 0, 0);
+                actPane.add(errPane, 0, 10);
+                lg.logger.warning(user.username + " has entered and invalid day(s) for the activity with the response: " + meets);
+                updateActivityDisplay();
+            }
 
             Course c = new Course(title, start, end, meets);
             Boolean cc = cl.checkConfliction(c,user.schedule);
@@ -1336,7 +1332,85 @@ public class FXMain extends Application {
             }
 
             cl.addClass(c, user.schedule);
-            alertStg.close();
+            actStg.close();
+            updateScheduleDisplay();
+
+    }
+
+    public void launchActivity(){
+        Group alertGroup = new Group();
+        Scene alertScene = new Scene(alertGroup, 400, 460);
+        actStg = new Stage();
+
+        actPane = new GridPane();
+        actPane.getStyleClass().clear();
+        actPane.getStyleClass().add("pane");
+        actPane.setAlignment(Pos.CENTER);
+        errPane = new GridPane();
+
+
+        nameActField = new TextField();
+        Label nameActLbl = new Label("Enter name of activity:");
+
+        startTimeField = new TextField();
+        Label startTimeLbl = new Label("Enter start time (in military time; ex. 8:00:00):");
+
+        endTimeField = new TextField();
+        Label endTimeLbl = new Label("Enter end time (in military time; ex. 13:00:00):");
+
+        daysField = new TextField();
+        Label daysLbl = new Label("Enter the day(s) occurring (ex. MWF):");
+
+        Label alertTitleLbl = new Label("CREATE ACTIVITY");
+        alertTitleLbl.getStyleClass().clear();
+        alertTitleLbl.getStyleClass().add("subtitle");
+
+        ButtonBar confirmBar = new ButtonBar();
+        Button yBtn = new Button("Create");
+        yBtn.getStyleClass().clear();
+        yBtn.getStyleClass().add("buttons");
+
+        yBtn.setOnAction(event -> {
+            String title = nameActField.getText();
+            String start = startTimeField.getText();
+            String end = endTimeField.getText();
+
+            if(!start.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$") ||!end.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")) {
+                errPane.getChildren().clear();
+                Label timeErrLbl = new Label("Invalid Time.");
+                errPane.add(timeErrLbl, 0, 0);
+                actPane.add(errPane, 0, 10);
+                lg.logger.warning(user.username + " has attempted to set the invalid time of: " + start + " for the start time of their personal activity");
+                updateActivityDisplay();
+            }
+
+            String meets = daysField.getText();
+            if((!meets.matches("[M,T,W,R,F]*"))){
+                errPane.getChildren().clear();
+                Label meetsErrLbl = new Label("Invalid Days.");
+                lg.logger.warning(user.username + " has entered and invalid day(s) for the activity with the response: " + meets);
+                errPane.add(meetsErrLbl, 0, 0);
+                actPane.add(errPane, 0, 10);
+                updateActivityDisplay();
+            }
+
+            Course c = new Course(title, start, end, meets);
+            Boolean cc = cl.checkConfliction(c,user.schedule);
+            Boolean d = cl.checkDouble(c, user.schedule);
+
+            if(d){
+                lg.logConflict(user.username + " has attempted to add a personal activity: " + c + " that they already have on their schedule.");
+            }else if(cc && user.schedule.contains(c)){
+                lg.logConflict(user.username + " added the activity: " + c + " that conflicts with a course/activity on their schedule.");
+                hasConflict = cc;
+            }else if(cc && !user.schedule.contains(c)){
+                lg.logConflict(user.schedule + " has attempted to add the activity: " + c + ", that conflicts with their schedule but elected not to add it.");
+            }else{
+                lg.Action(user.username + " has added the activity " + c);
+            }
+
+            cl.addClass(c, user.schedule);
+            actStg.close();
             updateScheduleDisplay();
         });
 
@@ -1346,32 +1420,32 @@ public class FXMain extends Application {
         nBtn.getStyleClass().add("buttons2");
         ButtonBar.setButtonData(yBtn, ButtonBar.ButtonData.LEFT);
 
-        setProperties(alertPane, 400, 460, 12, 5, 10);
-        alertPane.add(alertTitleLbl, 0, 0, 2, 1);
-        alertPane.add(nameActLbl, 0, 1);
-        alertPane.add(nameActField, 0, 2);
+        setProperties(actPane, 400, 460, 12, 5, 10);
+        actPane.add(alertTitleLbl, 0, 0, 2, 1);
+        actPane.add(nameActLbl, 0, 1);
+        actPane.add(nameActField, 0, 2);
 
-        alertPane.add(startTimeLbl, 0, 3);
-        alertPane.add(startTimeField, 0, 4);
+        actPane.add(startTimeLbl, 0, 3);
+        actPane.add(startTimeField, 0, 4);
 
-        alertPane.add(endTimeLbl, 0, 5);
-        alertPane.add(endTimeField, 0, 6);
+        actPane.add(endTimeLbl, 0, 5);
+        actPane.add(endTimeField, 0, 6);
 
-        alertPane.add(daysLbl, 0, 7);
-        alertPane.add(daysField, 0, 8);
+        actPane.add(daysLbl, 0, 7);
+        actPane.add(daysField, 0, 8);
 
         confirmBar.getButtons().addAll(yBtn, nBtn);
-        alertPane.add(confirmBar, 0, 9);
+        actPane.add(confirmBar, 0, 9);
 
         nBtn.setOnMouseClicked(event -> {
-            alertStg.close();
+            actStg.close();
         });
 
-        nBtn.setOnMouseClicked(event -> alertStg.close());
-        alertGroup.getChildren().add(alertPane);
+        nBtn.setOnMouseClicked(event -> actStg.close());
+        alertGroup.getChildren().add(actPane);
         alertScene.getStylesheets().add("projStyles.css");
-        alertStg.setScene(alertScene);
-        alertStg.show();
+        actStg.setScene(alertScene);
+        actStg.show();
 
     }
 

@@ -6,10 +6,13 @@ Background: rgb(245, 238, 238)
 .scroll-pane {
     -fx-background-color: white;
 }
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
 
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track{
-    -fx-background-color: white;
+    -fx-background-color: rgb(245, 238, 238);
     -fx-border-color: white;
     -fx-background-radius: 0em;
 }
