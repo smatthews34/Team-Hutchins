@@ -65,13 +65,14 @@ public class ApachePOI {
        }
     }
 
-    public static void writeSchedule(String username, ArrayList<Course> user){
+    public static void writeSchedule(String username, ArrayList<Course> user) throws IOException {
         String fileName = "UserSchedules.xlsx";
+        deleteOldSchedule(username, fileName);
         try {
             FileInputStream userFile = new FileInputStream(fileName);
             XSSFWorkbook schedules = new XSSFWorkbook(userFile);
             //Remove old schedule if there is one
-            deleteOldSchedule(username, fileName);
+            //deleteOldSchedule(username, fileName);
 
             XSSFSheet userSheet = schedules.createSheet(username);
             int rowCount = -1;
@@ -237,18 +238,18 @@ public class ApachePOI {
         return results;
     }
     public static void main (String[] args) throws IOException {
-//        ArrayList<Course> userCourse = new ArrayList<>();
-//        Course test_c = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
-//        userCourse.add(test_c);
-//        System.out.println(userCourse);
-//        String userName = "testing";
-//        System.out.println("About to run");
-//        writeSchedule(userName, userCourse);
-//        System.out.println("Complete");
-//
-//        ArrayList<Course> completed = readSchedule(userName);
-//        System.out.println(completed);
+        ArrayList<Course> userCourse = new ArrayList<>();
+        Course test_c = new Course("MATH 101", "Intro Math", "Introduction to Mathematics", "9", "10", "MWF", "SHAL", "101");
+        userCourse.add(test_c);
+        System.out.println(userCourse);
+        String userName = "testing";
+        System.out.println("About to run");
+        writeSchedule(userName, userCourse);
+        System.out.println("Complete");
 
-        deleteOldSchedule("Test1","UserSchedules.xlsx");
+        ArrayList<Course> completed = readSchedule(userName);
+        System.out.println(completed);
+
+        //deleteOldSchedule("Test1","UserSchedules.xlsx");
     }
 }

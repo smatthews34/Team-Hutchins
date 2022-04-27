@@ -3,7 +3,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class filterCallers {
-    public static void promptUserDays() {
+    public static ArrayList<Course> promptUserDays() {
+        ArrayList<Course> toPrint = new ArrayList<>();
         Scanner scnr = new Scanner(System.in);
         System.out.println("Enter the days you want to see classes on:");
         System.out.print(">");
@@ -15,7 +16,6 @@ public class filterCallers {
                 System.out.println("Please enter valid input");
             }
             else{
-                ArrayList<Course> toPrint = new ArrayList<>();
                 for(String string : courses){
                     if(ApachePOI.findByCourseCode(string) == null){
                         System.out.println("That class does not exist.");
@@ -24,13 +24,15 @@ public class filterCallers {
                         toPrint.add(ApachePOI.findByCourseCode(string));
                     }
                 }
-                toPrint.forEach(System.out::println); // prints out the list of appropriate courses
+                //toPrint.forEach(System.out::println); // prints out the list of appropriate courses
             }
             break;
         }
+        return toPrint;
     }
 
-    public static void promptUserTimes() {
+    public static ArrayList<Course> promptUserTimes() {
+        ArrayList<Course> toPrint = new ArrayList<>();
         Scanner scnr = new Scanner(System.in);
         System.out.println("Enter the times you want to see classes on:");
         System.out.print(">");
@@ -40,7 +42,6 @@ public class filterCallers {
             if(courses == null){
                 System.out.println("Please enter a valid time");
             }else{
-                ArrayList<Course> toPrint = new ArrayList<>();
                 for(String string : courses){
                     if(ApachePOI.findByCourseCode(string) == null){
                         System.out.println("That class does not exist.");
@@ -49,14 +50,15 @@ public class filterCallers {
                         toPrint.add(ApachePOI.findByCourseCode(string));
                     }
                 }
-                toPrint.forEach(System.out::println); // prints out the list of appropriate courses
+                //toPrint.forEach(System.out::println); // prints out the list of appropriate courses
             }
             break;
         }
-        // scnr.close();
+        return toPrint;
     }
 
-    public static void promptUserDepts() {
+    public static ArrayList<Course> promptUserDepts() {
+        ArrayList<Course> toPrint = new ArrayList<>();
         Scanner scnr = new Scanner(System.in);
         System.out.println("Enter the depts you want to see classes in:");
         System.out.print(">");
@@ -66,7 +68,6 @@ public class filterCallers {
             if(courses == null){
                 System.out.println("Please enter a valid department");
             }else{
-                ArrayList<Course> toPrint = new ArrayList<>();
                 for(String string : courses){
                     if(ApachePOI.findByCourseCode(string) == null){
                         System.out.println("That class does not exist.");
@@ -75,15 +76,15 @@ public class filterCallers {
                         toPrint.add(ApachePOI.findByCourseCode(string));
                     }
                 }
-                toPrint.forEach(System.out::println); // prints out the list of appropriate courses
+                //toPrint.forEach(System.out::println); // prints out the list of appropriate courses
             }
             break;
         }
-        //scnr.close();
-
+        return toPrint;
     }
 
-    public static void promptUserBuildings() {
+    public static ArrayList<Course> promptUserBuildings() {
+        ArrayList<Course> toPrint = new ArrayList<>();
         Scanner scnr = new Scanner(System.in);
         System.out.println("Enter the building you want to see classes in:");
         System.out.print(">");
@@ -94,7 +95,6 @@ public class filterCallers {
                 System.out.println("Please enter valid input");
             }
             else{
-                ArrayList<Course> toPrint = new ArrayList<>();
                 for(String string : courses){
                     if(ApachePOI.findByCourseCode(string) == null){
                         System.out.println("That class does not exist.");
@@ -103,9 +103,10 @@ public class filterCallers {
                         toPrint.add(ApachePOI.findByCourseCode(string));
                     }
                 }
-                toPrint.forEach(System.out::println); // prints out the list of appropriate courses
+                //toPrint.forEach(System.out::println); // prints out the list of appropriate courses
             }
             break;
         }
+        return toPrint;
     }
 }

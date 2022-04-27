@@ -773,7 +773,7 @@ public class FXMain extends Application {
         if (!dayFilterBox.getSelectionModel().isEmpty()) {
             s = new Search(searchField.getText());
             ArrayList<Course> courses = s.getResults(searchField.getText());
-            ;
+            
             for (int i = 0; i < courses.size(); i++) {
                 if (courses.get(i).meets.contains(dayFilterBox.getValue().toString())) {
                     filteredResults.add(courses.get(i));
@@ -1069,17 +1069,31 @@ public class FXMain extends Application {
 
         ObservableList<String> dayFilters =
                 FXCollections.observableArrayList(
-                        "",
                         "MWF",
-                        "TR"
+                        "TR",
+                        "M",
+                        "T",
+                        "W",
+                        "R",
+                        "F"
                 );
-        //TODO: Add all times
         ObservableList<String> timeFilters =
                 FXCollections.observableArrayList(
-                        "",
                         "8:00:00",
                         "9:00:00",
-                        "13:00:00"
+                        "9:15:00",
+                        "10:00:00",
+                        "10:05:00",
+                        "11:00:00",
+                        "11:30:00",
+                        "12:00:00",
+                        "13:00:00",
+                        "14:00:00",
+                        "14:30:00",
+                        "15:00:00",
+                        "16:00:00",
+                        "18:30:00",
+                        "19:00:00"
                 );
         //TODO: Add all depts
         ObservableList<String> deptFilters =

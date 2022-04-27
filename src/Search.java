@@ -193,7 +193,8 @@ public class Search {
                 String[] split = line.split(","); // separates columns using a comma
                 populateMapDays(split[5], split[0]); // adds the columns for coursecode and days
             }
-            filterCallers.promptUserDays(); //calls the prompt user method after
+            ArrayList<Course> toPrint = filterCallers.promptUserDays(); //calls the prompt user method after
+            toPrint.forEach(System.out::println);
             // error catching
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -263,7 +264,8 @@ public class Search {
                 String[] split = line.split(","); // separates columns using a comma
                 populateMapTimes(split[3], split[0]); // adds the columns for coursecode and start time
             }
-            filterCallers.promptUserTimes(); // then calls the prompt user method
+            ArrayList<Course> toPrint = filterCallers.promptUserTimes(); // then calls the prompt user method
+            toPrint.forEach(System.out::println);
             // error catching
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -331,7 +333,8 @@ public class Search {
                 String[] split = line.split(","); // separates columns using a comma
                 populateMapDepts(split[10], split[0]); // adds the columns for coursecode and department
             }
-            filterCallers.promptUserDepts(); //calls the method to prompt the user
+            ArrayList<Course> toPrint = filterCallers.promptUserDepts(); //calls the method to prompt the user
+            toPrint.forEach(System.out::println);
             // error catching
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -398,7 +401,8 @@ public class Search {
                 String[] split = line.split(","); // separates columns using a comma
                 populateMapBuildings(split[6], split[0]); // adds the columns for coursecode and building
             }
-            filterCallers.promptUserBuildings(); //calls the prompt user method after
+            ArrayList<Course> toPrint = filterCallers.promptUserBuildings(); //calls the prompt user method after
+            toPrint.forEach(System.out::println);
             // error catching
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -68,27 +68,54 @@ public class ConfirmSchedule {
                 pw.printf("%-20s%-50s%-50s%-50s%-50s%-50s\n",startTimesInOrder.get(i),monString,tueString,wedString,thuString,friString);
             }
         }
-//        //pw.printf("%-50s%-50s%-50s%-50s%-50s\n","Monday","Tuesday","Wednesday","Thursday","Friday");
-//        ArrayList<Course> mon = classesPerDay(S,2,true);
-//        ArrayList<Course> tue = classesPerDay(S,3,false);
-//        ArrayList<Course> wed = classesPerDay(S,4,false);
-//        ArrayList<Course> thu = classesPerDay(S,5,false);
-//        ArrayList<Course> fri = classesPerDay(S,6,false);
-//
-//        mon = orderList(mon);
-//        tue = orderList(tue);
-//        wed = orderList(wed);
-//        thu = orderList(thu);
-//        fri = orderList(fri);
-//
-//        String monString = courseListString(mon);
-//        String tueString = courseListString(tue);
-//        String wedString = courseListString(wed);
-//        String thuString = courseListString(thu);
-//        String friString = courseListString(fri);
-//
-//        pw.println("Monday\n" + monString + "\nTuesday\n" + tueString + "\nWednesday\n" + wedString
-//        + "\nThursday\n" + thuString + "\nFriday\n" + friString);
+        //three lines
+        pw.println("\n\n\n");
+
+        //print calendar too
+        Calendar currentDate = Calendar.getInstance();
+        Calendar calendar = new GregorianCalendar(currentDate.get(Calendar.YEAR),
+                currentDate.get(Calendar.MONTH),1);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        pw.println("          "+new SimpleDateFormat("MMMM yyyy").format(calendar.getTime()));
+        pw.println("          SUNDAY                MONDAY                " +
+                "TUESDAY               WEDNESDAY             THURSDAY              " +
+                "FRIDAY                SATURDAY");
+
+        //print initial spaces
+        String initialSpace = "";
+        for (int i = 0; i < dayOfWeek - 1; i++) {
+            initialSpace += "                      ";
+        }
+        pw.print(initialSpace);
+
+        //print the days of the month starting from 1
+        for (int i = 0, dayOfMonth = 1; dayOfMonth <= daysInMonth; i++) {
+            for (int j = ((i == 0) ? dayOfWeek - 1 : 0); j < 7 && (dayOfMonth <= daysInMonth); j++) {
+                pw.printf("%10d ", dayOfMonth);
+                if(j == 1) {
+                    pw.print(classesPerDay(S, j+1, false).size() + " Class(es)");
+                }
+                if(j==0 || j==6) {
+                    pw.print("            ");
+                }
+                if(j == 2) {
+                    pw.print(classesPerDay(S, j+1, false).size() + " Class(es)");
+                }
+                if(j == 3) {
+                    pw.print(classesPerDay(S, j+1, false).size() + " Class(es)");
+                }
+                if(j == 4) {
+                    pw.print(classesPerDay(S, j+1, false).size() + " Class(es)");
+                }
+                if(j == 5) {
+                    pw.print(classesPerDay(S, j+1, false).size() + " Class(es)");
+                }
+                dayOfMonth++;
+            }
+            pw.println("\n");
+        }
 
         if(countConflicts(S) > 0) {
             pw.println("Conflicts Still Exist");
